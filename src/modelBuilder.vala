@@ -4,7 +4,7 @@ namespace MoneyWatch {
 	internal errordomain ParsingErrors {
 		INVALID_DATA
 	}
-	internal interface ModelBuilder {
+	internal interface ModelBuilder : GLib.Object {
 		internal abstract Model build();
 	}
 	internal class ModelBuilderFactory {
@@ -30,7 +30,7 @@ namespace MoneyWatch {
 			}
 		}
 	}
-	internal class ModelV1Builder : ModelBuilder {
+	internal class ModelV1Builder : ModelBuilder, GLib.Object {
 		Json.Object root;
 		internal ModelV1Builder(Json.Object root) {
 			this.root = root;
@@ -38,7 +38,7 @@ namespace MoneyWatch {
 
 		internal Model build() {
 			var ret = new Model();
-			var account = new Account("default");
+			var account = new Account(_("default"));
 			var data = this.root.get_array_member("data");
 			for(var i = 0; i < data.get_length(); i++) {
 				var expense = data.get_object_element(i);
@@ -47,16 +47,23 @@ namespace MoneyWatch {
 				expense_ret.set_currency("€");
 				var date = expense.get_object_member("date");
 				expense_ret.set_date(new DateTime(new TimeZone.local(),
-									(int)date.get_int_member("year"),
-									(int)date.get_int_member("month"),
+									(int)date.get_int_member("year") + 1900,
+									(int)date.get_int_member("month") + 1,
 									(int)date.get_int_member("day"), 0, 0, 0));
+				account.add_expense(expense_ret);
 			}
+			info("Loaded %u expenses", data.get_length());
+			account.set_sorting((uint)this.root.get_int_member("sorting"));
+			ret.add_tag(new Tag("foo", new uint8[]{(uint8)255, (uint8)200, (uint8)100, (uint8)0}));
+			ret.add_tag(new Tag("foo1", new uint8[]{(uint8)255, (uint8)200, (uint8)100, (uint8)0}));
+			ret.add_tag(new Tag("foo2", new uint8[]{(uint8)255, (uint8)100, (uint8)100, (uint8)0}));
+			ret.add_tag(new Tag("foo3", new uint8[]{(uint8)255, (uint8)200, (uint8)100, (uint8)0}));
 			ret.add_account(account);
 			return ret;
 		}
 	}
 
-	internal class ModelV2Builder : ModelBuilder {
+	internal class ModelV2Builder : ModelBuilder, GLib.Object {
 		Json.Object root;
 
 		internal ModelV2Builder(Json.Object root) {
@@ -74,9 +81,10 @@ namespace MoneyWatch {
 				color[0] = (uint8)(colors.get_int_element(0) & 0xFF);
 				color[1] = (uint8)(colors.get_int_element(1) & 0xFF);
 				color[2] = (uint8)(colors.get_int_element(2) & 0xFF);
-				color[3] = colors.get_length() == 3 ? 0 : (uint8)(colors.get_int_element(3) & 0xFF);
+				color[3] = colors.get_length() == 3 ? 255 : (uint8)(colors.get_int_element(3) & 0xFF);
 				ret.add_tag(new Tag(name, color));
 			}
+			info("Loaded %u tags",tags.get_length());
 			var locations = this.root.get_array_member("locations");
 			for(var i = 0; i < locations.get_length(); i++) {
 				var location = tags.get_object_element(i);
@@ -84,6 +92,7 @@ namespace MoneyWatch {
 								location.get_string_member("city"),
 								location.get_string_member("info")));
 			}
+			info("Loaded %u locations",locations.get_length());
 			var accounts = this.root.get_array_member("accounts");
 			for(var i = 0; i < accounts.get_length(); i++) {
 				var account = accounts.get_object_element(i);
@@ -109,8 +118,10 @@ namespace MoneyWatch {
 					}
 					account_ret.add_expense(expense_ret);
 				}
+				info("Loaded %u expenses", expenses.get_length());
 				ret.add_account(account_ret);
 			}
+			info("Loaded %u accounts", accounts.get_length());
 			return ret;
 		}
 	}
