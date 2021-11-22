@@ -32,17 +32,31 @@ namespace MoneyWatch {
 			this.func = (owned)func;
 			this.sharp = true;
 		}
+		internal Json.Node serialize() {
+			var builder = new Json.Builder();
+			builder.begin_object();
+			builder.set_member_name("name");
+			builder.add_string_value(this._name);
+			builder.set_member_name("color");
+			builder.begin_array();
+			for(var i = 0; i < 4; i++) {
+				builder.add_int_value(this._rgba[i]);
+			}
+			builder.end_array();
+			builder.end_object();
+			return builder.get_root();
+		}
 	}
 
 	internal class Location {
 		internal string _name{internal get; private set;}
-		internal string _city{internal get; private set;}
-		string _further_info;
+		internal string? _city{internal get; private set;}
+		string? _further_info;
 
 		bool sharp;
 		TriggerFunc func;
 
-		internal Location(string name, string city, string info) {
+		internal Location(string name, string? city, string? info) {
 			this._name = name;
 			this._city = city;
 			this._further_info = info;
@@ -53,11 +67,11 @@ namespace MoneyWatch {
 			this._name = name;
 			this.fire(TriggerType.EDIT_LOCATION);
 		}
-		internal void set_city(string city) {
+		internal void set_city(string? city) {
 			this._city = city;
 			this.fire(TriggerType.EDIT_LOCATION);
 		}
-		internal void set_info(string info) {
+		internal void set_info(string? info) {
 			this._further_info = info;
 			this.fire(TriggerType.EDIT_LOCATION);
 		}
@@ -69,6 +83,18 @@ namespace MoneyWatch {
 		internal void set_sharp(owned TriggerFunc func) {
 			this.func = (owned)func;
 			this.sharp = true;
+		}
+		internal Json.Node serialize() {
+			var builder = new Json.Builder();
+			builder.begin_object();
+			builder.set_member_name("name");
+			builder.add_string_value(this._name);
+			builder.set_member_name("city");
+			builder.add_string_value(this._city);
+			builder.set_member_name("info");
+			builder.add_string_value(this._further_info);
+			builder.end_object();
+			return builder.get_root();
 		}
 	}
 	internal class Expense {
@@ -87,6 +113,10 @@ namespace MoneyWatch {
 			this._tags = new Gee.ArrayList<Tag>();
 			this.sharp = false;
 			this.func = t => {};
+		}
+		internal void set_tags(Gee.List<Tag> tags) {
+			this._tags = tags;
+			this.fire(TriggerType.EDIT_EXPENSE);
 		}
 		internal void set_purpose(string purpose) {
 			this._purpose = purpose;
@@ -127,6 +157,14 @@ namespace MoneyWatch {
 			});
 			this.fire(TriggerType.EXPENSE_SORT_TAGS);
 		}
+		internal void begin_edits() {
+			this.sharp = false;
+		}
+		internal void end_edits() {
+			this.sharp = true;
+			this.fire(TriggerType.GENERAL);
+		}
+
 		internal string format() {
 			// TODO: Some currencies don't have basic units or a different
 			// rate.
@@ -134,6 +172,35 @@ namespace MoneyWatch {
 			var amount_string = "%s\u202f%.2f".printf(this._currency, this._amount / 100.0);
 			// TODO: Align the three-em dashes
 			return _("%s \u2e3b %s \u2e3b %s").printf(this._purpose, this._date.format("%x"), amount_string);
+		}
+		internal Json.Node serialize() {	
+			var builder = new Json.Builder();
+			builder.begin_object();
+			builder.set_member_name("purpose");
+			builder.add_string_value(this._purpose);
+			builder.set_member_name("amount");
+			builder.add_int_value((int64)this._amount);
+			builder.set_member_name("currency");
+			builder.add_string_value(this._currency);
+			builder.set_member_name("date");
+			builder.begin_object();
+			builder.set_member_name("year");
+			builder.add_int_value(this._date.get_year());
+			builder.set_member_name("month");
+			builder.add_int_value(this._date.get_month());
+			builder.set_member_name("day");
+			builder.add_int_value(this._date.get_day_of_month());
+			builder.end_object();
+			builder.set_member_name("location");
+			builder.add_string_value(this._location == null ? null : this._location._name);
+			builder.set_member_name("tags");
+			builder.begin_array();
+			foreach(var t in this._tags) {
+				builder.add_string_value(t._name);
+			}
+			builder.end_array();
+			builder.end_object();
+			return builder.get_root();
 		}
 	}
 
@@ -143,13 +210,13 @@ namespace MoneyWatch {
 		internal Gee.List<Expense> _expenses{internal get; private set;}
 
 		bool sharp;
-		TriggerFunc func;
+		unowned TriggerFunc func;
 
 		internal Account(string name) {
 			this._name = name;
 			this._expenses = new Gee.ArrayList<Expense>();
 			sharp = false;
-			func = t => {};
+			func = null;
 		}
 		internal void set_name(string name) {
 			this._name = name;
@@ -165,15 +232,20 @@ namespace MoneyWatch {
 			this.fire(TriggerType.EDIT_ACCOUNT);
 		}
 		internal void fire(TriggerType type) {
-			if(!this.sharp || this.func == null)
+			if((!this.sharp) || this.func == null)
 				return;
 			this.func(type);
 		}
-		internal void set_sharp(owned TriggerFunc func) {
-			this.func = (owned)func;
+		internal void delete_expense(Expense expense) {
+			this._expenses.remove(expense);
+			this.fire(TriggerType.EDIT_ACCOUNT);
+		}
+
+		internal void set_sharp(TriggerFunc func) {
+			this.func = func;
 			this.sharp = true;
 			this._expenses.foreach(a => {
-				a.set_sharp((owned)func);
+				a.set_sharp(func);
 				return true;
 			});
 		}
@@ -189,9 +261,9 @@ namespace MoneyWatch {
 					case 4:
 						return a._amount > b._amount ? -1 : (a._amount == b._amount ? 0 : 1);
 					case 5:
-						return a._purpose.collate(b._purpose);
+						return b._purpose.collate(a._purpose);
 					case 6:
-						return a._date.compare(b._date);
+						return b._date.compare(a._date);
 				}
 				return 0;
 			});
@@ -203,6 +275,22 @@ namespace MoneyWatch {
 			}
 			this.fire(TriggerType.ACCOUNT_EXPENSES_SORT);
 		}
+		internal Json.Node serialize() {
+			var builder = new Json.Builder();
+			builder.begin_object();
+			builder.set_member_name("name");
+			builder.add_string_value(this._name);
+			builder.set_member_name("sorting");
+			builder.add_int_value(this._sorting);
+			builder.set_member_name("expenses");
+			builder.begin_array();
+			foreach(var expense in this._expenses) {
+				builder.add_value(expense.serialize());
+			}
+			builder.end_array();
+			builder.end_object();
+			return builder.get_root();
+		}
 	}
 
 	internal class Model {
@@ -211,7 +299,7 @@ namespace MoneyWatch {
 		internal Gee.List<Account> _accounts{internal get; private set;}
 
 		bool sharp;
-		TriggerFunc func;
+		unowned TriggerFunc func;
 
 		internal Model() {
 			this._tags = new Gee.ArrayList<Tag>();
@@ -247,24 +335,31 @@ namespace MoneyWatch {
 			}
 			return null;
 		}
+		internal Account? search_account(string name) {
+			foreach(var a in this._accounts) {
+				if(name == a._name)
+					return a;
+			}
+			return null;
+		}
 		internal void fire(TriggerType type) {
 			if(!this.sharp || this.func == null)
 				return;
 			this.func(type);
 		}
-		internal void set_sharp(owned TriggerFunc func) {
-			this.func = (owned)func;
+		internal void set_sharp(TriggerFunc func) {
+			this.func = func;
 			this.sharp = true;
 			this._tags.foreach(a => {
-				a.set_sharp((owned)func);
+				a.set_sharp(func);
 				return true;
 			});
 			this._locations.foreach(a => {
-				a.set_sharp((owned)func);
+				a.set_sharp(func);
 				return true;
 			});
 			this._accounts.foreach(a => {
-				a.set_sharp((owned)func);
+				a.set_sharp(func);
 				return true;
 			});
 		}
@@ -287,6 +382,38 @@ namespace MoneyWatch {
 		internal bool has_account(Account a) {
 			foreach(var account in this._accounts)
 				if(account._name == a._name)
+					return true;
+			return false;
+		}
+		internal Json.Node serialize() {
+			var builder = new Json.Builder();
+			builder.begin_object();
+			builder.set_member_name("version");
+			builder.add_int_value(2);
+			builder.set_member_name("tags");
+			builder.begin_array();
+			foreach(var tag in this._tags) {
+				builder.add_value(tag.serialize());
+			}
+			builder.end_array();
+			builder.set_member_name("locations");
+			builder.begin_array();
+			foreach(var location in this._locations) {
+				builder.add_value(location.serialize());
+			}
+			builder.end_array();
+			builder.set_member_name("accounts");
+			builder.begin_array();
+			foreach(var account in this._accounts) {
+				builder.add_value(account.serialize());
+			}
+			builder.end_array();
+			builder.end_object();
+			return builder.get_root();
+		}
+		internal bool account_exists(string name) {
+			foreach(var account in this._accounts)
+				if(account._name == name)
 					return true;
 			return false;
 		}

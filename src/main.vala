@@ -18,6 +18,9 @@ namespace MoneyWatch {
 			var panel = new MoneyWatchPanel();
 			window.add(panel);
 			window.show_all();
+			window.destroy.connect(() => {
+				panel.save();
+			});
 		}
 	}
 }

@@ -87,10 +87,11 @@ namespace MoneyWatch {
 			info("Loaded %u tags",tags.get_length());
 			var locations = this.root.get_array_member("locations");
 			for(var i = 0; i < locations.get_length(); i++) {
-				var location = tags.get_object_element(i);
-				ret.add_location(new Location(location.get_string_member("name"),
-								location.get_string_member("city"),
-								location.get_string_member("info")));
+				var location = locations.get_object_element(i);
+				var name = location.get_string_member("name");
+				var city = location.has_member("city") ? location.get_string_member("city") : null;
+				var _info = location.has_member("info") ? location.get_string_member("info") : null;
+				ret.add_location(new Location(name, city, _info));
 			}
 			info("Loaded %u locations",locations.get_length());
 			var accounts = this.root.get_array_member("accounts");
@@ -110,7 +111,7 @@ namespace MoneyWatch {
 										(int)date.get_int_member("year"),
 										(int)date.get_int_member("month"),
 										(int)date.get_int_member("day"), 0, 0, 0));
-					if(expense.has_member("location"))
+					if(expense.has_member("location") && expense.get_string_member("location") != null)
 						expense_ret.set_location(ret.search_location(expense.get_string_member("location")));
 					var assigned_tags = expense.get_array_member("tags");
 					for(var k = 0; k < assigned_tags.get_length(); k++) {
