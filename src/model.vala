@@ -84,6 +84,11 @@ namespace MoneyWatch {
 			this.func = (owned)func;
 			this.sharp = true;
 		}
+		internal string id_string() {
+			if(this._city == null || this._city == "" || this._city.length == 0)
+				return this._name;
+			return this._name + ",\u00a0" + this._city;
+		}
 		internal Json.Node serialize() {
 			var builder = new Json.Builder();
 			builder.begin_object();
@@ -102,7 +107,7 @@ namespace MoneyWatch {
 		internal uint64 _amount;
 		internal string _currency;
 		internal DateTime _date;
-		internal Location _location;
+		internal Location? _location;
 		internal Gee.List<Tag> _tags;
 
 		bool sharp;
@@ -134,7 +139,7 @@ namespace MoneyWatch {
 			this._date = date;
 			this.fire(TriggerType.EDIT_EXPENSE);
 		}
-		internal void set_location(Location location) {
+		internal void set_location(Location? location) {
 			this._location = location;
 			this.fire(TriggerType.EDIT_EXPENSE);
 		}
@@ -192,7 +197,9 @@ namespace MoneyWatch {
 			builder.add_int_value(this._date.get_day_of_month());
 			builder.end_object();
 			builder.set_member_name("location");
-			builder.add_string_value(this._location == null ? null : this._location._name);
+			builder.add_string_value(this._location == null ? "" : this._location._name);
+			builder.set_member_name("location_city");
+			builder.add_string_value(this._location == null ? "" : (this._location._city == null ? "" : this._location._city));
 			builder.set_member_name("tags");
 			builder.begin_array();
 			foreach(var t in this._tags) {
@@ -321,9 +328,18 @@ namespace MoneyWatch {
 			this._accounts.add(account);
 			this.fire(TriggerType.ADD_ACCOUNT);
 		}
-		internal Location? search_location(string name) {
+		internal Location? search_location(string name, string city) {
 			foreach(var l in this._locations) {
-				if(name == l._name)
+				var b1 = l._city == "" && city == null;
+				var b2 = l._city == null && city == "";
+				if(name == l._name && (city == l._city || b1 || b2))
+					return l;
+			}
+			return null;
+		}
+		internal Location? search_location_by_id(string id) {
+			foreach(var l in this._locations) {
+				if(id == l.id_string())
 					return l;
 			}
 			return null;
@@ -341,6 +357,26 @@ namespace MoneyWatch {
 					return a;
 			}
 			return null;
+		}
+		internal void rename_tag(string old, string @new) {
+			foreach(var t in this._tags) {
+				if(old == t._name) {
+					t.set_name(@new);
+					break;
+				}
+			}
+			this.sort();
+		}
+		internal void rename_location(string old, string? city, string @new) {
+			foreach(var l in this._locations) {
+				var b1 = l._city == "" && city == null;
+				var b2 = l._city == null && city == "";
+				if(old == l._name && (l._city == city || b1 || b2)) {
+					l.set_name(@new);
+					break;
+				}
+			}
+			this.sort();
 		}
 		internal void fire(TriggerType type) {
 			if(!this.sharp || this.func == null)

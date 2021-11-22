@@ -314,9 +314,9 @@ namespace MoneyWatch {
 				this.location_chooser = new Gtk.ComboBoxText();
 				this.location_chooser.append("$$<<NU$$LL>>$$", "");
 				foreach(var loc in model._locations) {
-					this.location_chooser.append(loc._name, loc._name);
+					this.location_chooser.append(loc.id_string(), loc.id_string());
 				}
-				this.location_chooser.active_id = expense._location == null ? "$$<<NU$$LL>>$$" : expense._location._name;
+				this.location_chooser.active_id = expense._location == null ? "$$<<NU$$LL>>$$" : expense._location.id_string();
 				this.first_line.pack_start(this.location_chooser, true, true, 2);
 				this.pack_start(this.first_line, true, true, 2);
 				this.second_line = new Gtk.Calendar();
@@ -343,7 +343,7 @@ namespace MoneyWatch {
 					// FIXME: It's not always times 100
 					expense.set_amount((uint64)(double.parse(this.amount.buffer.text) * 100));
 					var loc = this.location_chooser.get_active_text();
-					expense.set_location(loc == "" ? null : model.search_location(loc));
+					expense.set_location(loc == "" ? null : model.search_location_by_id(loc));
 					uint year = 0;
 					uint month = 0;
 					uint day = 0;
@@ -364,7 +364,7 @@ namespace MoneyWatch {
 					this.purpose.buffer.set_text(expense._purpose.data);
 					// FIXME: It's not always the factor 100
 					this.amount.buffer.set_text("%.2f".printf(expense._amount / 100.0).data);
-					this.location_chooser.active_id = expense._location == null ? "$$<<NU$$LL>>$$" : expense._location._name;
+					this.location_chooser.active_id = expense._location == null ? "$$<<NU$$LL>>$$" : expense._location.id_string();
 					var d = expense._date;
 					this.second_line.select_month(d.get_month() -1, d.get_year());
 					this.second_line.select_day(d.get_day_of_month());
@@ -407,7 +407,7 @@ namespace MoneyWatch {
 		
 		internal LocationButton(Location l) {
 			this.location = l;
-			this.label = "%s, %s".printf(l._name, l._city);
+			this.label = l.id_string();
 			this.get_style_context().add_class("circular");
 		}
 	}
@@ -460,7 +460,10 @@ namespace MoneyWatch {
 			this.pack_start(this.accounts, false, false, 2);
 			this.locations = new Expander(_("Locations"), new LocationActionHandler(this.model), "text", false);
 			foreach(var location in model._locations) {
-				this.locations.append_string(location._name);
+				var n = location._name;
+				var c = location._city;
+				var n_c = (c == null || c == "") ? n : "%s, %s".printf(n, c);
+				this.locations.append_string(n_c, location.id_string());
 			}
 			this.locations.set_expanded(expanded_locations);
 			this.pack_start(this.locations, false, false, 2);
@@ -541,7 +544,6 @@ namespace MoneyWatch {
 					var btn = new RecommendedColorButton(c2, list);
 					btn.join_group(custom_color);
 					list.add(btn);
-					var lbl = new Gtk.Label(null);
 					box.pack_start(btn, true, true, 2);
 				}
 				var scr = new Gtk.ScrolledWindow(null, null);
@@ -605,7 +607,15 @@ namespace MoneyWatch {
 				dialog.get_content_area().pack_start(info, true, true, 2);
 				name.changed.connect(() => {
 					var btn = ((Gtk.Button)dialog.get_widget_for_response(0));
-					if(name.buffer.text.length == 0 || model.search_location(name.buffer.text) != null) {
+					if(name.buffer.text.length == 0 || model.search_location(name.buffer.text, city.buffer.text) != null) {
+						btn.set_sensitive(false);
+					} else {
+						btn.set_sensitive(true);
+					}
+				});
+				city.changed.connect(() => {
+					var btn = ((Gtk.Button)dialog.get_widget_for_response(0));
+					if(name.buffer.text.length == 0 || model.search_location(name.buffer.text, city.buffer.text) != null) {
 						btn.set_sensitive(false);
 					} else {
 						btn.set_sensitive(true);
@@ -684,8 +694,8 @@ namespace MoneyWatch {
 			this.treeView = new TreeViewWithAction(s, handler, type, editable);
 			this.add(this.treeView);
 		}
-		internal void append_string(string val) {
-			this.treeView.append_string(val);
+		internal void append_string(string val, string shadow = "") {
+			this.treeView.append_string(val, shadow == null ? "" : shadow);
 		}
 	}
 	internal class TreeViewWithAction : Gtk.TreeView {
@@ -694,7 +704,7 @@ namespace MoneyWatch {
 
 		internal TreeViewWithAction(string s, ActionHandler handler, string type =  "text", bool editable = true) {
 			this.get_selection().set_mode(Gtk.SelectionMode.BROWSE);
-			this.store = new Gtk.ListStore(1, GLib.Type.STRING);
+			this.store = new Gtk.ListStore(3, GLib.Type.STRING, GLib.Type.STRING, GLib.Type.STRING);
 			this.hover_selection = true;
 			this.enable_search = true;
 			var column = new Gtk.TreeViewColumn();
@@ -713,6 +723,10 @@ namespace MoneyWatch {
 				selected.get_selected(out model, out iter);
 				var val = Value(typeof(string));
 				this.store.get_value(iter, 0, out val);
+				var val2 = Value(typeof(string));
+				// id_string
+				this.store.get_value(iter, 1, out val2);
+				info("Shadow: %s", (string)val2);
 				handler.handle_mouse_press((string)val, event);
 				return false;
 			});
@@ -724,8 +738,9 @@ namespace MoneyWatch {
 				selected.get_selected(out model, out iter);
 				var val = Value(typeof(string));
 				this.store.get_value(iter, 0, out val);
-				if(handler.handle_edit((string)val, new_text))
-					this.store.set_value(iter, 0, new_text);
+				string out_val = "";
+				if(handler.handle_edit((string)val, new_text, out out_val))
+					this.store.set_value(iter, 0, out_val == null ? new_text : out_val);
 			});
 			this.key_release_event.connect_after((event) => {
 				var selected = this.get_selection();
@@ -739,13 +754,17 @@ namespace MoneyWatch {
 			});
 		}
 
-		internal void append_string(string val) {
-			this.store.insert_with_values(out tp, -1, 0, val, -1);
+		internal void append_string(string val, string shadow = "") {
+			var val1 = Value(typeof(string));
+			var val2 = Value(typeof(string));
+			val1.set_string(val);
+			val2.set_string(shadow);
+			this.store.insert_with_valuesv(out tp, -1, new int[]{0, 1}, new Value[]{val1, val2});
 		}
 	}
 	interface ActionHandler : GLib.Object {
 		// If true, accept the change, else reject
-		internal abstract bool handle_edit(string old, string @new);
+		internal abstract bool handle_edit(string old, string @new, out string replacement);
 		internal abstract void handle_mouse_press(string selected, Gdk.EventButton event);
 		internal abstract void handle_key_press(string selected, Gdk.EventKey key);
 	}
@@ -756,7 +775,8 @@ namespace MoneyWatch {
 			this.model = model;
 			this.func = func;
 		}
-		bool handle_edit(string old, string @new) {
+		bool handle_edit(string old, string @new, out string replacement) {
+			replacement = null;
 			warning("Didn't expect a call to AccountActionHandler::handle_edit!");
 			return false; // Shouldn't be called
 		}
@@ -774,13 +794,16 @@ namespace MoneyWatch {
 		internal LocationActionHandler(Model model) {
 			this.model = model;
 		}
-		bool handle_edit(string old, string @new) {
-			// TODO: Error message
-			return this.model.search_location(@new) == null;
+		bool handle_edit(string old, string @new, out string replacement) {
+			replacement = null;
+			return false;
 		}
 		void handle_mouse_press(string selected, Gdk.EventButton event) {
 			// On doubleclick open info window where it can be edited
 			// Open in the AccountInfo
+			if(event.type == Gdk.EventType.@2BUTTON_PRESS) {
+				// Show window
+			}
 		}
 		void handle_key_press(string selected, Gdk.EventKey key) {
 			
@@ -791,14 +814,23 @@ namespace MoneyWatch {
 		internal TagActionHandler(Model model) {
 			this.model = model;
 		}
-		bool handle_edit(string old, string @new) {
-			
-			// Extract ??? from <span...>???</span>
+		bool handle_edit(string old, string @new, out string replacement) {
+			replacement = null;
+			var prologue_len = "<b><span foreground=\"#11223344\" >".length;
+			var epilogue_len = "</span></b>".length;
+			var content_len = @old.length - (prologue_len + epilogue_len);
+			var old_name = @old.slice(prologue_len, prologue_len + content_len);
+			if(old_name == @new)
+				return false;
+			if(this.model.search_tag(@new) != null)
+				return false;
+			replacement = @old.substring(0, prologue_len) + @new + "</span></b>";
+			model.rename_tag(old_name, @new);
 			return false;
 		}
 		void handle_mouse_press(string selected, Gdk.EventButton event) {
 			// On doubleclick open info window where it can be edited
-			// Open in the AccountInfo
+			// If rightclick, show menu with "Delete"
 		}
 		void handle_key_press(string selected, Gdk.EventKey key) {
 			

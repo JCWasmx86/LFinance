@@ -111,8 +111,10 @@ namespace MoneyWatch {
 										(int)date.get_int_member("year"),
 										(int)date.get_int_member("month"),
 										(int)date.get_int_member("day"), 0, 0, 0));
-					if(expense.has_member("location") && expense.get_string_member("location") != null)
-						expense_ret.set_location(ret.search_location(expense.get_string_member("location")));
+					if(expense.has_member("location") && expense.get_string_member("location") != null) {
+						var city = expense.has_member("location_city") ? expense.get_string_member("location_city") : null;
+						expense_ret.set_location(ret.search_location(expense.get_string_member("location"), city));
+					}
 					var assigned_tags = expense.get_array_member("tags");
 					for(var k = 0; k < assigned_tags.get_length(); k++) {
 						expense_ret.add_tag(ret.search_tag(assigned_tags.get_string_element(i)));
