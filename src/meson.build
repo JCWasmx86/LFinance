@@ -2,11 +2,13 @@ src = [
 	'constants.vala',
 	'gui.vala',
 	'main.vala',
-	'modelBuilder.vala',
 	'model/account.vala',
 	'model/expense.vala',
 	'model/location.vala',
 	'model/model.vala',
+	'model/modelBuilder/modelBuilderFactory.vala',
+	'model/modelBuilder/V1Builder.vala',
+	'model/modelBuilder/V2Builder.vala',
 	'model/shared.vala',
 	'model/tag.vala'
 ]
