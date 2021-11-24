@@ -2,8 +2,13 @@ src = [
 	'constants.vala',
 	'gui.vala',
 	'main.vala',
-	'model.vala',
-	'modelBuilder.vala'
+	'modelBuilder.vala',
+	'model/account.vala',
+	'model/expense.vala',
+	'model/location.vala',
+	'model/model.vala',
+	'model/shared.vala',
+	'model/tag.vala'
 ]
 deps = [
 	dependency('glib-2.0'),

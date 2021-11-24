@@ -288,6 +288,10 @@ namespace MoneyWatch {
 			// [Calendar]
 			// [Taglist][Addbutton]
 			// [Save][Cancel]
+			Model model;
+			Account account;
+			Expense expense;
+
 			Gtk.Box first_line;
 			Gtk.Entry purpose;
 			Gtk.Entry amount;
@@ -302,6 +306,9 @@ namespace MoneyWatch {
 
 			internal EditWidget(Model model, Account account, Expense expense) {
 				Object(orientation: Gtk.Orientation.VERTICAL, spacing: 2);
+				this.model = model;
+				this.account = account;
+				this.expense = expense;
 				this.first_line = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
 				var buffer = new Gtk.EntryBuffer();
 				buffer.set_text(expense._purpose.data);
@@ -326,13 +333,16 @@ namespace MoneyWatch {
 				this.pack_start(this.second_line, true, true, 2);
 				this.tags = new Gee.ArrayList<ExtendedTagButton>();
 				this.third_line = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
+				this.add_tag = new Gtk.Button.from_icon_name("list-add");
+				this.add_tag.clicked.connect(() => {
+					this.show_tag_selection_dialog();
+				});
+				this.third_line.pack_start(this.add_tag, true, true, 2);
 				foreach(var tag in expense._tags) {
 					var btn = new ExtendedTagButton(tag, account, expense);
 					this.tags.add(btn);
 					this.third_line.pack_start(btn, true, true, 2);
 				}
-				this.add_tag = new Gtk.Button.from_icon_name("list-add");
-				this.third_line.pack_start(this.add_tag, true, true, 2);
 				this.pack_start(this.third_line, true, true, 2);
 				this.fourth_line = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
 				this.edit = new Gtk.Button.with_label(_("Save edits"));
@@ -350,11 +360,10 @@ namespace MoneyWatch {
 					this.second_line.get_date(out year, out month, out day);
 					month++;
 					expense.set_date(new DateTime.local((int)year, (int)month, (int)day, 0, 0, 0));
-					var new_tag_list = new Gee.ArrayList<Tag>();
+					expense._tags.remove_all(expense._tags);
 					foreach(var tag in this.tags) {
-						new_tag_list.add(tag.get_tag());
+						expense._tags.add(tag.get_tag());
 					}
-					expense.set_tags(new_tag_list);
 					expense.end_edits();
 				});
 				this.fourth_line.pack_start(this.edit, true, true, 2);
@@ -382,6 +391,50 @@ namespace MoneyWatch {
 				this.fourth_line.pack_start(this.cancel, true, true, 2);
 				this.pack_start(this.fourth_line, true, true, 2);
 			}
+			void show_tag_selection_dialog() {
+				var dialog = new Gtk.Dialog.with_buttons(_("Add tag"), null, Gtk.DialogFlags.MODAL);
+				dialog.add_button(_("Add tag"), 0);
+				dialog.add_button(_("Cancel"), 1);
+				var b = new Gtk.Box(Gtk.Orientation.VERTICAL, 2);
+				var buttons = new SList<Gtk.RadioButton>();
+				foreach(var tag in model._tags) {
+					bool found = false;
+					foreach(var btn in this.tags) {
+						if(tag._name == btn.get_tag()._name) {
+							found = true;
+							break;
+						}
+					}
+					if(found)
+						continue;
+					var radio = new Gtk.RadioButton.with_label(buttons, tag._name);
+					buttons.append(radio);
+					b.add(radio);
+				}
+				var scr = new Gtk.ScrolledWindow(null, null);
+				scr.add(b);
+				dialog.get_content_area().pack_start(scr, true, true, 2);
+				dialog.show_all();
+				var result = dialog.run();
+				if(result == 0) {
+					foreach(var radio in buttons) {
+						if(radio.get_active()) {
+							var btn = new ExtendedTagButton(model.search_tag(radio.label), account, expense);
+							this.tags.add(btn);
+							Gdk.threads_add_idle_full(GLib.Priority.HIGH_IDLE + 20, () => {
+								this.third_line.pack_start(btn, true, true, 2);
+								this.third_line.show_all();
+								this.third_line.queue_draw();
+							 	return false;
+							});
+							break;
+						}
+					}
+					dialog.destroy();
+				} else {
+					dialog.destroy();
+				}
+			}
 	}
 
 	internal class ExtendedTagButton : Gtk.Box {
@@ -391,11 +444,11 @@ namespace MoneyWatch {
 			this.tag = t;
 			var label = new Gtk.Label("");
 			var colors = t._rgba;
-			label.label = "<b><span foreground=\"#%02x%02x%02x%02x\" >".printf(colors[0], colors[1], colors[2], colors[3]) + t._name + "</span></b>";
-			this.pack_start(label, true, true, 2);
+			label.set_markup("<b><span foreground=\"#%02x%02x%02x%02x\" >".printf(colors[0], colors[1], colors[2], colors[3]) + t._name + "</span></b>");
+			this.pack_start(label, false, false, 2);
 			var button = new Gtk.Button.from_icon_name("edit-delete");
 			button.tooltip_text = _("Delete Tag");
-			this.pack_start(button, true, true, 2);
+			this.pack_start(button, false, false, 2);
 		}
 		internal Tag get_tag() {
 			return this.tag;
