@@ -53,7 +53,7 @@ namespace MoneyWatch {
 					}
 					var assigned_tags = expense.get_array_member("tags");
 					for(var k = 0; k < assigned_tags.get_length(); k++) {
-						expense_ret.add_tag(ret.search_tag(assigned_tags.get_string_element(i)));
+						expense_ret.add_tag(ret.search_tag(assigned_tags.get_string_element(k)));
 					}
 					account_ret.add_expense(expense_ret);
 				}

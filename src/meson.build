@@ -1,6 +1,12 @@
 src = [
 	'constants.vala',
 	'gui.vala',
+	'gui/panel.vala',
+	'gui/right/accountInfo.vala',
+	'gui/right/editWidget.vala',
+	'gui/right/expenseList.vala',
+	'gui/right/expenseWidget.vala',
+	'gui/right/overview.vala',
 	'main.vala',
 	'model/account.vala',
 	'model/expense.vala',
