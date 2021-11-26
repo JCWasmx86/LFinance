@@ -91,10 +91,7 @@ namespace MoneyWatch {
 			this.pack_start(this.accounts, false, false, 2);
 			this.locations = new Expander(_("Locations"), new LocationActionHandler(this.model), "text", false);
 			foreach(var location in model._locations) {
-				var n = location._name;
-				var c = location._city;
-				var n_c = (c == null || c == "") ? n : "%s, %s".printf(n, c);
-				this.locations.append_string(n_c, location.id_string());
+				this.locations.append_string(location.id_string(), location.id_string());
 			}
 			this.locations.set_expanded(expanded_locations);
 			this.pack_start(this.locations, false, false, 2);
@@ -412,9 +409,19 @@ namespace MoneyWatch {
 			return false; // Shouldn't be called
 		}
 		void handle_mouse_press(string selected, Gdk.EventButton event) {
+			if(event.type == Gdk.EventType.BUTTON_PRESS && event.button == 3) {
+				var menu = new Gtk.Menu();
+				var item = new Gtk.MenuItem.with_label(_("Delete"));
+				item.activate.connect(() => {
+					this.model.remove_account_by_name(selected);
+				});
+				menu.append(item);
+				menu.show_all();
+				menu.popup_at_pointer(event);
+				return;
+			}
 			info("Account selected: %s", selected);
 			this.func(selected);
-			// Open in the AccountInfo
 		}
 		void handle_key_press(string selected, Gdk.EventKey key) {
 			
@@ -430,10 +437,21 @@ namespace MoneyWatch {
 			return false;
 		}
 		void handle_mouse_press(string selected, Gdk.EventButton event) {
-			// On doubleclick open info window where it can be edited
-			// Open in the AccountInfo
-			if(event.type == Gdk.EventType.@2BUTTON_PRESS) {
-				// Show window
+			if(event.type == Gdk.EventType.BUTTON_PRESS && event.button == 3) {
+				var menu = new Gtk.Menu();
+				var edit = new Gtk.MenuItem.with_label(_("Edit"));
+				edit.activate.connect(() => {
+					// Open "Edit" window
+				});
+				menu.append(edit);
+				var @delete = new Gtk.MenuItem.with_label(_("Delete"));
+				@delete.activate.connect(() => {
+					this.model.remove_location_by_id(selected);
+				});
+				menu.append(@delete);
+				menu.show_all();
+				menu.popup_at_pointer(event);
+				return;
 			}
 		}
 		void handle_key_press(string selected, Gdk.EventKey key) {
@@ -460,8 +478,26 @@ namespace MoneyWatch {
 			return false;
 		}
 		void handle_mouse_press(string selected, Gdk.EventButton event) {
-			// On doubleclick open info window where it can be edited
-			// If rightclick, show menu with "Delete"
+			if(event.type == Gdk.EventType.BUTTON_PRESS && event.button == 3) {
+				var menu = new Gtk.Menu();
+				var edit = new Gtk.MenuItem.with_label(_("Edit"));
+				edit.activate.connect(() => {
+					// Open "Edit" window
+				});
+				menu.append(edit);
+				var @delete = new Gtk.MenuItem.with_label(_("Delete"));
+				@delete.activate.connect(() => {
+					var prologue_len = "<b><span foreground=\"#11223344\" >".length;
+					var epilogue_len = "</span></b>".length;
+					var content_len = selected.length - (prologue_len + epilogue_len);
+					var old_name = selected.slice(prologue_len, prologue_len + content_len);
+					this.model.remove_tag_by_name(old_name);
+				});
+				menu.append(@delete);
+				menu.show_all();
+				menu.popup_at_pointer(event);
+				return;
+			}
 		}
 		void handle_key_press(string selected, Gdk.EventKey key) {
 			

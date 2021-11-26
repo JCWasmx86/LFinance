@@ -38,6 +38,7 @@ namespace MoneyWatch {
 		}
 		internal Location? search_location_by_id(string id) {
 			foreach(var l in this._locations) {
+				info((l.id_string() == id).to_string() + "//" + id + "//" + l.id_string());
 				if(id == l.id_string())
 					return l;
 			}
@@ -119,6 +120,46 @@ namespace MoneyWatch {
 				if(account._name == a._name)
 					return true;
 			return false;
+		}
+		internal void remove_account_by_name(string s) {
+			var index = 0;
+			foreach(var account in this._accounts) {
+				if(account._name == s)
+					break;
+				index++;
+			}
+			this._accounts.remove_at(index);
+			this.fire(TriggerType.GENERAL);
+		}
+		internal void remove_tag_by_name(string s) {
+			var t = this.search_tag(s);
+			foreach(var account in this._accounts) {
+				foreach(var expense in account._expenses) {
+					for(var i = 0; i < expense._tags.size; i++) {
+						if(expense._tags[i]._name == s) {
+							expense._tags.remove_at(i);
+							i--;
+						}
+					}
+				}
+			}
+			this._tags.remove(t);
+			this.fire(TriggerType.GENERAL);
+		}
+		internal void remove_location_by_id(string id) {
+			var loc = this.search_location_by_id(id);
+			info("Removing %s", id);
+			foreach(var account in this._accounts) {
+				foreach(var expense in account._expenses) {
+					if(expense._location != null && expense._location.id_string() == loc.id_string()) {
+						expense._location = null;
+					}
+				}
+			}
+			info("%u", this._locations.size);
+			this._locations.remove(loc);
+			info("%u", this._locations.size);
+			this.fire(TriggerType.GENERAL);
 		}
 		internal Json.Node serialize() {
 			var builder = new Json.Builder();

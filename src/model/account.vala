@@ -24,6 +24,9 @@ namespace MoneyWatch {
 		}
 		internal void add_expense(Expense expense) {
 			this._expenses.add(expense);
+			expense.sort();
+			expense.set_sharp(this.func);
+			this.sort(false);
 			this.fire(TriggerType.EDIT_ACCOUNT);
 		}
 		internal void fire(TriggerType type) {
