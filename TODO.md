@@ -2,7 +2,7 @@
 
 ## General
 - [ ] Cleanup the code
-- [ ] Split the files into multiple directories/files
+- [x] Split the files into multiple directories/files
 - [ ] Document what consequences each action should have
 
 ## Left side
