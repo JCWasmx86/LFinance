@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=MoneyWatch
+Comment=Manage your finances
+TryExec=money_watch
+Exec=money_watch
+Icon=jcwasmx86.money_watch
+Terminal=false
+Type=Application
+StartupNotify=true
+Keywords=money,finance;
