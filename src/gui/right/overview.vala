@@ -34,7 +34,6 @@ namespace MoneyWatch {
 					this.is_editing = false;
 				} else {
 					this.btn.set_label(_("Save"));
-					this.btn.set_sensitive(false);
 					this.name_entry.editable = true;
 					this.name_entry.can_focus = true;
 					this.is_editing = true;

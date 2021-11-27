@@ -45,5 +45,7 @@ data_dir = join_paths(meson.source_root(), 'data')
 po_dir = join_paths(meson.source_root(), 'po')
 src_dir = join_paths(meson.source_root(), 'src')
 
+subdir('data')
 subdir('src')
 subdir('po')
+meson.add_install_script('update_cache.sh', icondir)
