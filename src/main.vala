@@ -59,7 +59,7 @@ namespace MoneyWatch {
 				copyright = _("Copyright © 2021 JCWasmx86"),
 				license_type = Gtk.License.AGPL_3_0,
 				authors = authors,
-				website = "https://github.com/JCWasmx86/MoneyWatch",
+				website = "https://github.com/JCWasmx86/MoneyWatch"
 			};
 			dialog.show();
 		}
