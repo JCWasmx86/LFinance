@@ -413,6 +413,14 @@ namespace MoneyWatch {
 				var menu = new Gtk.Menu();
 				var item = new Gtk.MenuItem.with_label(_("Delete"));
 				item.activate.connect(() => {
+					var md = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.QUESTION, Gtk.ButtonsType.NONE, _("Do you really want to delete the account %s?").printf(selected));
+					md.add_button(_("Delete"), 0);
+					md.add_button(_("Cancel"), 1);
+					if(md.run() == 1) {
+						md.destroy();
+						return;
+					}
+					md.destroy();
 					this.model.remove_account_by_name(selected);
 				});
 				menu.append(item);
@@ -441,11 +449,36 @@ namespace MoneyWatch {
 				var menu = new Gtk.Menu();
 				var edit = new Gtk.MenuItem.with_label(_("Edit"));
 				edit.activate.connect(() => {
-					// Open "Edit" window
+					var location = model.search_location_by_id(selected);
+					var dialog = new LocationEditDialog(selected, model);
+					var result = dialog.run();
+					var name = dialog.get_name();
+					var city = dialog.get_city();
+					var info = dialog.get_info();
+					dialog.destroy();
+					if(result == 0) {
+						// Edit and fire
+						location.set_name(name);
+						location.set_city(city);
+						location.set_info(info);
+						dialog.destroy();
+						model._locations.sort((a, b) => {
+							return a._name.collate(b._name);
+						});
+						model.fire(TriggerType.GENERAL);
+					}
 				});
 				menu.append(edit);
 				var @delete = new Gtk.MenuItem.with_label(_("Delete"));
 				@delete.activate.connect(() => {
+					var md = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.QUESTION, Gtk.ButtonsType.NONE, _("Do you really want to delete this location?"));
+					md.add_button(_("Delete"), 0);
+					md.add_button(_("Cancel"), 1);
+					if(md.run() == 1) {
+						md.destroy();
+						return;
+					}
+					md.destroy();
 					this.model.remove_location_by_id(selected);
 				});
 				menu.append(@delete);
@@ -482,7 +515,32 @@ namespace MoneyWatch {
 				var menu = new Gtk.Menu();
 				var edit = new Gtk.MenuItem.with_label(_("Edit"));
 				edit.activate.connect(() => {
-					// Open "Edit" window
+					var prologue_len = "<b><span foreground=\"#11223344\" >".length;
+					var epilogue_len = "</span></b>".length;
+					var content_len = selected.length - (prologue_len + epilogue_len);
+					var old_name = selected.slice(prologue_len, prologue_len + content_len);
+					var tag = this.model.search_tag(old_name);
+					var dialog = new TagEditDialog(tag, model);
+					var result = dialog.run();
+					var new_name = dialog.get_new_name();
+					var rgba = dialog.get_rgba();
+					dialog.destroy();
+					if(result == 0) {
+							tag.set_name(new_name);
+							tag.set_rgba(rgba);
+							model._tags.sort((a, b) => {
+								return a._name.collate(b._name);
+							});
+							model._accounts.foreach(a => {
+								foreach(var expense in a._expenses) {
+									expense._tags.sort((a, b) => {
+										return a._name.collate(b._name);
+									});
+								}
+								return true;
+							});
+							model.fire(TriggerType.GENERAL);
+					}
 				});
 				menu.append(edit);
 				var @delete = new Gtk.MenuItem.with_label(_("Delete"));
@@ -491,6 +549,14 @@ namespace MoneyWatch {
 					var epilogue_len = "</span></b>".length;
 					var content_len = selected.length - (prologue_len + epilogue_len);
 					var old_name = selected.slice(prologue_len, prologue_len + content_len);
+					var md = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.QUESTION, Gtk.ButtonsType.NONE, _("Do you really want to delete the tag %s?").printf(old_name));
+					md.add_button(_("Delete"), 0);
+					md.add_button(_("Cancel"), 1);
+					if(md.run() == 1) {
+						md.destroy();
+						return;
+					}
+					md.destroy();
 					this.model.remove_tag_by_name(old_name);
 				});
 				menu.append(@delete);
@@ -501,6 +567,70 @@ namespace MoneyWatch {
 		}
 		void handle_key_press(string selected, Gdk.EventKey key) {
 			
+		}
+	}
+	internal class LocationEditDialog : Gtk.Dialog {
+		Gtk.Entry name_entry;
+		Gtk.Entry city;
+		Gtk.TextView textview;
+		
+		internal LocationEditDialog(string selected, Model model) {
+			this.title = _("Edit location");
+			var location = model.search_location_by_id(selected);
+			this.name_entry = new Gtk.Entry();
+			this.name_entry.set_text(location._name);
+			this.city = new Gtk.Entry();
+			this.city.set_text(location._city);
+			this.textview = new Gtk.TextView();
+			this.textview.buffer.set_text(location._further_info);
+			this.get_content_area().pack_start(new Gtk.Label(_("Name:")), false, true, 2);
+			this.get_content_area().pack_start(this.name_entry, false, true, 2);
+			this.get_content_area().pack_start(new Gtk.Label(_("City:")), false, true, 2);
+			this.get_content_area().pack_start(this.city, false, true, 2);
+			this.get_content_area().pack_start(new Gtk.Label(_("Further information")), false, true, 2);
+			this.get_content_area().pack_start(this.textview, true, true, 2);
+			this.add_button(_("Edit"), 0);
+			this.add_button(_("Cancel"), 1);
+			this.show_all();
+		}
+		internal string get_name() {
+			return this.name_entry.buffer.text;
+		}
+		internal string get_city() {
+			return this.city.buffer.text;
+		}
+		internal string get_info() {
+			return this.textview.buffer.text;
+		}
+	}
+
+	internal class TagEditDialog : Gtk.Dialog {
+		Gtk.Entry name_entry;
+		Gtk.ColorButton button;
+
+		internal TagEditDialog(Tag tag, Model model) {
+			this.title = _("Edit tag");
+			this.name_entry = new Gtk.Entry();
+			this.name_entry.buffer.set_text(tag._name.data);
+			this.button = new Gtk.ColorButton();
+			this.button.set_rgba(Gdk.RGBA(){
+				red = tag._rgba[0] / 255.0,
+				green = tag._rgba[1] / 255.0,
+				blue = tag._rgba[2] / 255.0,
+				alpha = tag._rgba[3] / 255.0
+			});
+			this.get_content_area().pack_start(this.name_entry, true, false, 2);
+			this.get_content_area().pack_start(this.button, true, false, 2);
+			this.add_button(_("Edit"), 0);
+			this.add_button(_("Cancel"), 1);
+			this.show_all();
+		}
+		internal string get_new_name() {
+			return this.name_entry.buffer.text;
+		}
+		internal uint8[] get_rgba() {
+			var rgba = this.button.get_rgba();
+			return new uint8[]{(uint8)(rgba.red * 255), (uint8)(rgba.green * 255), (uint8)(rgba.blue * 255), (uint8)(rgba.alpha *255)};
 		}
 	}
 }

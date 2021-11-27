@@ -6,9 +6,9 @@
 - [ ] Document what consequences each action should have
 
 ## Left side
-- [ ] Rightclick on tag opens menu: DELETE and EDIT
-- [ ] Rightclick on location opens menu: DELETE and EDIT
-- [ ] Rightclick on account opens menu: DELETE
+- [x] Rightclick on tag opens menu: DELETE and EDIT
+- [x] Rightclick on location opens menu: DELETE and EDIT
+- [x] Rightclick on account opens menu: DELETE
 
 ## Right side
 ### Overview

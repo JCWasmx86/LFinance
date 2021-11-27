@@ -38,7 +38,6 @@ namespace MoneyWatch {
 		}
 		internal Location? search_location_by_id(string id) {
 			foreach(var l in this._locations) {
-				info((l.id_string() == id).to_string() + "//" + id + "//" + l.id_string());
 				if(id == l.id_string())
 					return l;
 			}

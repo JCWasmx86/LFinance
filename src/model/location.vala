@@ -1,8 +1,8 @@
 namespace MoneyWatch {
 	internal class Location {
-		internal string _name{internal get; private set;}
-		internal string? _city{internal get; private set;}
-		string? _further_info;
+		internal string _name{internal get; internal set;}
+		internal string? _city{internal get; internal set;}
+		internal string? _further_info{internal get; internal set;}
 
 		bool sharp;
 		TriggerFunc func;
@@ -10,7 +10,7 @@ namespace MoneyWatch {
 		internal Location(string name, string? city, string? info) {
 			this._name = name;
 			this._city = city;
-			this._further_info = info;
+			this._further_info = info == null ? "" : info;
 			this.sharp = false;
 			this.func = t => {};
 		}
