@@ -7,7 +7,7 @@ The at the moment only Fedora and Debian are supported. These instructions may w
 ### Fedora
 
 ```
-sudo dnf install git glib2-devel pkgconf-pkg-config meson ninja vala libgee-devel json-glib-devel gtk3-devel
+sudo dnf install git glib2-devel pkgconf-pkg-config meson ninja-build vala libgee-devel json-glib-devel gtk3-devel
 ```
 
 ### Debian
