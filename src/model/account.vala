@@ -73,6 +73,15 @@ namespace MoneyWatch {
 			}
 			this.fire(TriggerType.ACCOUNT_EXPENSES_SORT);
 		}
+		internal Gee.List<Expense> expenses_after(DateTime date) {
+			var ret = new Gee.ArrayList<Expense>();
+			foreach(var expense in this._expenses) {
+				if(expense._date.compare(date) >= 0) {
+					ret.add(expense);
+				}
+			}
+			return ret;
+		}
 		internal Json.Node serialize() {
 			var builder = new Json.Builder();
 			builder.begin_object();

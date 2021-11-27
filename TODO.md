@@ -12,11 +12,11 @@
 
 ## Right side
 ### Overview
-- [ ] Implement rename account feature
-- [ ] Implement stats for the entire time
-- [ ] Implement stats for the last year
-- [ ] Implement stats for the last month
-- [ ] Implement stats for the last week
+- [x] Implement rename account feature
+- [x] Implement stats for the entire time
+- [x] Implement stats for the last year
+- [x] Implement stats for the last month
+- [x] Implement stats for the last week
 
 ### Expenses
 - [x] Implement "Add Tag" button
