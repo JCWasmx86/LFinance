@@ -2,7 +2,7 @@ namespace MoneyWatch {
 	class Constants {
 		[CCode (cheader_filename="config.h", cname="APPLICATION_ID")]
 		public extern const string APPLICATION_ID;
-		[CCode (cheader_filename="config.h")]
+		[CCode (cheader_filename="config.h", cname="PACKAGE_VERSION")]
 		public extern const string PACKAGE_VERSION;
 		[CCode (cheader_filename="config.h")]
 		public extern const string GETTEXT_PACKAGE;
