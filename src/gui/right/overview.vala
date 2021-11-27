@@ -27,17 +27,27 @@ namespace MoneyWatch {
 					this.account.set_name(this.name_entry.buffer.text);
 					this.old_name = this.name_entry.buffer.text;
 					this.btn.set_label(_("Edit"));
+					this.btn.set_sensitive(true);
 					this.first_line.remove(this.reset);
 					this.name_entry.editable = false;
 					this.name_entry.can_focus = false;
 					this.is_editing = false;
 				} else {
 					this.btn.set_label(_("Save"));
+					this.btn.set_sensitive(false);
 					this.name_entry.editable = true;
 					this.name_entry.can_focus = true;
 					this.is_editing = true;
 					this.first_line.pack_start(this.reset, false, false, 2);
 					this.show_all();
+				}
+			});
+			this.name_entry.changed.connect(() => {
+				var text = this.name_entry.buffer.text;
+				if(text == "" || (model.search_account(text) != null && text != this.old_name)) {
+					this.btn.set_sensitive(false);
+				} else {
+					this.btn.set_sensitive(true);
 				}
 			});
 			this.reset = new Gtk.Button.with_label(_("Reset"));
@@ -46,11 +56,11 @@ namespace MoneyWatch {
 				this.name_entry.set_text(this.account._name);
 				this.account.set_name(this.name_entry.buffer.text);
 				this.btn.set_label(_("Edit"));
-				this.reset.hide();
+				this.btn.set_sensitive(true);
+				this.first_line.remove(this.reset);
 				this.name_entry.editable = false;
 				this.name_entry.can_focus = false;
 				this.is_editing = false;
-				this.hide();
 			});
 			this.first_line.pack_start(this.name_entry, true, true, 2);
 			this.first_line.pack_start(this.btn, false, false, 2);

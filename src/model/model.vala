@@ -25,6 +25,9 @@ namespace MoneyWatch {
 		}
 		internal void add_account(Account account) {
 			this._accounts.add(account);
+			this._accounts.sort((a, b) => {
+				return a._name.collate(b._name);
+			});
 			this.fire(TriggerType.ADD_ACCOUNT);
 		}
 		internal Location? search_location(string name, string city) {

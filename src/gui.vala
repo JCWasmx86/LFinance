@@ -352,14 +352,11 @@ namespace MoneyWatch {
 				var val = Value(typeof(string));
 				this.store.get_value(iter, 0, out val);
 				var val2 = Value(typeof(string));
-				// id_string
 				this.store.get_value(iter, 1, out val2);
-				info("Shadow: %s", (string)val2);
 				handler.handle_mouse_press((string)val, event);
 				return false;
 			});
 			renderer.edited.connect((path, new_text) => {
-				GLib.stdout.printf("%s//%s\n", path, new_text);
 				var selected = this.get_selection();
 				Gtk.TreeModel model;
 				Gtk.TreeIter iter;
