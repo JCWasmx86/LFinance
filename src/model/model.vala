@@ -150,7 +150,6 @@ namespace MoneyWatch {
 		}
 		internal void remove_location_by_id(string id) {
 			var loc = this.search_location_by_id(id);
-			info("Removing %s", id);
 			foreach(var account in this._accounts) {
 				foreach(var expense in account._expenses) {
 					if(expense._location != null && expense._location.id_string() == loc.id_string()) {
@@ -158,9 +157,7 @@ namespace MoneyWatch {
 					}
 				}
 			}
-			info("%u", this._locations.size);
 			this._locations.remove(loc);
-			info("%u", this._locations.size);
 			this.fire(TriggerType.GENERAL);
 		}
 		internal Json.Node serialize() {
