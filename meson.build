@@ -4,7 +4,7 @@ add_project_arguments('-DGETTEXT_PACKAGE="' + meson.project_name() + '"', langua
 project_version = meson.project_version()
 config_h = configuration_data()
 
-package_bugreport = 'http://github.com/JCWasmx86/MoneyWatch"
+package_bugreport = 'http://github.com/JCWasmx86/MoneyWatch'
 set_defines = [
 	['PACKAGE', meson.project_name()],
 	['PACKAGE_BUGREPORT', package_bugreport],

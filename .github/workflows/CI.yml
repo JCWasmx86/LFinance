@@ -1,0 +1,19 @@
+name: Build
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Just build it
+        run: |
+          sudo apt install git libglib2.0-dev meson ninja-build valac libgee-0.8-dev libjson-glib-dev libgtk-3-dev
+          mkdir build && cd build
+          meson ..
+          ninja
