@@ -23,7 +23,7 @@ namespace MoneyWatch {
 			this.expense = expense;
 			this.build_gui();
 			this.connect_signals();
-			this.style();
+			this.style_widget();
 		}
 		
 		void build_gui() {
@@ -63,7 +63,7 @@ namespace MoneyWatch {
 			this.expander.add(this.edit);
 			this.pack_start(this.expander, false, true, 2);
 		}
-		void style() {
+		void style_widget() {
 			var provider = new Gtk.CssProvider();
 			try {
 				provider.load_from_data("""

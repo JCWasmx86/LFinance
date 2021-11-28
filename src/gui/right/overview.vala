@@ -1,5 +1,6 @@
 namespace MoneyWatch {
 	internal class Overview : ScrollBox {
+		Model model;
 		Account account;
 		string old_name;
 		// Number of expenses total + amount
@@ -16,12 +17,45 @@ namespace MoneyWatch {
 
 		internal Overview(Model model, Account to_render) {
 			Object(orientation: Gtk.Orientation.VERTICAL, spacing: 2);
+			this.model = model;
 			this.account = to_render;
 			this.old_name = this.account._name;
+			this.build_gui();
+			this.connect_signals();
+		}
+		void build_gui() {
+			this.build_first_line();
+			this.build_store();
+			this.show_all();
+		}
+		void build_first_line() {
 			this.first_line = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
 			this.name_entry = new Gtk.Entry();
 			this.name_entry.set_text(this.account._name);
 			this.btn = new Gtk.Button.with_label(_("Edit"));
+			this.reset = new Gtk.Button.with_label(_("Reset"));
+			reset.get_style_context().add_class("destructive-action");
+			this.first_line.pack_start(this.name_entry, true, true, 2);
+			this.first_line.pack_start(this.btn, false, false, 2);
+			this.pack_start(this.first_line, false, false, 2);
+		}
+		void build_store() {
+			this.store = new Gtk.ListStore(4, GLib.Type.STRING, GLib.Type.STRING, GLib.Type.STRING, GLib.Type.STRING);
+			var time = new Gtk.TreeViewColumn.with_attributes(_("Timespan"), new Gtk.CellRendererText(), "text", 0, null);
+			var nExpenses = new Gtk.TreeViewColumn.with_attributes(_("Number of Expenses"), new Gtk.CellRendererText(), "text", 1, null);
+			var average = new Gtk.TreeViewColumn.with_attributes(_("Average Amount"), new Gtk.CellRendererText(), "text", 2, null);
+			var total = new Gtk.TreeViewColumn.with_attributes(_("Total Amount"), new Gtk.CellRendererText(), "text", 3, null);
+			this.stats = new Gtk.TreeView.with_model(this.store);
+			this.stats.append_column(time);
+			this.stats.append_column(nExpenses);
+			this.stats.append_column(average);
+			this.stats.append_column(total);
+			this.populate_stats();
+			this.pack_start(this.stats, true, true, 2);
+			this.name_entry.editable = false;
+			this.name_entry.can_focus = false;
+		}
+		void connect_signals() {
 			this.btn.clicked.connect(() => {
 				if(this.is_editing) {
 					this.account.set_name(this.name_entry.buffer.text);
@@ -49,8 +83,6 @@ namespace MoneyWatch {
 					this.btn.set_sensitive(true);
 				}
 			});
-			this.reset = new Gtk.Button.with_label(_("Reset"));
-			reset.get_style_context().add_class("destructive-action");
 			this.reset.clicked.connect(() => {
 				this.name_entry.set_text(this.account._name);
 				this.account.set_name(this.name_entry.buffer.text);
@@ -61,24 +93,6 @@ namespace MoneyWatch {
 				this.name_entry.can_focus = false;
 				this.is_editing = false;
 			});
-			this.first_line.pack_start(this.name_entry, true, true, 2);
-			this.first_line.pack_start(this.btn, false, false, 2);
-			this.pack_start(this.first_line, false, false, 2);
-			this.store = new Gtk.ListStore(4, GLib.Type.STRING, GLib.Type.STRING, GLib.Type.STRING, GLib.Type.STRING);
-			var time = new Gtk.TreeViewColumn.with_attributes(_("Timespan"), new Gtk.CellRendererText(), "text", 0, null);
-			var nExpenses = new Gtk.TreeViewColumn.with_attributes(_("Number of Expenses"), new Gtk.CellRendererText(), "text", 1, null);
-			var average = new Gtk.TreeViewColumn.with_attributes(_("Average Amount"), new Gtk.CellRendererText(), "text", 2, null);
-			var total = new Gtk.TreeViewColumn.with_attributes(_("Total Amount"), new Gtk.CellRendererText(), "text", 3, null);
-			this.stats = new Gtk.TreeView.with_model(this.store);
-			this.stats.append_column(time);
-			this.stats.append_column(nExpenses);
-			this.stats.append_column(average);
-			this.stats.append_column(total);
-			this.populate_stats();
-			this.pack_start(this.stats, true, true, 2);
-			this.name_entry.editable = false;
-			this.name_entry.can_focus = false;
-			this.show_all();
 		}
 		void populate_stats() {
 			this.store.clear();
