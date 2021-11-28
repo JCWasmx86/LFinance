@@ -1,19 +1,11 @@
 namespace MoneyWatch {
 	class Constants {
 		[CCode (cheader_filename="config.h", cname="APPLICATION_ID")]
-		public extern const string APPLICATION_ID;
+		internal extern const string APPLICATION_ID;
 		[CCode (cheader_filename="config.h", cname="PACKAGE_VERSION")]
-		public extern const string PACKAGE_VERSION;
-		[CCode (cheader_filename="config.h")]
-		public extern const string GETTEXT_PACKAGE;
-		[CCode (cheader_filename="config.h")]
-		public extern const string PACKAGE;
-		[CCode (cheader_filename="config.h")]
-		public extern const string PACKAGE_BUGREPORT;
-		[CCode (cheader_filename="config.h")]
-		public extern const string PACKAGE_NAME;
+		internal extern const string PACKAGE_VERSION;
 		[CCode (cheader_filename="config.h", cname="APPLICATION_INSTALL_PREFIX")]
-		public extern const string APPLICATION_INSTALL_PREFIX;
+		internal extern const string APPLICATION_INSTALL_PREFIX;
 	}
 	internal class Colors {
 		// From https://stackoverflow.com/a/20298027

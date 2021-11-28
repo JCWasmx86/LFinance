@@ -46,4 +46,4 @@ deps = [
 	dependency('gtk+-3.0'),
 	project_config_dep
 ]
-executable('money_watch', sources: src, dependencies: deps, install:true)
+executable('money_watch', sources: src, dependencies: deps, install: true)

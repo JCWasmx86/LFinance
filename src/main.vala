@@ -35,9 +35,6 @@ namespace MoneyWatch {
 			this.init_widgets();
 		}
 		void build_header_bar() {
-			var title_bar = new Gtk.HeaderBar();
-			title_bar.title = "MoneyWatch";
-			title_bar.show_close_button = true;
 			var item = new Gtk.MenuItem.with_label(_("About MoneyWatch"));
 			item.activate.connect(about);
 			var menu = new Gtk.Menu();
@@ -47,6 +44,9 @@ namespace MoneyWatch {
 			menu_button.@set("halign", Gtk.Align.CENTER);
 			menu_button.image = new Gtk.Image.from_icon_name("open-menu-symbolic", Gtk.IconSize.MENU);
 			menu_button.popup = menu;
+			var title_bar = new Gtk.HeaderBar();
+			title_bar.title = "MoneyWatch";
+			title_bar.show_close_button = true;
 			title_bar.pack_end(menu_button);
 			title_bar.show_all();
 			this.set_titlebar(title_bar);
@@ -61,7 +61,7 @@ namespace MoneyWatch {
 			} catch(GLib.Error e) {
 				var dialog = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK, _("An error occurred saving data: %s\n").printf(e.message));
 				dialog.run();
-				return false;
+				return true;
 			}
 
 			return false;
