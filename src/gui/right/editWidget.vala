@@ -91,6 +91,12 @@ namespace MoneyWatch {
 				this.add_tag.clicked.connect(() => {
 					this.show_tag_selection_dialog();
 				});
+				this.purpose.changed.connect(() => {
+					this.update_edit_button();
+				});
+				this.amount.changed.connect(() => {
+					this.update_edit_button();
+				});
 				this.edit.clicked.connect(() => {
 					expense.begin_edits();
 					expense.set_purpose(this.purpose.buffer.text);
@@ -132,6 +138,13 @@ namespace MoneyWatch {
 					this.third_line.show_all();
 					this.queue_draw();
 				});
+			}
+
+			void update_edit_button() {
+				var pt = this.purpose.buffer.text;
+				var at = this.amount.buffer.text;
+				var set_active = pt.length != 0 && at.length != 0 && double.parse(at) > 0;
+				this.edit.set_sensitive(set_active);
 			}
 
 			void show_tag_selection_dialog() {
