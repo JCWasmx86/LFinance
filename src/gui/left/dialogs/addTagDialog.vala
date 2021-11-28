@@ -31,6 +31,7 @@ namespace MoneyWatch {
 					continue;
 				var btn = new RecommendedColorButton(c2, this.colored_radio_buttons);
 				btn.join_group(custom_color);
+				btn.set_text(_("Sample text"));
 				this.colored_radio_buttons.add(btn);
 				box.pack_start(btn, true, true, 2);
 			}
@@ -45,7 +46,6 @@ namespace MoneyWatch {
 			// Hacky way to show all widgets
 			this.resize(200, 600);
 			this.show_all();
-			GLib.Signal.emit_by_name(entry, "changed");
 		}
 		void connect_signals() {
 			this.custom_color.toggled.connect(() => {
