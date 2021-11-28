@@ -5,6 +5,10 @@ namespace MoneyWatch {
 			Object(orientation: Gtk.Orientation.HORIZONTAL, spacing: 2);
 			this.tag = t;
 			var colors = t._rgba;
+			this.build_gui();
+			this.style();
+		}
+		void build_gui() {
 			var label = new Gtk.Label("");
 			label.set_markup("<b><span foreground=\"#%02x%02x%02x%02x\" >".printf(colors[0], colors[1], colors[2], colors[3]) + t._name + "</span></b>");
 			this.pack_start(label, false, false, 2);
@@ -16,6 +20,8 @@ namespace MoneyWatch {
 				parent.remove(this);
 			});
 			this.pack_start(button, false, false, 2);
+		}
+		void style() {
 			var provider = new Gtk.CssProvider();
 			try {
 				provider.load_from_data("""
