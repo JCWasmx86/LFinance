@@ -1,13 +1,12 @@
 namespace MoneyWatch {
 	internal class EditWidget : Gtk.Box {
+			Model model;
+			Account account;
+			Expense expense;
 			// [Purpose][Amount][LocationComboBox]
 			// [Calendar]
 			// [Taglist][Addbutton]
 			// [Save][Cancel]
-			Model model;
-			Account account;
-			Expense expense;
-
 			Gtk.Box first_line;
 			Gtk.Entry purpose;
 			Gtk.Entry amount;
@@ -25,6 +24,19 @@ namespace MoneyWatch {
 				this.model = model;
 				this.account = account;
 				this.expense = expense;
+				this.build_gui();
+				this.connect_signals();
+			}
+
+			void build_gui() {
+				this.build_first_line();
+				this.build_second_line();
+				this.build_third_line();
+				this.build_fourth_line();
+				this.show_all();
+			}
+
+			void build_first_line() {
 				this.first_line = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
 				var buffer = new Gtk.EntryBuffer();
 				buffer.set_text(expense._purpose.data);
@@ -42,17 +54,20 @@ namespace MoneyWatch {
 				this.location_chooser.active_id = expense._location == null ? "$$<<NU$$LL>>$$" : expense._location.id_string();
 				this.first_line.pack_start(this.location_chooser, true, true, 2);
 				this.pack_start(this.first_line, true, true, 2);
+			}
+
+			void build_second_line() {
 				this.second_line = new Gtk.Calendar();
 				var date = expense._date;
 				this.second_line.select_month(date.get_month() -1, date.get_year());
 				this.second_line.select_day(date.get_day_of_month());
 				this.pack_start(this.second_line, true, true, 2);
+			}
+			
+			void build_third_line() {
 				this.tags = new Gee.ArrayList<ExtendedTagButton>();
 				this.third_line = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
 				this.add_tag = new Gtk.Button.from_icon_name("list-add");
-				this.add_tag.clicked.connect(() => {
-					this.show_tag_selection_dialog();
-				});
 				this.third_line.pack_start(this.add_tag, true, true, 2);
 				foreach(var tag in expense._tags) {
 					var btn = new ExtendedTagButton(tag, account, expense, this.tags);
@@ -60,9 +75,22 @@ namespace MoneyWatch {
 					this.third_line.pack_start(btn, false, false, 2);
 				}
 				this.pack_start(this.third_line, true, true, 2);
+			}
+			
+			void build_fourth_line() {
 				this.fourth_line = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
 				this.edit = new Gtk.Button.with_label(_("Save edits"));
 				this.edit.get_style_context().add_class("suggested-action");
+				this.fourth_line.pack_start(this.edit, true, true, 2);
+				this.cancel = new Gtk.Button.with_label(_("Reset changes"));
+				this.cancel.get_style_context().add_class("destructive-action");
+				this.fourth_line.pack_start(this.cancel, true, true, 2);
+				this.pack_start(this.fourth_line, true, true, 2);
+			}
+			void connect_signals() {
+				this.add_tag.clicked.connect(() => {
+					this.show_tag_selection_dialog();
+				});
 				this.edit.clicked.connect(() => {
 					expense.begin_edits();
 					expense.set_purpose(this.purpose.buffer.text);
@@ -83,9 +111,6 @@ namespace MoneyWatch {
 					}
 					expense.end_edits();
 				});
-				this.fourth_line.pack_start(this.edit, true, true, 2);
-				this.cancel = new Gtk.Button.with_label(_("Reset changes"));
-				this.cancel.get_style_context().add_class("destructive-action");
 				this.cancel.clicked.connect(() => {
 					this.purpose.buffer.set_text(expense._purpose.data);
 					// FIXME: It's not always the factor 100
@@ -107,30 +132,26 @@ namespace MoneyWatch {
 					this.third_line.show_all();
 					this.queue_draw();
 				});
-				this.fourth_line.pack_start(this.cancel, true, true, 2);
-				this.pack_start(this.fourth_line, true, true, 2);
 			}
+
 			void show_tag_selection_dialog() {
 				var dialog = new AddTagDialog(model, this.tags);
-				dialog.response.connect(response => {
-					if(response == 0) {
-						foreach(var radio in dialog.buttons) {
-							if(radio.get_active()) {
-								var btn = new ExtendedTagButton(model.search_tag(radio.label), account, expense, this.tags);
-								this.tags.add(btn);
-								Gdk.threads_add_idle_full(GLib.Priority.HIGH_IDLE + 20, () => {
-									this.third_line.pack_start(btn, false, false, 2);
-									this.third_line.show_all();
-									this.third_line.queue_draw();
-									return false;
-								});
-								break;
-							}
+				var result = dialog.run();
+				if(result == 0) {
+					foreach(var radio in dialog.buttons) {
+						if(radio.get_active()) {
+							var btn = new ExtendedTagButton(model.search_tag(radio.label), account, expense, this.tags);
+							this.tags.add(btn);
+							Gdk.threads_add_idle_full(GLib.Priority.HIGH_IDLE + 20, () => {
+								this.third_line.pack_start(btn, false, false, 2);
+								this.third_line.show_all();
+								this.third_line.queue_draw();
+								return false;
+							});
+							break;
 						}
 					}
-					dialog.destroy();
-				});
-				dialog.run();
+				}
 		}
 	}
 }

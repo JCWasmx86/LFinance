@@ -1,5 +1,7 @@
 namespace MoneyWatch {
 	internal class CreateExpense : Gtk.Box {
+		Model model;
+		Account account;
 		// [PurposeTextfield+Label] [AmountTextfield+Label] [LocationCombobox]
 		// [Calendar]
 		// Checkboxes with tags
@@ -20,40 +22,33 @@ namespace MoneyWatch {
 		Gtk.Box buttons;
 		Gtk.Button add_btn;
 		Gtk.Button reset;
-		Model model;
-		Account account;
 
 		internal CreateExpense(Account account, Model model) {
 			Object(orientation: Gtk.Orientation.VERTICAL, spacing: 2);
 			this.model = model;
 			this.account = account;
-			this.first_line = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
-			this.purpose_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
-			this.purpose_label = new Gtk.Label(_("Purpose:"));
-			this.purpose = new Gtk.Entry();
-			this.purpose.changed.connect(() => {
-				this.edited();
-			});
-			this.purpose_box.pack_start(this.purpose_label, false, true, 2);
-			this.purpose_box.pack_start(this.purpose, true, true, 2);
-			this.first_line.pack_start(this.purpose_box, true, true, 2);
-			this.amount_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
-			this.amount_label = new Gtk.Label(_("Amount:"));
-			this.amount = new Gtk.Entry();
-			this.amount.changed.connect(() => {
-				this.edited();
-			});
-			this.amount_box.pack_start(this.amount_label, false, true, 2);
-			this.amount_box.pack_start(this.amount, true, true, 2);
-			this.first_line.pack_start(this.amount_box, true, true, 2);
-			this.location = new Gtk.ComboBoxText();
-			this.location.append("", "");
-			foreach(var loc in model._locations) {
-				this.location.append(loc.id_string(), loc.id_string());
-			}
-			this.location.set_active(0); // Default no location
-			this.first_line.pack_start(this.location, true, true, 2);
-			this.calendar = new Gtk.Calendar();
+			this.build_gui();
+			this.connect_signals();
+		}
+		void build_gui() {
+			this.build_first_line();
+			this.build_calendar();
+			this.build_tags_window();
+			this.build_buttons();
+			this.show_all();
+		}
+
+		void build_buttons() {
+			this.buttons = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
+			this.add_btn = new Gtk.Button.with_label(_("Add"));
+			this.add_btn.set_sensitive(false);
+			this.reset = new Gtk.Button.with_label(_("Reset"));
+			this.buttons.pack_start(this.add_btn, true, true, 2);
+			this.buttons.pack_start(this.reset, true, true, 2);
+			this.pack_start(this.buttons, true, true, 2);
+		}
+
+		void build_tags_window() {
 			this.tags_scw = new Gtk.ScrolledWindow(null, null);
 			this.tags_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 2);
 			this.tags = new Gee.ArrayList<Gtk.CheckButton>();
@@ -68,25 +63,54 @@ namespace MoneyWatch {
 				this.tags.add(cb);
 				this.tag_names.add(tag._name);
 			}
-			this.buttons = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
-			this.add_btn = new Gtk.Button.with_label(_("Add"));
-			this.add_btn.set_sensitive(false);
+			this.pack_start(this.tags_scw, true, true, 2);
+		}
+
+		void build_calendar() {
+			this.calendar = new Gtk.Calendar();
+			this.pack_start(this.calendar, true, true, 2);
+		}
+
+		void build_first_line() {
+			this.first_line = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
+			this.purpose_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
+			this.purpose_label = new Gtk.Label(_("Purpose:"));
+			this.purpose = new Gtk.Entry();
+			this.purpose_box.pack_start(this.purpose_label, false, true, 2);
+			this.purpose_box.pack_start(this.purpose, true, true, 2);
+			this.first_line.pack_start(this.purpose_box, true, true, 2);
+			this.amount_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
+			this.amount_label = new Gtk.Label(_("Amount:"));
+			this.amount = new Gtk.Entry();
+			this.amount_box.pack_start(this.amount_label, false, true, 2);
+			this.amount_box.pack_start(this.amount, true, true, 2);
+			this.first_line.pack_start(this.amount_box, true, true, 2);
+			this.location = new Gtk.ComboBoxText();
+			this.location.append("", "");
+			foreach(var loc in model._locations) {
+				this.location.append(loc.id_string(), loc.id_string());
+			}
+			this.location.set_active(0); // Default no location
+			this.first_line.pack_start(this.location, true, true, 2);
+			this.pack_start(this.first_line, true, true, 2);
+		}
+
+		void connect_signals() {
 			this.add_btn.clicked.connect(() => {
 				this.add_expense();
 				this.reset_all();
 			});
-			this.reset = new Gtk.Button.with_label(_("Reset"));
 			this.reset.clicked.connect(() => {
 				this.reset_all();
 			});
-			this.buttons.pack_start(this.add_btn, true, true, 2);
-			this.buttons.pack_start(this.reset, true, true, 2);
-			this.pack_start(this.first_line, true, true, 2);
-			this.pack_start(this.calendar, true, true, 2);
-			this.pack_start(this.tags_scw, true, true, 2);
-			this.pack_start(this.buttons, true, true, 2);
-			this.show_all();
+			this.purpose.changed.connect(() => {
+				this.edited();
+			});
+			this.amount.changed.connect(() => {
+				this.edited();
+			});
 		}
+
 		internal void select(Account account) {
 			this.account = account;
 		}

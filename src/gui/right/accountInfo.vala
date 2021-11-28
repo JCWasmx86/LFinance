@@ -1,11 +1,11 @@
 namespace MoneyWatch {
 	internal class AccountInfo : Gtk.Box {
+		Model model;
 		// The info is composed like this:
 		// A GtkNotebook consisting of an Overview page, that
 		// just gives some stats, allows editing the name and exporting to LaTeX
 		// The second page is the list of expenses and button to add a new expense
 		// The third page is with diagrams
-		Model model;
 		Gtk.Notebook notebook;
 		Account to_render;
 		Overview overview;
@@ -36,8 +36,11 @@ namespace MoneyWatch {
 			if(this.model._accounts.size == 0)
 				return;
 			// Account was deleted
-			if(!this.model.has_account(this.to_render))
+			if(!this.model.has_account(this.to_render)) {
+				// Just use the first account we can find
+				this.select(this.model._accounts[0]._name);
 				return;
+			}
 			if(this.overview == null) {
 				this.overview = new Overview(this.model, this.to_render);
 				this.notebook.append_page(this.overview, new Gtk.Label(_("Overview")));
