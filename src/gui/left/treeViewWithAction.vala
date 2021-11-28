@@ -2,21 +2,38 @@ namespace MoneyWatch {
 	internal class TreeViewWithAction : Gtk.TreeView {
 		Gtk.TreeIter tp;
 		Gtk.ListStore store;
+		Gtk.CellRendererText renderer;
+		bool editable;
+		string title;
+		string type;
+		ActionHandler handler;
 
 		internal TreeViewWithAction(string s, ActionHandler handler, string type =  "text", bool editable = true) {
 			this.get_selection().set_mode(Gtk.SelectionMode.BROWSE);
 			this.store = new Gtk.ListStore(3, GLib.Type.STRING, GLib.Type.STRING, GLib.Type.STRING);
 			this.hover_selection = true;
 			this.enable_search = true;
+			this.editable = editable;
+			this.title = s;
+			this.type = type;
+			this.handler = handler;
+
+			this.set_events(Gdk.EventMask.ALL_EVENTS_MASK);
+			this.build_gui();
+			this.connect_signals();
+		}
+		
+		void build_gui() {
+			this.renderer = new Gtk.CellRendererText();
+			this.renderer.editable = this.editable;
 			var column = new Gtk.TreeViewColumn();
-			column.set_title(s);
-			var renderer = new Gtk.CellRendererText();
-			renderer.editable = editable;
-			column.pack_start(renderer, true);
-			column.add_attribute(renderer, type, 0);
+			column.set_title(this.title);
+			column.pack_start(this.renderer, true);
+			column.add_attribute(this.renderer, type, 0);
 			this.append_column(column);
 			this.set_model(this.store);
-			this.set_events(Gdk.EventMask.ALL_EVENTS_MASK | Gdk.EventMask.KEY_PRESS_MASK | Gdk.EventMask.KEY_PRESS_MASK | Gdk.EventMask.KEY_RELEASE_MASK);
+		}
+		void connect_signals() {
 			this.button_press_event.connect((event) => {
 				var selected = this.get_selection();
 				Gtk.TreeModel model;
@@ -29,7 +46,7 @@ namespace MoneyWatch {
 				handler.handle_mouse_press((string)val, event);
 				return false;
 			});
-			renderer.edited.connect((path, new_text) => {
+			this.renderer.edited.connect((path, new_text) => {
 				var selected = this.get_selection();
 				Gtk.TreeModel model;
 				Gtk.TreeIter iter;
