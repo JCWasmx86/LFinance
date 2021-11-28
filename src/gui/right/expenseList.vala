@@ -1,9 +1,8 @@
 namespace MoneyWatch {
 	internal class ExpenseList : ScrollBox {
 		// [SortingOrder]
-		// [Searchbar with extra options]
-		// [Expenselist]
 		// [Add new expense]
+		// [Expenselist]
 		Model model;
 		Account account;
 
@@ -18,7 +17,16 @@ namespace MoneyWatch {
 			Object(orientation: Gtk.Orientation.VERTICAL, spacing: 2);
 			this.model = model;
 			this.account = account;
-			this.widgets = new Gee.ArrayList<ExpenseWidget>();
+			this.build_gui();
+		}
+
+		void build_gui() {
+			this.build_header();
+			this.build_creation_widget();
+			this.build_list();
+			this.show_all();
+		}
+		void build_header() {
 			this.header = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
 			this.header_sort_label = new Gtk.Label(_("Sort by:"));
 			this.header_sorting = new Gtk.ComboBoxText();
@@ -37,8 +45,13 @@ namespace MoneyWatch {
 			this.header.pack_start(this.header_sort_label, false, false, 2);
 			this.header.pack_start(this.header_sorting, true, true, 2);
 			this.pack_start(this.header, false, true, 2);
+		}
+		void build_creation_widget() {
 			this.epw = new CreateExpenseWidget(account, model);
 			this.pack_start(this.epw, true, true, 2);
+		}
+		void build_list() {
+			this.widgets = new Gee.ArrayList<ExpenseWidget>();
 			this.expenses = new Gtk.Box(Gtk.Orientation.VERTICAL, 2);
 			foreach(var expense in this.account._expenses) {
 				var widget = new ExpenseWidget(this.model, this.account, expense);
@@ -47,6 +60,7 @@ namespace MoneyWatch {
 			}
 			this.pack_start(this.expenses, false, true, 2);
 		}
+
 		internal void rebuild() {
 			this.header_sorting.active_id = "%u".printf(account._sorting);
 			this.widgets.foreach(a => {
