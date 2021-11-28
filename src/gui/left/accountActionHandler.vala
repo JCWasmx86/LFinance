@@ -2,6 +2,7 @@ namespace MoneyWatch {
 	class AccountActionHandler : GLib.Object, ActionHandler {
 		Model model;
 		SelectAccountFunc func;
+
 		internal AccountActionHandler(SelectAccountFunc func, Model model) {
 			this.model = model;
 			this.func = func;
