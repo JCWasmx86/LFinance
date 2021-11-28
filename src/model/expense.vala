@@ -16,10 +16,6 @@ namespace MoneyWatch {
 			this.sharp = false;
 			this.func = t => {};
 		}
-		internal void set_tags(Gee.List<Tag> tags) {
-			this._tags = tags;
-			this.fire(TriggerType.EDIT_EXPENSE);
-		}
 		internal void set_purpose(string purpose) {
 			this._purpose = purpose;
 			this.fire(TriggerType.EDIT_EXPENSE);

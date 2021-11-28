@@ -6,7 +6,7 @@ namespace MoneyWatch {
 		int obj;
 		SelectAccountFunc func;
 
-		internal MoneyWatchPanel() {
+		internal MoneyWatchPanel() throws GLib.Error {
 			Object(orientation: Gtk.Orientation.HORIZONTAL, spacing: 2);
 			this.obj = 0;
 			var before = GLib.get_monotonic_time() / 1000000.0;
@@ -55,7 +55,7 @@ namespace MoneyWatch {
 				});
 			}
 		}
-		internal void save() {
+		internal void save() throws GLib.Error {
 			var generator = new Json.Generator();
 			generator.set_root(this.model.serialize());
 			generator.indent_char = '\t';

@@ -3,7 +3,6 @@ namespace MoneyWatch {
 		// [About this expense][DeleteButton]
 		// [Tags]
 		// [Expander that expands to a widget that allows editing]
-		Gtk.Box toplevel;
 		Gtk.Box labelBox; // Contains location and then the tags
 		Gtk.Box upperLabelBox;
 		Gtk.Label infos;
@@ -43,16 +42,18 @@ namespace MoneyWatch {
 			this.expander.add(this.edit);
 			this.pack_start(this.expander, false, true, 2);
 			var provider = new Gtk.CssProvider();
-			provider.load_from_data("""
-				.bordered {
-					border: 1px solid #3F4747;
-				}
-			""");
-			this.name = "bordered";
+			try {
+				provider.load_from_data("""
+					.bordered {
+						border: 1px solid #3F4747;
+					}
+				""");
+			} catch(GLib.Error e) {
+				warning("Gtk.CssProvider::load_from_data failed: %s", e.message);
+			}
 			this.get_style_context().add_class("bordered");
 			this.get_style_context().add_provider(provider, -1);
 			this.delete_button.clicked.connect(() => {
-				info("Deleting");
 				var dialog = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.QUESTION, Gtk.ButtonsType.NONE, _("Do you really want to delete expense \u201c%s\u201d?").printf(expense._purpose));
 				dialog.add_button(_("Delete"), 0);
 				dialog.add_button(_("Cancel"), 1);

@@ -10,7 +10,6 @@ namespace MoneyWatch {
 		Gtk.Box header;
 		Gtk.Label header_sort_label;
 		Gtk.ComboBoxText header_sorting;
-		Gtk.Box searchbar;
 		Gtk.Box expenses;
 		Gee.List<ExpenseWidget> widgets;
 		CreateExpenseWidget epw;

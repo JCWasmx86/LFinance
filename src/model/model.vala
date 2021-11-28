@@ -69,17 +69,6 @@ namespace MoneyWatch {
 			}
 			this.sort();
 		}
-		internal void rename_location(string old, string? city, string @new) {
-			foreach(var l in this._locations) {
-				var b1 = l._city == "" && city == null;
-				var b2 = l._city == null && city == "";
-				if(old == l._name && (l._city == city || b1 || b2)) {
-					l.set_name(@new);
-					break;
-				}
-			}
-			this.sort();
-		}
 		internal void fire(TriggerType type) {
 			if(!this.sharp || this.func == null)
 				return;

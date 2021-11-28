@@ -17,12 +17,15 @@ namespace MoneyWatch {
 			});
 			this.pack_start(button, false, false, 2);
 			var provider = new Gtk.CssProvider();
-			provider.load_from_data("""
-				.bordered {
-					border: 1px solid #3F4747;
-				}
-			""");
-			this.name = "bordered";
+			try {
+				provider.load_from_data("""
+					.bordered {
+						border: 1px solid #3F4747;
+					}
+				""");
+			} catch(GLib.Error e) {
+				warning("Gtk.CssProvider::load_from_data failed: %s", e.message);
+			}
 			this.get_style_context().add_class("bordered");
 			this.get_style_context().add_provider(provider, -1);
 		}

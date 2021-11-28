@@ -100,7 +100,7 @@ namespace MoneyWatch {
 			var hash_map = new Gee.HashMap<string, uint64?>();
 			foreach(var expense in expenses) {
 				sum += expense._amount;
-				if(expense._currency in hash_map) {
+				if(hash_map.has_key(expense._currency)) {
 					hash_map[expense._currency] = hash_map[expense._currency] + 1;
 				} else {
 					hash_map[expense._currency] = 1;
