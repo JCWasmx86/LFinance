@@ -1,6 +1,7 @@
 namespace MoneyWatch {
 	internal class BigList : ScrollBox {
 		Model model;
+
 		Expander accounts;
 		Expander locations;
 		Expander tags;
@@ -11,10 +12,12 @@ namespace MoneyWatch {
 			this.model = model;
 		}
 		internal void rebuild(SelectAccountFunc func) {
-			bool expanded_accounts = accounts == null ? false : accounts.get_expanded();
-			bool expanded_locations = locations == null ? false : locations.get_expanded();
-			bool expanded_tags = tags == null ? false : tags.get_expanded();
-			this.box.get_children().@foreach(a => {this.box.remove(a);});
+			bool expanded_accounts = this.accounts == null ? false : this.accounts.get_expanded();
+			bool expanded_locations = this.locations == null ? false : this.locations.get_expanded();
+			bool expanded_tags = this.tags == null ? false : this.tags.get_expanded();
+			if(this.box != null) {
+				this.box.get_children().@foreach(a => this.box.remove(a));
+			}
 			this.accounts = new Expander(_("Accounts"), new AccountActionHandler(func, this.model), "text", false);
 			foreach(var account in model._accounts) {
 				this.accounts.append_string(account._name);
@@ -31,7 +34,7 @@ namespace MoneyWatch {
 			foreach(var tag in model._tags) {
 				var colors = tag._rgba;
 				this.tags.append_string(
-					"<b><span foreground=\"#%02x%02x%02x%02x\" >".printf(colors[0], colors[1], colors[2], colors[3]) + tag._name + "</span></b>");
+					"<b><span foreground=\"#%02x%02x%02x%02x\" >%s</span></b>".printf(colors[0], colors[1], colors[2], colors[3], tag._name));
 			}
 			this.tags.set_expanded(expanded_tags);
 			this.pack_start(this.tags, false, false, 2);
