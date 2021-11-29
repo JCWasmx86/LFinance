@@ -1,3 +1,3 @@
-namespace MoneyWatch {
+namespace LFinance {
 	internal delegate void SelectAccountFunc(string name);
 }

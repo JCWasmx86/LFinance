@@ -1,4 +1,4 @@
-namespace MoneyWatch {
+namespace LFinance {
 	internal class LocationEditDialog : Gtk.Dialog {
 		Gtk.Entry name_entry;
 		Gtk.Entry city;

@@ -1,4 +1,4 @@
-Name: money_watch
+Name: lfinance
 Version: 0.1
 Release: 1%{?dist}
 Summary: An application to easily manage your finances
@@ -31,10 +31,10 @@ BuildRequires: pkgconfig(gtk+-3.0)
 %meson_test
 
 %files
-%{_bindir}/money_watch
-%{_datadir}/applications/jcwasmx86.money_watch.desktop
-%{_datadir}/icons/hicolor/scalable/apps/jcwasmx86.money_watch.svg
-%{_datadir}/locale/de/LC_MESSAGES/money_watch.mo
+%{_bindir}/lfinance
+%{_datadir}/applications/jcwasmx86.lfinance.desktop
+%{_datadir}/icons/hicolor/scalable/apps/jcwasmx86.lfinance.svg
+%{_datadir}/locale/de/LC_MESSAGES/lfinance.mo
 
 %post
 gtk-update-icon-cache --quiet --force --ignore-theme-index %{_datadir}/icons/hicolor

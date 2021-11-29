@@ -1,4 +1,4 @@
-namespace MoneyWatch {
+namespace LFinance {
 	internal class LocationButton : Gtk.Label {
 		Location location;
 		

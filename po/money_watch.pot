@@ -1,12 +1,12 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the money_watch package.
+# This file is distributed under the same license as the lfinance package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: money_watch\n"
+"Project-Id-Version: lfinance\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-27 17:03+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
@@ -252,7 +252,7 @@ msgid "Do you really want to delete the tag %s?"
 msgstr ""
 
 #: src/main.vala:41
-msgid "About MoneyWatch"
+msgid "About LFinance"
 msgstr ""
 
 #: src/main.vala:59

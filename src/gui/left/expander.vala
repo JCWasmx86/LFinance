@@ -1,4 +1,4 @@
-namespace MoneyWatch {
+namespace LFinance {
 	internal class Expander : Gtk.Expander {
 		TreeViewWithAction treeView;
 

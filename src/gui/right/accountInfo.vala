@@ -1,4 +1,4 @@
-namespace MoneyWatch {
+namespace LFinance {
 	internal class AccountInfo : Gtk.Box {
 		Model model;
 		// The info is composed like this:

@@ -1,4 +1,4 @@
-namespace MoneyWatch {
+namespace LFinance {
 	class LocationActionHandler : GLib.Object, ActionHandler {
 		Model model;
 		internal LocationActionHandler(Model model) {

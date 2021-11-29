@@ -1,4 +1,4 @@
-namespace MoneyWatch {
+namespace LFinance {
 	internal class Overview : ScrollBox {
 		Model model;
 		Account account;

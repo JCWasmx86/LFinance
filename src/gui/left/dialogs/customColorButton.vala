@@ -1,4 +1,4 @@
-namespace MoneyWatch {
+namespace LFinance {
 	internal class CustomColorButton : ColoredRadioButton, Gtk.RadioButton {
 		string color;
 		internal CustomColorButton(Gee.List<ColoredRadioButton> list) {

@@ -1,4 +1,4 @@
-namespace MoneyWatch {
+namespace LFinance {
 	internal class Expense {
 		internal string _purpose;
 		internal uint64 _amount;

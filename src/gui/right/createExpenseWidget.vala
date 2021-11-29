@@ -1,4 +1,4 @@
-namespace MoneyWatch {
+namespace LFinance {
 	internal class CreateExpenseWidget : Gtk.Expander {
 		CreateExpense ce;
 

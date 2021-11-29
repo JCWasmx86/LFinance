@@ -1,8 +1,8 @@
-## MoneyWatch Documentation
+## LFinance Documentation
 
 ### JSON Format (Version 1)
 
-This is the first storage format of MoneyWatch. It is deprecated. No support for writing is implemented. If such a file
+This is the first storage format of LFinance. It is deprecated. No support for writing is implemented. If such a file
 is loaded, it will be converted to version 2 as soon as possible.
 
 ```
@@ -45,7 +45,7 @@ A date (`Y/M/D`) is transformed like this:
 
 ### JSON Format (Version 2)
 
-This is the current storage format used by MoneyWatch.
+This is the current storage format used by LFinance.
 
 ```
 {

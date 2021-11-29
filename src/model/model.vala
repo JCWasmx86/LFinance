@@ -1,4 +1,4 @@
-namespace MoneyWatch {
+namespace LFinance {
 	internal class Model {
 		internal Gee.List<Tag> _tags{internal get; private set;}
 		internal Gee.List<Location> _locations{internal get; private set;}

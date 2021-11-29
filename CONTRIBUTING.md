@@ -6,12 +6,12 @@
 
 ## Contribute Code
 
-Have a look at the [open tasks](https://github.com/JCWasmx86/MoneyWatch/projects/1) or [issues](https://github.com/JCWasmx86/MoneyWatch/issues).
+Have a look at the [open tasks](https://github.com/JCWasmx86/LFinance/projects/1) or [issues](https://github.com/JCWasmx86/LFinance/issues).
 Furthermore there are a lot of FIXME's and TODO's in the source code, that are often good first issues to resolve.
 
 ## Contribute Art
 
-The icon of MoneyWatch is my first attempt at working with inkscape, so it looks accordingly. I thought of an eye with a dollar sign in the middle or a telescope looking at a dollar sign.
+The icon of LFinance is my first attempt at working with inkscape, so it looks accordingly. I thought of an eye with a dollar sign in the middle or a telescope looking at a dollar sign.
 
 ## General
 

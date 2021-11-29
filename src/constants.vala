@@ -1,4 +1,4 @@
-namespace MoneyWatch {
+namespace LFinance {
 	class Constants {
 		[CCode (cheader_filename="config.h", cname="APPLICATION_ID")]
 		internal extern const string APPLICATION_ID;
@@ -75,7 +75,7 @@ namespace MoneyWatch {
 				#FFB167
 				#009BFF
 				#E85EBE
-			""".replace("\t\t\t\t","").replace(" ", "").split("\n");
+			""".replace("\t\t\t\t", "").replace(" ", "").split("\n");
 		}
 	}
 }

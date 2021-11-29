@@ -1,4 +1,4 @@
-namespace MoneyWatch {
+namespace LFinance {
 	internal errordomain ParsingErrors {
 		INVALID_DATA
 	}

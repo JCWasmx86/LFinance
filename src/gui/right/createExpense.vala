@@ -1,4 +1,4 @@
-namespace MoneyWatch {
+namespace LFinance {
 	internal class CreateExpense : Gtk.Box {
 		Model model;
 		Account account;

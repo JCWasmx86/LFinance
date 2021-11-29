@@ -1,4 +1,4 @@
-namespace MoneyWatch {
+namespace LFinance {
 	internal class AddPanel : Gtk.Box {
 		Model model;
 

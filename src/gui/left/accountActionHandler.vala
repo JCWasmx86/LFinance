@@ -1,4 +1,4 @@
-namespace MoneyWatch {
+namespace LFinance {
 	class AccountActionHandler : GLib.Object, ActionHandler {
 		Model model;
 		SelectAccountFunc func;

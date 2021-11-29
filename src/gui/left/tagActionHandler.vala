@@ -1,4 +1,4 @@
-namespace MoneyWatch {
+namespace LFinance {
 	class TagActionHandler : GLib.Object, ActionHandler {
 		Model model;
 		internal TagActionHandler(Model model) {

@@ -1,6 +1,6 @@
-# MoneyWatch
+# LFinance
 
-MoneyWatch is a program to manage your expenses easily.
+LFinance is a program to manage your expenses easily.
 
 Features:
 - Multiple accounts

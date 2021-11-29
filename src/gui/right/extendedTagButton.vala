@@ -1,4 +1,4 @@
-namespace MoneyWatch {
+namespace LFinance {
 	internal class ExtendedTagButton : Gtk.Box {
 		Tag tag;
 		Gee.List<ExtendedTagButton> btns;

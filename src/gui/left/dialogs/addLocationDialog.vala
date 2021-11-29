@@ -1,4 +1,4 @@
-namespace MoneyWatch {
+namespace LFinance {
 	internal class AddLocationDialog : Gtk.Dialog {
 		Model model;
 

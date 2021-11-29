@@ -1,4 +1,4 @@
-namespace MoneyWatch {
+namespace LFinance {
 	internal class Tag {
 		internal string _name{internal get; private set;}
 		internal uint8[] _rgba{internal get; private set;}

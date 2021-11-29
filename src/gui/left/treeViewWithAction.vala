@@ -1,4 +1,4 @@
-namespace MoneyWatch {
+namespace LFinance {
 	internal class TreeViewWithAction : Gtk.TreeView {
 		Gtk.TreeIter tp;
 		Gtk.ListStore store;

@@ -1,4 +1,4 @@
-project('money_watch', ['c', 'vala'], version: '0.1')
+project('lfinance', ['c', 'vala'], version: '0.1')
 # The following is heavily inspired by https://github.com/Fluid-DE/test
 add_project_arguments('-DGETTEXT_PACKAGE="' + meson.project_name() + '"', language: 'c')
 project_version = meson.project_version()

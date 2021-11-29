@@ -1,12 +1,12 @@
-namespace MoneyWatch {
-	internal class MoneyWatchPanel : Gtk.Box {
+namespace LFinance {
+	internal class LFinancePanel : Gtk.Box {
 		BigList left;
 		AccountInfo right;
 		Model model;
 		int obj;
 		SelectAccountFunc func;
 
-		internal MoneyWatchPanel() throws Error {
+		internal LFinancePanel() throws Error {
 			Object(orientation: Gtk.Orientation.HORIZONTAL, spacing: 2);
 			this.obj = 0;
 			this.load_model();
@@ -31,20 +31,20 @@ namespace MoneyWatch {
 			var before = get_monotonic_time() / factor;
 			var data_dir = Environment.get_user_data_dir();
 			var files = new string[]{Environment.get_home_dir() + "/.spendings.json",
-										data_dir + "/MoneyWatch/data.json"};
+										data_dir + "/LFinance/data.json"};
 			if(FileUtils.test(files[1], FileTest.EXISTS)) {
 				this.model = ModelBuilderFactory.from_file(files[1]).build();
 			} else if(FileUtils.test(files[0], FileTest.EXISTS)) {
 				this.model = ModelBuilderFactory.from_file(files[0]).build();
 				try {
-					File.new_for_path(data_dir + "/MoneyWatch").make_directory_with_parents();
+					File.new_for_path(data_dir + "/LFinance").make_directory_with_parents();
 				} catch(Error e) {
 					warning("Error creating directory: %s", e.message);
 				}
 			} else {
 				this.model = new Model();
 				try {
-					File.new_for_path(data_dir + "/MoneyWatch").make_directory_with_parents();
+					File.new_for_path(data_dir + "/LFinance").make_directory_with_parents();
 				} catch(Error e) {
 					warning("Error creating directory: %s", e.message);
 				}
@@ -72,7 +72,7 @@ namespace MoneyWatch {
 			generator.indent_char = '\t';
 			generator.pretty = true;
 			var date = new DateTime.now();
-			var base_dir = Environment.get_user_data_dir() + "/MoneyWatch/";
+			var base_dir = Environment.get_user_data_dir() + "/LFinance/";
 			var save_dir = base_dir + "/%d/%d/%d".printf(date.get_year(), date.get_month(), date.get_day_of_month());
 			try {
 				File.new_for_path(save_dir).make_directory_with_parents();

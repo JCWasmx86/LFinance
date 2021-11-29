@@ -1,4 +1,4 @@
-namespace MoneyWatch {
+namespace LFinance {
 	internal class ScrollBox : Gtk.ScrolledWindow {
 		public Gtk.Orientation orientation{get; set construct;}
 		public int spacing{get; set construct;}

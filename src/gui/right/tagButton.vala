@@ -1,4 +1,4 @@
-namespace MoneyWatch {
+namespace LFinance {
 	internal class TagButton : Gtk.Label {
 		Tag tag;
 		internal TagButton(Tag t) {

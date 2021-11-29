@@ -19,13 +19,13 @@ sudo apt install git libglib2.0-dev meson ninja-build valac libgee-0.8-dev libjs
 ## Build
 
 ```
-git clone https://github.com/JCWasmx86/MoneyWatch
-cd MoneyWatch
+git clone https://github.com/JCWasmx86/LFinance
+cd LFinance
 mkdir build && cd build
 meson ..
 ninja
 # To run
-./src/money_watch
+./src/lfinance
 # To install to /usr/local
 sudo ninja install
 ```

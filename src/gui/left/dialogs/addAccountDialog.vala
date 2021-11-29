@@ -1,4 +1,4 @@
-namespace MoneyWatch {
+namespace LFinance {
 	internal class AddAccountDialog : Gtk.Dialog {
 		Model model;
 		Gtk.Entry entry;

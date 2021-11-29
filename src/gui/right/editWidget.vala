@@ -1,4 +1,4 @@
-namespace MoneyWatch {
+namespace LFinance {
 	internal class EditWidget : Gtk.Box {
 			Model model;
 			Account account;

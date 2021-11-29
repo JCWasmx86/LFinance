@@ -1,9 +1,9 @@
 [Desktop Entry]
-Name=MoneyWatch
+Name=LFinance
 Comment=Manage your finances
-TryExec=money_watch
-Exec=money_watch
-Icon=jcwasmx86.money_watch
+TryExec=lfinance
+Exec=lfinance
+Icon=jcwasmx86.lfinance
 Terminal=false
 Type=Application
 StartupNotify=true

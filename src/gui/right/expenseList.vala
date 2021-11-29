@@ -1,4 +1,4 @@
-namespace MoneyWatch {
+namespace LFinance {
 	internal class ExpenseList : ScrollBox {
 		// [SortingOrder]
 		// [Add new expense]

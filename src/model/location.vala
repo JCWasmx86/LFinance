@@ -1,4 +1,4 @@
-namespace MoneyWatch {
+namespace LFinance {
 	internal class Location {
 		internal string _name{internal get; internal set;}
 		internal string? _city{internal get; internal set;}

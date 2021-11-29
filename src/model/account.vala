@@ -1,4 +1,4 @@
-namespace MoneyWatch {
+namespace LFinance {
 	internal class Account {
 		internal string _name{internal get; private set;}
 		internal uint _sorting{internal get; private set;}

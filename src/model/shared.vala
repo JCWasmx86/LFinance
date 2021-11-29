@@ -1,4 +1,4 @@
-namespace MoneyWatch {
+namespace LFinance {
 	internal delegate void TriggerFunc(TriggerType type);
 	internal enum TriggerType {
 		DELETE_TAG, ADD_TAG, DELETE_LOCATION, ADD_LOCATION, DELETE_ACCOUNT, ADD_ACCOUNT, ADD_EXPENSE, DELETE_EXPENSE, ACCOUNT_EXPENSES_SORT, EDIT_TAG,

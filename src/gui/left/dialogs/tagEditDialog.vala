@@ -1,4 +1,4 @@
-namespace MoneyWatch {
+namespace LFinance {
 	internal class TagEditDialog : Gtk.Dialog {
 		Gtk.Entry name_entry;
 		Gtk.ColorButton button;

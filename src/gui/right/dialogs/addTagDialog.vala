@@ -1,4 +1,4 @@
-namespace MoneyWatch {
+namespace LFinance {
 	internal class AddTagDialog : Gtk.Dialog {
 		Model model;
 

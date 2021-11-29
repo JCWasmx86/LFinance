@@ -1,4 +1,4 @@
-namespace MoneyWatch {
+namespace LFinance {
 	interface ActionHandler : GLib.Object {
 		// If true, accept the change, else reject
 		internal abstract bool handle_edit(string old, string @new, out string replacement);

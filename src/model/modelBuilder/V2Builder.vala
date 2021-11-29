@@ -1,4 +1,4 @@
-namespace MoneyWatch {
+namespace LFinance {
 	internal class ModelV2Builder : ModelBuilder, GLib.Object {
 		Json.Object root;
 
