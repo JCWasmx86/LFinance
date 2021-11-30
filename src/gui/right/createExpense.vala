@@ -152,5 +152,21 @@ namespace LFinance {
 				btn.set_active(false);
 			}
 		}
+		internal void rebuild(TriggerType type) {
+			if(type == TriggerType.ADD_TAG || type == TriggerType.DELETE_TAG || type == TriggerType.EDIT_TAG) {
+				this.remove(this.tags_scw);
+				this.build_tags_window();
+				this.reorder_child(this.tags_scw, 2);
+			} else if(type == TriggerType.ADD_LOCATION || type == TriggerType.DELETE_LOCATION || type == TriggerType.EDIT_LOCATION) {
+				var id = this.location.active_id;
+				this.location.append("", "");
+				foreach(var loc in model._locations) {
+					this.location.append(loc.id_string(), loc.id_string());
+				}
+				if(!this.location.set_active_id(id)) {
+					this.location.set_active(0);
+				}
+			}
+		}
 	}
 }

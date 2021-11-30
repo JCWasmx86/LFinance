@@ -11,5 +11,8 @@ namespace LFinance {
 		internal void select(Account account) {
 			this.ce.select(account);
 		}
+		internal void rebuild(TriggerType? type) {
+			this.ce.rebuild(type);
+		}
 	}
 }

@@ -11,35 +11,47 @@ namespace LFinance {
 			Object(orientation: Gtk.Orientation.VERTICAL, spacing: 2);
 			this.model = model;
 		}
-		internal void rebuild(SelectAccountFunc func) {
-			bool expanded_accounts = this.accounts == null ? false : this.accounts.get_expanded();
-			bool expanded_locations = this.locations == null ? false : this.locations.get_expanded();
-			bool expanded_tags = this.tags == null ? false : this.tags.get_expanded();
-			if(this.box != null) {
-				this.box.get_children().@foreach(a => this.box.remove(a));
+		internal void rebuild(TriggerType? type, SelectAccountFunc func) {
+			if(type == null) {
+				this.accounts = new Expander(_("Accounts"), new AccountActionHandler(func, this.model), "text", false);
+				foreach(var account in model._accounts) {
+					this.accounts.append_string(account._name);
+				}
+				this.pack_start(this.accounts, false, false, 2);
+				this.locations = new Expander(_("Locations"), new LocationActionHandler(this.model), "text", false);
+				foreach(var location in model._locations) {
+					this.locations.append_string(location.id_string(), location.id_string());
+				}
+				this.pack_start(this.locations, false, false, 2);
+				this.tags = new Expander(_("Tags"), new TagActionHandler(this.model), "markup");
+				foreach(var tag in model._tags) {
+					var colors = tag._rgba;
+					this.tags.append_string(
+						"<b><span foreground=\"#%02x%02x%02x%02x\" >%s</span></b>".printf(colors[0], colors[1], colors[2], colors[3], tag._name));
+				}
+				this.pack_start(this.tags, false, false, 2);
+				this.addButtons = new AddPanel(this.model);
+				this.pack_start(this.addButtons, false, false, 2);
+			} else if(type == TriggerType.ADD_TAG || type == TriggerType.DELETE_TAG || type == TriggerType.EDIT_TAG) {
+				this.tags.clear();
+				foreach(var tag in model._tags) {
+					var colors = tag._rgba;
+					this.tags.append_string(
+						"<b><span foreground=\"#%02x%02x%02x%02x\" >%s</span></b>".printf(colors[0], colors[1], colors[2], colors[3], tag._name));
+				}
+			} else if(type == TriggerType.ADD_LOCATION || type == TriggerType.DELETE_LOCATION || type == TriggerType.EDIT_LOCATION) {
+				this.locations.clear();
+				foreach(var location in model._locations) {
+					this.locations.append_string(location.id_string(), location.id_string());
+				}
+			} else if(type == TriggerType.ADD_ACCOUNT || type == TriggerType.DELETE_ACCOUNT || type == TriggerType.EDIT_ACCOUNT) {
+				this.accounts.clear();
+				foreach(var account in model._accounts) {
+					this.accounts.append_string(account._name);
+				}
+			} else {
+				info("Unknown type, ignoring in BigList: %s", type.to_string());
 			}
-			this.accounts = new Expander(_("Accounts"), new AccountActionHandler(func, this.model), "text", false);
-			foreach(var account in model._accounts) {
-				this.accounts.append_string(account._name);
-			}
-			this.accounts.set_expanded(expanded_accounts);
-			this.pack_start(this.accounts, false, false, 2);
-			this.locations = new Expander(_("Locations"), new LocationActionHandler(this.model), "text", false);
-			foreach(var location in model._locations) {
-				this.locations.append_string(location.id_string(), location.id_string());
-			}
-			this.locations.set_expanded(expanded_locations);
-			this.pack_start(this.locations, false, false, 2);
-			this.tags = new Expander(_("Tags"), new TagActionHandler(this.model), "markup");
-			foreach(var tag in model._tags) {
-				var colors = tag._rgba;
-				this.tags.append_string(
-					"<b><span foreground=\"#%02x%02x%02x%02x\" >%s</span></b>".printf(colors[0], colors[1], colors[2], colors[3], tag._name));
-			}
-			this.tags.set_expanded(expanded_tags);
-			this.pack_start(this.tags, false, false, 2);
-			this.addButtons = new AddPanel(this.model);
-			this.pack_start(this.addButtons, false, false, 2);
 		}
 	}
 }

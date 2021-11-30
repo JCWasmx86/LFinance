@@ -22,36 +22,39 @@ namespace LFinance {
 			this.overview.select(this.to_render);
 			this.expenses.select(this.to_render);
 			Gdk.threads_add_idle_full(GLib.Priority.HIGH_IDLE + 20, () => {
-				this.rebuild();
 				this.show_all();
 				return false;
 			});
 		}
 
-		internal void rebuild() {
-			if(this.notebook == null) {
+		internal void rebuild(TriggerType? type) {
+			if(type == null) {
 				this.notebook = new Gtk.Notebook();
 				this.pack_start(this.notebook, true, true, 2);
-			}
-			if(this.model._accounts.size == 0)
-				return;
-			// Account was deleted
-			if(!this.model.has_account(this.to_render)) {
-				// Just use the first account we can find
-				this.select(this.model._accounts[0]._name);
-				return;
-			}
-			if(this.overview == null) {
+				if(this.model._accounts.size == 0)
+					return;
+				// Account was deleted
+				if(!this.model.has_account(this.to_render)) {
+					// Just use the first account we can find
+					this.select(this.model._accounts[0]._name);
+					return;
+				}
 				this.overview = new Overview(this.model, this.to_render);
 				this.notebook.append_page(this.overview, new Gtk.Label(_("Overview")));
-			} else {
-				this.overview.rebuild();
-			}
-			if(this.expenses == null) {
 				this.expenses = new ExpenseList(this.model, this.to_render);
 				this.notebook.append_page(this.expenses, new Gtk.Label(_("Expenses")));
+			} else if(type == TriggerType.ADD_TAG || type == TriggerType.DELETE_TAG || type == TriggerType.EDIT_TAG) {
+				// Only the expenses deal with tags
+				this.expenses.rebuild(type);
+			} else if(type == TriggerType.ADD_LOCATION || type == TriggerType.DELETE_LOCATION || type == TriggerType.EDIT_LOCATION) {
+				this.expenses.rebuild(type);
+			} else if(type == TriggerType.ADD_EXPENSE || type == TriggerType.DELETE_EXPENSE || type == TriggerType.EDIT_EXPENSE) {
+				this.overview.rebuild(type);
+				this.expenses.rebuild(type);
 			} else {
-				this.expenses.rebuild();
+				info("Unknown type, ignoring in AccountInfo: %s", type.to_string());
+				this.overview.rebuild(type);
+				this.expenses.rebuild(type);
 			}
 		}
 	}

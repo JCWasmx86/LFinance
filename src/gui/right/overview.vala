@@ -141,23 +141,29 @@ namespace LFinance {
 			val4.set_string("%s%.2lf".printf(currency, sum));
 			this.store.insert_with_valuesv(out iter, -1, new int[]{0, 1, 2, 3}, new Value[]{val1, val2, val3, val4});
 		}
-		internal void rebuild() {
-			if(this.old_name != this.account._name && this.is_editing) {
-				this.name_entry.set_text(this.account._name);
-				this.btn.set_label(_("Edit"));
-				this.first_line.remove(this.reset);
-				this.name_entry.editable = false;
-				this.name_entry.can_focus = false;
-				this.is_editing = false;
-			} else if(this.old_name != this.account._name) {
-				this.name_entry.set_text(this.account._name);
+		internal void rebuild(TriggerType? type) {
+			if(type == null) {
+				if(this.old_name != this.account._name && this.is_editing) {
+					this.name_entry.set_text(this.account._name);
+					this.btn.set_label(_("Edit"));
+					this.first_line.remove(this.reset);
+					this.name_entry.editable = false;
+					this.name_entry.can_focus = false;
+					this.is_editing = false;
+				} else if(this.old_name != this.account._name) {
+					this.name_entry.set_text(this.account._name);
+				}
+				this.old_name = this.account._name;
+				this.populate_stats();
+			} else if(type == TriggerType.ADD_EXPENSE || type == TriggerType.EDIT_EXPENSE || type == TriggerType.DELETE_EXPENSE) {
+				this.populate_stats();
+			} else {
+				info("Unknown type, ignoring in Overview: %s", type.to_string());
 			}
-			this.old_name = this.account._name;
-			this.populate_stats();
 		}
 		internal void select(Account to_render) {
 			this.account = to_render;
-			this.rebuild();
+			this.rebuild(null);
 		}
 	}
 }

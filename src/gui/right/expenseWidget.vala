@@ -89,5 +89,57 @@ namespace LFinance {
 				dialog.destroy();
 			});
 		}
+		internal void rebuild(TriggerType? type) {
+			if(type == TriggerType.ADD_LOCATION || type == TriggerType.DELETE_LOCATION || type == TriggerType.EDIT_LOCATION) {
+				if(type == TriggerType.DELETE_LOCATION && this.location != null) {
+					var loc = this.model.search_location_by_id(this.location.label);
+					if(loc == null) { // Deleted
+						this.tags_box.remove(this.location);
+					}
+				}
+				this.edit.rebuild(type);
+			} else if(type == TriggerType.ADD_TAG || type == TriggerType.DELETE_TAG || type == TriggerType.EDIT_TAG) {
+				if(!this.tags.is_empty && type == TriggerType.DELETE_TAG) {
+					for(var i = 0; i < this.tags.size; i++) {
+						if(this.model.search_tag(this.tags[i].tag._name) == null) {
+							this.tags_box.remove(this.tags[i]);
+							this.tags.remove_at(i);
+							i--;
+						}
+					}
+				} else if(type == TriggerType.EDIT_TAG) {
+					for(var i = 0; i < this.tags.size; i++) {
+						this.tags[i].rebuild_if_necessary();
+					}
+				}
+				this.edit.rebuild(type);
+			} else {
+				info("Unknown type, ignoring in ExpenseWidget: %s", type.to_string());
+			}
+		}
+		internal void rebuild_if_necessary() {
+			if(this.expense.format() != this.infos.label) {
+				this.infos.label = this.expense.format();
+			}
+			if(this.expense._location == null && this.location != null) {
+				this.tags_box.remove(this.location);
+				this.location = null;
+			} else if(this.expense._location != null && this.location == null) {
+				this.location = new LocationButton(expense._location);
+				this.tags_box.pack_start(this.location, false, true, 2);
+				this.tags_box.reorder_child(this.location, 0);
+				this.tags_box.show_all();
+			} else if(this.expense._location != null && this.location != null && this.location.label != null) {
+				this.location.label = this.expense._location.id_string();
+			}
+			for(var i = 0; i < this.tags.size; i++) {
+				if(model.search_tag(this.tags[i].tag._name) == null) { // Remove
+					this.tags.remove_at(i);
+					this.tags_box.remove(this.tags[i]);
+				} else { // Edited
+					this.tags[i].rebuild_if_necessary();
+				}
+			}
+		}
 	}
 }

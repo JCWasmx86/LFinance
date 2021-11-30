@@ -76,5 +76,8 @@ namespace LFinance {
 			val2.set_string(shadow);
 			this.store.insert_with_valuesv(out tp, -1, new int[]{0, 1}, new Value[]{val1, val2});
 		}
+		internal void clear() {
+			this.store.clear();
+		}
 	}
 }

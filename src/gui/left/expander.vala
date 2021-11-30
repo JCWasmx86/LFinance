@@ -10,5 +10,8 @@ namespace LFinance {
 		internal void append_string(string val, string shadow = "") {
 			this.treeView.append_string(val, shadow == null ? "" : shadow);
 		}
+		internal void clear() {
+			this.treeView.clear();
+		}
 	}
 }

@@ -12,17 +12,17 @@ namespace LFinance {
 			this.load_model();
 			this.build_gui();
 			this.model.set_sharp(type => {
-				this.rebuild();
+				this.rebuild(type);
 			});
 		}
 		void build_gui() {
 			this.func = s => this.right.select(s);
 			this.left = new BigList(this.model);
-			this.left.rebuild(func);
+			this.left.rebuild(null, func);
 			this.pack_start(left, true, true, 2);
 
 			this.right = new AccountInfo(model);
-			this.right.rebuild();
+			this.right.rebuild(null);
 			this.pack_start(this.right, true, true, 2);
 		}
 
@@ -54,11 +54,11 @@ namespace LFinance {
 			info("Loaded JSON: %.2fs", (after - before));
 		}
 
-		void rebuild() {
+		void rebuild(TriggerType type) {
 			info("Rebuilding GUI!");
 			lock(obj) {
-				this.left.rebuild(func);
-				this.right.rebuild();
+				this.left.rebuild(type, func);
+				this.right.rebuild(type);
 				Gdk.threads_add_idle_full(Priority.HIGH_IDLE + 20, () => {
 					this.show_all();
 					this.queue_draw();

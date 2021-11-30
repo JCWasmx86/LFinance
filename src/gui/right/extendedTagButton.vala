@@ -2,7 +2,8 @@ namespace LFinance {
 	internal class ExtendedTagButton : Gtk.Box {
 		Tag tag;
 		Gee.List<ExtendedTagButton> btns;
-
+		string old_markup;
+		Gtk.Label label;
 		internal ExtendedTagButton(Tag t, Account account, Expense expense, Gee.List<ExtendedTagButton> btns) {
 			Object(orientation: Gtk.Orientation.HORIZONTAL, spacing: 2);
 			this.tag = t;
@@ -12,9 +13,10 @@ namespace LFinance {
 		}
 		void build_gui() {
 			var colors = this.tag._rgba;
-			var label = new Gtk.Label("");
-			label.set_markup("<b><span foreground=\"#%02x%02x%02x%02x\" >%s</span></b>".printf(colors[0], colors[1], colors[2], colors[3], this.tag._name));
-			this.pack_start(label, false, false, 2);
+			this.label = new Gtk.Label("");
+			this.old_markup = "<b><span foreground=\"#%02x%02x%02x%02x\" >%s</span></b>".printf(colors[0], colors[1], colors[2], colors[3], this.tag._name);
+			this.label.set_markup(this.old_markup);
+			this.pack_start(this.label, false, false, 2);
 			var button = new Gtk.Button.from_icon_name("edit-delete");
 			button.tooltip_text = _("Delete Tag");
 			button.clicked.connect(() => {
@@ -40,6 +42,14 @@ namespace LFinance {
 		}
 		internal Tag get_tag() {
 			return this.tag;
+		}
+		internal void rebuild_if_necessary() {
+			var colors = this.tag._rgba;
+			var new_markup = "<b><span foreground=\"#%02x%02x%02x%02x\" >%s</span></b>".printf(colors[0], colors[1], colors[2], colors[3], this.tag._name);
+			if(new_markup != this.old_markup) {
+				this.label.set_markup(new_markup);
+				this.old_markup = new_markup;
+			}
 		}
 	}
 

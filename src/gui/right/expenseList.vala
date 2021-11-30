@@ -61,22 +61,56 @@ namespace LFinance {
 			this.pack_start(this.expenses, false, true, 2);
 		}
 
-		internal void rebuild() {
-			this.header_sorting.active_id = "%u".printf(account._sorting);
-			this.widgets.foreach(a => {
-				expenses.remove(a);
-				return true;
-			});
-			this.widgets = new Gee.ArrayList<ExpenseWidget>();
-			foreach(var expense in this.account._expenses) {
-				var widget = new ExpenseWidget(this.model, this.account, expense);
-				this.widgets.add(widget);
-				this.expenses.pack_start(widget, false, true, 2);
+		internal void rebuild(TriggerType? type) {
+			if(type == null) {
+				this.header_sorting.active_id = "%u".printf(account._sorting);
+				this.widgets.foreach(a => {
+					expenses.remove(a);
+					return true;
+				});
+				this.widgets = new Gee.ArrayList<ExpenseWidget>();
+				foreach(var expense in this.account._expenses) {
+					var widget = new ExpenseWidget(this.model, this.account, expense);
+					this.widgets.add(widget);
+					this.expenses.pack_start(widget, false, true, 2);
+				}
+			// TODO: Sorting could be smarter to avoid reconstructing the expenses
+			} else if(type == TriggerType.ADD_EXPENSE || type == TriggerType.DELETE_EXPENSE || type == TriggerType.ACCOUNT_EXPENSES_SORT) {
+				this.widgets.foreach(a => {
+					expenses.remove(a);
+					return true;
+				});
+				this.widgets = new Gee.ArrayList<ExpenseWidget>();
+				foreach(var expense in this.account._expenses) {
+					var widget = new ExpenseWidget(this.model, this.account, expense);
+					this.widgets.add(widget);
+					this.expenses.pack_start(widget, false, true, 2);
+				}
+			} else if(type == TriggerType.EDIT_EXPENSE) {
+				this.widgets.foreach(a => {
+					a.rebuild_if_necessary();
+					return true;
+				});
+			} else if(type == TriggerType.ADD_TAG || type == TriggerType.DELETE_TAG || type == TriggerType.EDIT_TAG) {
+				this.widgets.foreach(a => {
+					a.rebuild(type);
+					return true;
+				});
+				this.epw.rebuild(type);
+			} else if(type == TriggerType.ADD_LOCATION || type == TriggerType.DELETE_LOCATION || type == TriggerType.EDIT_LOCATION) {
+				this.widgets.foreach(a => {
+					a.rebuild(type);
+					return true;
+				});
+				this.epw.rebuild(type);
+			} else {
+				info("Unknown type, ignoring in ExpenseList: %s", type.to_string());
 			}
 		}
 		internal void select(Account to_render) {
 			this.account = to_render;
 			this.epw.select(to_render);
+			this.rebuild(null);
 		}
 	}
 }
