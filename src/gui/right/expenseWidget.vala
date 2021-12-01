@@ -131,12 +131,17 @@ namespace LFinance {
 				this.tags_box.pack_start(this.location, false, true, 2);
 				this.tags_box.reorder_child(this.location, 0);
 				this.tags_box.show_all();
+				if(this.tags_box.get_parent() == null) {
+					this.pack_start(this.tags_box, false, true, 2);
+					this.reorder_child(this.tags_box, 1);
+					this.tags_box.show_all();
+				}
 			} else if(this.expense._location != null && this.location != null && this.location.label != null) {
 				this.location.label = this.expense._location.id_string();
 			}
 			if(this.expense._tags.size > 0 && this.tags_box.get_parent() == null) {
 				this.pack_start(this.tags_box, false, true, 2);
-				this.reorder_child(this.tags_box, 2);
+				this.reorder_child(this.tags_box, 1);
 				this.tags_box.show_all();
 			}
 			var array = new bool[this.expense._tags.size];
