@@ -146,7 +146,7 @@ namespace LFinance {
 			}
 			var array = new bool[this.expense._tags.size];
 			for(var i = 0; i < this.tags.size; i++) {
-				if(expense.search_tag(this.tags[i].tag._name) == null) { // Remove
+				if(expense.search_tag(this.tags[i].tag._name) == null) { // Removed
 					this.tags_box.remove(this.tags[i]);
 					this.tags.remove_at(i);
 					i--;
