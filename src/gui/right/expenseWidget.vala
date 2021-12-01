@@ -113,6 +113,8 @@ namespace LFinance {
 					}
 				}
 				this.edit.rebuild(type);
+			} else if(type == TriggerType.EDIT_EXPENSE) {
+				this.rebuild_if_necessary();
 			} else {
 				info("Unknown type, ignoring in ExpenseWidget: %s", type.to_string());
 			}
@@ -132,14 +134,44 @@ namespace LFinance {
 			} else if(this.expense._location != null && this.location != null && this.location.label != null) {
 				this.location.label = this.expense._location.id_string();
 			}
+			if(this.expense._tags.size > 0 && this.tags_box.get_parent() == null) {
+				this.pack_start(this.tags_box, false, true, 2);
+				this.reorder_child(this.tags_box, 2);
+				this.tags_box.show_all();
+			}
+			var array = new bool[this.expense._tags.size];
 			for(var i = 0; i < this.tags.size; i++) {
-				if(model.search_tag(this.tags[i].tag._name) == null) { // Remove
-					this.tags.remove_at(i);
+				if(expense.search_tag(this.tags[i].tag._name) == null) { // Remove
 					this.tags_box.remove(this.tags[i]);
+					this.tags.remove_at(i);
+					i--;
 				} else { // Edited
 					this.tags[i].rebuild_if_necessary();
+					var cnter = 0;
+					foreach(var t in this.expense._tags) {
+						if(t._name == this.tags[i].tag._name) {
+							array[cnter] = true;
+							break;
+						}
+						cnter++;
+					}
 				}
 			}
+			for(var i = array.length - 1; i >= 0; i--) {
+				if(!array[i]) {
+					this.tags_box.foreach(a => this.tags_box.remove(a));
+					while(this.tags.size != 0)
+						this.tags.remove_at(0);
+					foreach(var t in this.expense._tags) {
+						info(t._name);
+						var btn = new TagButton(t);
+						this.tags.add(btn);
+						this.tags_box.pack_start(btn, false, true, 2);
+					}
+					break;
+				}
+			}
+			this.tags_box.show_all();
 		}
 	}
 }

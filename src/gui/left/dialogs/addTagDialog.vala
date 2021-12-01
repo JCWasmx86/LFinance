@@ -80,7 +80,9 @@ namespace LFinance {
 		}
 		internal string get_active_color() {
 			foreach(var item in this.colored_radio_buttons) {
+				info("HERE: %s", item.get_color());
 				if(((Gtk.RadioButton)item).get_active()) {
+					info("HHHHHEEEEEEEEEERRRRRRRRRRREEEE");
 					return item.get_color();
 				}
 			}

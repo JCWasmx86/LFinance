@@ -39,16 +39,19 @@ namespace LFinance {
 					this.tags.append_string(
 						"<b><span foreground=\"#%02x%02x%02x%02x\" >%s</span></b>".printf(colors[0], colors[1], colors[2], colors[3], tag._name));
 				}
+				this.tags.queue_draw();
 			} else if(type == TriggerType.ADD_LOCATION || type == TriggerType.DELETE_LOCATION || type == TriggerType.EDIT_LOCATION) {
 				this.locations.clear();
 				foreach(var location in model._locations) {
 					this.locations.append_string(location.id_string(), location.id_string());
 				}
+				this.locations.queue_draw();
 			} else if(type == TriggerType.ADD_ACCOUNT || type == TriggerType.DELETE_ACCOUNT || type == TriggerType.EDIT_ACCOUNT) {
 				this.accounts.clear();
 				foreach(var account in model._accounts) {
 					this.accounts.append_string(account._name);
 				}
+				this.accounts.queue_draw();
 			} else {
 				info("Unknown type, ignoring in BigList: %s", type.to_string());
 			}

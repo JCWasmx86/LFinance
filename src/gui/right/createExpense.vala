@@ -154,11 +154,36 @@ namespace LFinance {
 		}
 		internal void rebuild(TriggerType type) {
 			if(type == TriggerType.ADD_TAG || type == TriggerType.DELETE_TAG || type == TriggerType.EDIT_TAG) {
+				this.tag_names = new Gee.ArrayList<string>();
 				this.remove(this.tags_scw);
+				var active = new Gee.ArrayList<Tag>();
+				foreach(var btn in this.tags) {
+					if(btn.active) {
+						var prologue_len = "<b><span foreground=\"#11223344\" >".length;
+						var epilogue_len = "</span></b>".length;
+						var content_len = btn.label.length - (prologue_len + epilogue_len);
+						var sub_string = btn.label.slice(prologue_len, prologue_len + content_len);
+						info("Looking up %s", sub_string);
+						var tag = this.model.search_tag(sub_string);
+						if(tag != null)
+							active.add(tag);
+					}
+				}
 				this.build_tags_window();
+				foreach(var tag in active) {
+					foreach(var btn in this.tags) {
+						var prologue_len = "<b><span foreground=\"#11223344\" >".length;
+						var epilogue_len = "</span></b>".length;
+						var content_len = btn.label.length - (prologue_len + epilogue_len);
+						var sub_string = btn.label.slice(prologue_len, prologue_len + content_len);
+						if(sub_string == tag._name)
+							btn.active = true;
+					}
+				}
 				this.reorder_child(this.tags_scw, 2);
 			} else if(type == TriggerType.ADD_LOCATION || type == TriggerType.DELETE_LOCATION || type == TriggerType.EDIT_LOCATION) {
 				var id = this.location.active_id;
+				this.location.remove_all();
 				this.location.append("", "");
 				foreach(var loc in model._locations) {
 					this.location.append(loc.id_string(), loc.id_string());
@@ -166,6 +191,8 @@ namespace LFinance {
 				if(!this.location.set_active_id(id)) {
 					this.location.set_active(0);
 				}
+			} else if(type == TriggerType.ADD_EXPENSE) {
+				this.reset_all();
 			}
 		}
 	}

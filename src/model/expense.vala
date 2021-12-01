@@ -60,7 +60,17 @@ namespace LFinance {
 		}
 		internal void end_edits() {
 			this.sharp = true;
-			this.fire(TriggerType.GENERAL);
+			this._tags.sort((a, b) => {
+				return a._name.collate(b._name);
+			});
+			this.fire(TriggerType.EDIT_EXPENSE);
+		}
+		internal Tag? search_tag(string name) {
+			foreach(var t in this._tags) {
+				if(name == t._name)
+					return t;
+			}
+			return null;
 		}
 
 		internal string format() {

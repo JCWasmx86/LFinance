@@ -39,7 +39,11 @@ namespace LFinance {
 					var name = dialog.get_name();
 					var color = dialog.get_active_color();
 					var rgba = new uint8[4];
-					color.scanf("#%02x%02x,02x02x", out rgba[0], out rgba[1], out rgba[2], out rgba[3]);
+					rgba[0] = (uint8)uint.parse(color.substring(1, 2), 16);
+					rgba[1] = (uint8)uint.parse(color.substring(2, 3), 16);
+					rgba[2] = (uint8)uint.parse(color.substring(3, 4), 16);
+					if(color.length >= 6)
+						rgba[3] = (uint8)uint.parse(color.substring(4, 5), 16);
 					model.add_tag(new Tag(name, rgba));
 				}
 				dialog.destroy();

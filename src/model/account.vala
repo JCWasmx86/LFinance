@@ -36,6 +36,7 @@ namespace LFinance {
 		}
 		internal void delete_expense(Expense expense) {
 			this._expenses.remove(expense);
+			this.fire(TriggerType.DELETE_EXPENSE);
 			this.fire(TriggerType.EDIT_ACCOUNT);
 		}
 

@@ -52,7 +52,7 @@ namespace LFinance {
 			this.first_line.pack_start(this.location_chooser, true, true, 2);
 			this.pack_start(this.first_line, true, true, 2);
 		}
-			void build_second_line() {
+		void build_second_line() {
 			this.second_line = new Gtk.Calendar();
 			var date = expense._date;
 			this.second_line.select_month(date.get_month() -1, date.get_year());
@@ -112,6 +112,7 @@ namespace LFinance {
 					expense._tags.add(tag.get_tag());
 				}
 				expense.end_edits();
+				((Gtk.Expander)this.get_parent()).set_expanded(false);
 			});
 			this.cancel.clicked.connect(() => {
 				this.purpose.buffer.set_text(expense._purpose.data);
@@ -159,6 +160,7 @@ namespace LFinance {
 					}
 				}
 			}
+			dialog.destroy();
 		}
 		internal void rebuild(TriggerType type) {
 			if(type == TriggerType.ADD_LOCATION || type == TriggerType.DELETE_LOCATION || type == TriggerType.EDIT_LOCATION) {

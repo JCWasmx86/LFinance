@@ -120,7 +120,7 @@ namespace LFinance {
 				index++;
 			}
 			this._accounts.remove_at(index);
-			this.fire(TriggerType.GENERAL);
+			this.fire(TriggerType.DELETE_ACCOUNT);
 		}
 		internal void remove_tag_by_name(string s) {
 			var t = this.search_tag(s);
@@ -135,7 +135,7 @@ namespace LFinance {
 				}
 			}
 			this._tags.remove(t);
-			this.fire(TriggerType.GENERAL);
+			this.fire(TriggerType.DELETE_TAG);
 		}
 		internal void remove_location_by_id(string id) {
 			var loc = this.search_location_by_id(id);
@@ -147,7 +147,7 @@ namespace LFinance {
 				}
 			}
 			this._locations.remove(loc);
-			this.fire(TriggerType.GENERAL);
+			this.fire(TriggerType.DELETE_LOCATION);
 		}
 		internal Json.Node serialize() {
 			var builder = new Json.Builder();
