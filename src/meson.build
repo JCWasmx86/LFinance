@@ -1,5 +1,7 @@
 src = [
 	'constants.vala',
+	'exporters/factory.vala',
+	'exporters/pdf.vala',
 	'gui/left/accountActionHandler.vala',
 	'gui/left/actionHandler.vala',
 	'gui/left/addPanel.vala',
@@ -47,6 +49,7 @@ deps = [
 	dependency('gee-0.8'),
 	dependency('json-glib-1.0'),
 	dependency('gtk+-3.0'),
+	meson.get_compiler('vala').find_library('posix'),
 	project_config_dep
 ]
 executable('lfinance', sources: src, dependencies: deps, install: true)

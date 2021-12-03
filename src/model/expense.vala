@@ -73,6 +73,9 @@ namespace LFinance {
 			return null;
 		}
 
+		internal string format_amount() {
+			return "%s\u202f%.2f".printf(this._currency, this._amount / 100.0);
+		}
 		internal string format() {
 			// TODO: Some currencies don't have basic units or a different
 			// rate.

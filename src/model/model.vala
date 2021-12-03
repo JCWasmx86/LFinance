@@ -17,6 +17,9 @@ namespace LFinance {
 
 		internal void add_tag(Tag tag) {
 			this._tags.add(tag);
+			this._tags.sort((a, b) => {
+				return a._name.collate(b._name);
+			});
 			this.fire(TriggerType.ADD_TAG);
 		}
 		internal void add_location(Location location) {
