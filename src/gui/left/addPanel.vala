@@ -9,7 +9,7 @@ namespace LFinance {
 			add_account.clicked.connect(() => {
 				var dialog = new AddAccountDialog(this.model);
 				var result = dialog.run();
-				if(result == 0) {
+				if(result == Gtk.ResponseType.OK) {
 					var text = dialog.get_text();
 					dialog.destroy();
 					model.add_account(new Account(text));
@@ -22,7 +22,7 @@ namespace LFinance {
 			add_location.clicked.connect(() => {
 				var dialog = new AddLocationDialog(this.model);
 				var result = dialog.run();
-				if(result == 0) {
+				if(result == Gtk.ResponseType.OK) {
 					var loc = dialog.build_location();
 					dialog.destroy();
 					model.add_location(loc);
@@ -35,7 +35,7 @@ namespace LFinance {
 			add_tag.clicked.connect(() => {
 				var dialog = new CreateTagDialog(this.model);
 				var result = dialog.run();
-				if(result == 0) {
+				if(result == Gtk.ResponseType.OK) {
 					var name = dialog.get_name();
 					var color = dialog.get_active_color();
 					var rgba = new uint8[4];

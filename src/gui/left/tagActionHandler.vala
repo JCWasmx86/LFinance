@@ -33,7 +33,7 @@ namespace LFinance {
 					var new_name = dialog.get_new_name();
 					var rgba = dialog.get_rgba();
 					dialog.destroy();
-					if(result == 0) {
+					if(result == Gtk.ResponseType.OK) {
 							tag.set_name(new_name);
 							tag.set_rgba(rgba);
 							model._tags.sort((a, b) => {
@@ -58,9 +58,8 @@ namespace LFinance {
 					var content_len = selected.length - (prologue_len + epilogue_len);
 					var old_name = selected.slice(prologue_len, prologue_len + content_len);
 					var md = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.QUESTION, Gtk.ButtonsType.NONE, _("Do you really want to delete the tag %s?").printf(old_name));
-					md.add_button(_("Delete"), 0);
-					md.add_button(_("Cancel"), 1);
-					if(md.run() == 1) {
+					md.add_buttons(_("_Cancel"), Gtk.ResponseType.CANCEL, _("_Delete"), Gtk.ResponseType.OK);
+					if(md.run() == Gtk.ResponseType.CANCEL) {
 						md.destroy();
 						return;
 					}

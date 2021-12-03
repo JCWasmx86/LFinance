@@ -16,8 +16,7 @@ namespace LFinance {
 			this.connect_signals();
 		}
 		void build_gui() {
-			this.add_button(_("Create Tag"), 0);
-			this.add_button(_("Cancel"), 1);
+			this.add_buttons(_("_Cancel"), Gtk.ResponseType.CANCEL, _("Create Tag"), Gtk.ResponseType.OK);
 			var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 2);
 			var label = new Gtk.Label(_("Name:"));
 			this.entry = new Gtk.Entry();
@@ -42,7 +41,7 @@ namespace LFinance {
 			ca.pack_start(this.entry, false, false, 2);
 			ca.pack_start(scr, true, true, 2);
 			ca.pack_start(this.color_button, false, false, 2);
-			((Gtk.Button)this.get_widget_for_response(0)).set_sensitive(false);
+			((Gtk.Button)this.get_widget_for_response(Gtk.ResponseType.OK)).set_sensitive(false);
 			// Hacky way to show all widgets
 			this.resize(200, 600);
 			this.show_all();
@@ -67,7 +66,7 @@ namespace LFinance {
 				foreach(var btn in this.colored_radio_buttons) {
 					btn.set_text(text);
 				}
-				var btn = (Gtk.Button)this.get_widget_for_response(0);
+				var btn = (Gtk.Button)this.get_widget_for_response(Gtk.ResponseType.OK);
 				if(et.length == 0 || model.search_tag(et) != null) {
 					btn.set_sensitive(false);
 				} else {

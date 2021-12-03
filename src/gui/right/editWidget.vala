@@ -145,7 +145,7 @@ namespace LFinance {
 		void show_tag_selection_dialog() {
 			var dialog = new AddTagDialog(model, this.tags);
 			var result = dialog.run();
-			if(result == 0) {
+			if(result == Gtk.ResponseType.OK) {
 				foreach(var radio in dialog.buttons) {
 					if(radio.get_active()) {
 						var btn = new ExtendedTagButton(model.search_tag(radio.label), account, expense, this.tags);

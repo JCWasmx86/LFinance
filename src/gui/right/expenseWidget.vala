@@ -80,10 +80,9 @@ namespace LFinance {
 		void connect_signals() {
 			this.delete_button.clicked.connect(() => {
 				var dialog = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.QUESTION, Gtk.ButtonsType.NONE, _("Do you really want to delete expense \u201c%s\u201d?").printf(this.expense._purpose));
-				dialog.add_button(_("Delete"), 0);
-				dialog.add_button(_("Cancel"), 1);
+				dialog.add_buttons(_("_Cancel"), Gtk.ResponseType.CANCEL, _("_Delete"), Gtk.ResponseType.OK);
 				var result = dialog.run();
-				if(result == 0) {
+				if(result == Gtk.ResponseType.OK) {
 					this.account.delete_expense(this.expense);
 				}
 				dialog.destroy();
@@ -168,7 +167,6 @@ namespace LFinance {
 					while(this.tags.size != 0)
 						this.tags.remove_at(0);
 					foreach(var t in this.expense._tags) {
-						info(t._name);
 						var btn = new TagButton(t);
 						this.tags.add(btn);
 						this.tags_box.pack_start(btn, false, true, 2);

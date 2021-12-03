@@ -15,8 +15,7 @@ namespace LFinance {
 		}
 
 		void build_gui() {
-			this.add_button(_("Create Location"), 0);
-			this.add_button(_("Cancel"), 1);
+			this.add_buttons(_("_Cancel"), Gtk.ResponseType.CANCEL, _("Create Location"), Gtk.ResponseType.OK);
 			var name_l = new Gtk.Label(_("Name:"));
 			this.name_entry = new Gtk.Entry();
 			var city_l = new Gtk.Label(_("City:"));
@@ -32,13 +31,13 @@ namespace LFinance {
 			ca.pack_start(this.info, true, true, 2);
 			// Hacky way to show all widgets
 			this.resize(200, 400);
-			((Gtk.Button)this.get_widget_for_response(0)).set_sensitive(false);
+			((Gtk.Button)this.get_widget_for_response(Gtk.ResponseType.OK)).set_sensitive(false);
 			this.show_all();
 		}
 
 		void connect_signals() {
 			this.name_entry.changed.connect(() => {
-				var btn = ((Gtk.Button)this.get_widget_for_response(0));
+				var btn = ((Gtk.Button)this.get_widget_for_response(Gtk.ResponseType.OK));
 				var nb = this.name_entry.buffer.text;
 				if(nb.length == 0 || this.model.search_location(nb, this.city.buffer.text) != null) {
 					btn.set_sensitive(false);
@@ -47,7 +46,7 @@ namespace LFinance {
 				}
 			});
 			this.city.changed.connect(() => {
-				var btn = ((Gtk.Button)this.get_widget_for_response(0));
+				var btn = ((Gtk.Button)this.get_widget_for_response(Gtk.ResponseType.OK));
 				var nb = this.name_entry.buffer.text;
 				if(nb.length == 0 || model.search_location(nb, this.city.buffer.text) != null) {
 					btn.set_sensitive(false);

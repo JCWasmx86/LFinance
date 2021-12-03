@@ -21,7 +21,7 @@ namespace LFinance {
 			scrolled_window.add(this.view);
 			this.get_content_area().pack_start(this.progress_bar, false, false, 2);
 			this.get_content_area().pack_start(scrolled_window, true, true, 2);
-			this.exit_button = this.add_button(_("_Close"), 0);
+			this.exit_button = this.add_button(_("_Close"), Gtk.ResponseType.OK);
 			this.response.connect(r => this.destroy());
 			// Otherwise the dialog will be too small
 			this.set_default_size(250, 350);

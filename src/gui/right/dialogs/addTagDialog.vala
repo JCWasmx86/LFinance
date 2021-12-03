@@ -13,8 +13,7 @@ namespace LFinance {
 			this.show_all();
 		}
 		void build_gui() {
-			this.add_button(_("Add tag"), 0);
-			this.add_button(_("Cancel"), 1);
+			this.add_buttons(_("_Cancel"), Gtk.ResponseType.CANCEL, _("Add Tag"), Gtk.ResponseType.OK);
 			var b = new Gtk.Box(Gtk.Orientation.VERTICAL, 2);
 			this.buttons = new SList<Gtk.RadioButton>();
 			foreach(var tag in this.model._tags) {

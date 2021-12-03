@@ -20,7 +20,7 @@ namespace LFinance {
 					var city = dialog.get_city();
 					var info = dialog.get_info();
 					dialog.destroy();
-					if(result == 0) {
+					if(result == Gtk.ResponseType.OK) {
 						// Edit and fire
 						location.set_name(name);
 						location.set_city(city);
@@ -36,9 +36,8 @@ namespace LFinance {
 				var @delete = new Gtk.MenuItem.with_label(_("Delete"));
 				@delete.activate.connect(() => {
 					var md = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.QUESTION, Gtk.ButtonsType.NONE, _("Do you really want to delete this location?"));
-					md.add_button(_("Delete"), 0);
-					md.add_button(_("Cancel"), 1);
-					if(md.run() == 1) {
+					md.add_buttons(_("_Cancel"), Gtk.ResponseType.CANCEL, _("_Delete"), Gtk.ResponseType.OK);
+					if(md.run() == Gtk.ResponseType.CANCEL) {
 						md.destroy();
 						return;
 					}

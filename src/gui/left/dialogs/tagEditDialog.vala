@@ -16,8 +16,7 @@ namespace LFinance {
 			});
 			this.get_content_area().pack_start(this.name_entry, true, false, 2);
 			this.get_content_area().pack_start(this.button, true, false, 2);
-			this.add_button(_("Edit"), 0);
-			this.add_button(_("Cancel"), 1);
+			this.add_buttons(_("_Cancel"), Gtk.ResponseType.CANCEL, _("_Edit"), Gtk.ResponseType.OK);
 			this.show_all();
 		}
 		internal string get_new_name() {

@@ -35,7 +35,7 @@ namespace LFinance {
 			this.init_widgets();
 		}
 		void build_header_bar() {
-			var item = new Gtk.MenuItem.with_label(_("About LFinance"));
+			var item = new Gtk.MenuItem.with_label(_("_About"));
 			item.activate.connect(about);
 			var menu = new Gtk.Menu();
 			menu.append(item);
