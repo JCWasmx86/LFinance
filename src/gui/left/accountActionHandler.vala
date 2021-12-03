@@ -17,14 +17,12 @@ namespace LFinance {
 				var menu = new Gtk.Menu();
 				var export = new Gtk.MenuItem.with_label(_("Export"));
 				export.activate.connect(() => {
-					var dialog = new Gtk.FileChooserDialog(_("Export %s").printf(selected), null, Gtk.FileChooserAction.SAVE);
+					var dialog = new Gtk.FileChooserDialog(_("Export %s").printf(selected),null, Gtk.FileChooserAction.SAVE, _("_Cancel"), Gtk.ResponseType.CANCEL, _("Export"), Gtk.ResponseType.OK);
 					dialog.do_overwrite_confirmation = true;
-					dialog.add_button(_("Export"), 0);
-					dialog.add_button(_("Cancel"), 1);
 					var result = dialog.run();
 					var file = dialog.get_filename();
 					dialog.destroy();
-					if(result == 0) {
+					if(result == Gtk.ResponseType.OK) {
 						var progress_dialog = new Gtk.Dialog();
 						var bar = new Gtk.ProgressBar();
 						bar.show_text = true;
@@ -34,8 +32,9 @@ namespace LFinance {
 						scrolled_window.add(view);
 						progress_dialog.get_content_area().pack_start(bar, false, false, 2);
 						progress_dialog.get_content_area().pack_start(scrolled_window, true, true, 2);
-						var exit_button = progress_dialog.add_button(_("Close"), 0);
+						var exit_button = progress_dialog.add_button(_("_Close"), 0);
 						progress_dialog.response.connect(r => progress_dialog.destroy());
+						// Otherwise the dialog will be too small
 						progress_dialog.set_default_size(250, 350);
 						progress_dialog.show_all();
 						new Thread<void>("question", () => {
@@ -45,6 +44,7 @@ namespace LFinance {
 									GLib.Idle.add(() => {
 										view.buffer.text += (text + "\n");
 										bar.set_fraction(frac);
+										// To avoid any floating point inaccuracies...
 										exit_button.set_sensitive(frac >= 0.999999);
 										return false;
 									});
@@ -61,9 +61,8 @@ namespace LFinance {
 				var remove = new Gtk.MenuItem.with_label(_("Delete"));
 				remove.activate.connect(() => {
 					var md = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.QUESTION, Gtk.ButtonsType.NONE, _("Do you really want to delete the account %s?").printf(selected));
-					md.add_button(_("Delete"), 0);
-					md.add_button(_("Cancel"), 1);
-					if(md.run() == 1) {
+					md.add_buttons(_("_Cancel"), Gtk.ResponseType.CANCEL, _("_Delete"), Gtk.ResponseType.OK);
+					if(md.run() == Gtk.ResponseType.CANCEL) {
 						md.destroy();
 						return;
 					}
