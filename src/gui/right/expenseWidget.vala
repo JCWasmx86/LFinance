@@ -80,7 +80,7 @@ namespace LFinance {
 		void connect_signals() {
 			this.delete_button.clicked.connect(() => {
 				var dialog = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.QUESTION, Gtk.ButtonsType.NONE, _("Do you really want to delete expense \u201c%s\u201d?").printf(this.expense._purpose));
-				dialog.add_buttons(_("_Cancel"), Gtk.ResponseType.CANCEL, _("_Delete"), Gtk.ResponseType.OK);
+				dialog.add_buttons(_("_Cancel"), Gtk.ResponseType.CANCEL, _("Delete"), Gtk.ResponseType.OK);
 				var result = dialog.run();
 				if(result == Gtk.ResponseType.OK) {
 					this.account.delete_expense(this.expense);

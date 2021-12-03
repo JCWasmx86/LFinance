@@ -36,7 +36,7 @@ namespace LFinance {
 				var @delete = new Gtk.MenuItem.with_label(_("Delete"));
 				@delete.activate.connect(() => {
 					var md = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.QUESTION, Gtk.ButtonsType.NONE, _("Do you really want to delete this location?"));
-					md.add_buttons(_("_Cancel"), Gtk.ResponseType.CANCEL, _("_Delete"), Gtk.ResponseType.OK);
+					md.add_buttons(_("_Cancel"), Gtk.ResponseType.CANCEL, _("Delete"), Gtk.ResponseType.OK);
 					if(md.run() == Gtk.ResponseType.OK) {
 						this.model.remove_location_by_id(selected);
 					}

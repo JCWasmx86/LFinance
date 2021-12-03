@@ -20,7 +20,7 @@ namespace LFinance {
 			ca.pack_start(this.city, false, true, 2);
 			ca.pack_start(new Gtk.Label(_("Further information")), false, true, 2);
 			ca.pack_start(this.textview, true, true, 2);
-			this.add_buttons(_("_Cancel"), Gtk.ResponseType.CANCEL, _("_Edit"), Gtk.ResponseType.OK);
+			this.add_buttons(_("_Cancel"), Gtk.ResponseType.CANCEL, _("Edit"), Gtk.ResponseType.OK);
 			this.show_all();
 		}
 		internal string get_name() {
