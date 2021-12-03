@@ -71,7 +71,18 @@ namespace LFinance {
 			}
 		}
 		void handle_key_press(string selected, Gdk.EventKey key) {
-			
+			if(key.keyval == Gdk.Key.Delete) {
+				var prologue_len = "<b><span foreground=\"#11223344\" >".length;
+				var epilogue_len = "</span></b>".length;
+				var content_len = selected.length - (prologue_len + epilogue_len);
+				var old_name = selected.slice(prologue_len, prologue_len + content_len);
+				var md = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.QUESTION, Gtk.ButtonsType.NONE, _("Do you really want to delete the tag %s?").printf(old_name));
+				md.add_buttons(_("_Cancel"), Gtk.ResponseType.CANCEL, _("Delete"), Gtk.ResponseType.OK);
+				if(md.run() == Gtk.ResponseType.OK) {
+					this.model.remove_tag_by_name(old_name);
+				}
+				md.destroy();
+			}
 		}
 	}
 }

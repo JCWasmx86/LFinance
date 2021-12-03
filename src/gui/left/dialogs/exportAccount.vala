@@ -42,6 +42,7 @@ namespace LFinance {
 					});
 					exporter.export(this.account);
 				} catch(GLib.Error e) {
+					this.destroy();
 					var message = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK, _("Export failed: %s").printf(e.message));
 					message.run();
 					message.destroy();

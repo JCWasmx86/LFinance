@@ -46,7 +46,14 @@ namespace LFinance {
 			this.func(selected);
 		}
 		void handle_key_press(string selected, Gdk.EventKey key) {
-			
+			if(key.keyval == Gdk.Key.Delete) {
+				var md = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.QUESTION, Gtk.ButtonsType.NONE, _("Do you really want to delete the account %s?").printf(selected));
+				md.add_buttons(_("_Cancel"), Gtk.ResponseType.CANCEL, _("Delete"), Gtk.ResponseType.OK);
+				if(md.run() == Gtk.ResponseType.OK) {
+					this.model.remove_account_by_name(selected);
+				}
+				md.destroy();
+			}
 		}
 	}
 }
