@@ -25,9 +25,30 @@ namespace LFinance {
 					var file = dialog.get_filename();
 					dialog.destroy();
 					if(result == 0) {
+						var progress_dialog = new Gtk.Dialog();
+						var bar = new Gtk.ProgressBar();
+						bar.show_text = true;
+						var scrolled_window = new Gtk.ScrolledWindow(null, null);
+						var view = new Gtk.TextView();
+						view.editable = false;
+						scrolled_window.add(view);
+						progress_dialog.get_content_area().pack_start(bar, false, false, 2);
+						progress_dialog.get_content_area().pack_start(scrolled_window, true, true, 2);
+						var exit_button = progress_dialog.add_button(_("Close"), 0);
+						progress_dialog.response.connect(r => progress_dialog.destroy());
+						progress_dialog.set_default_size(250, 350);
+						progress_dialog.show_all();
 						new Thread<void>("question", () => {
 							try {
 								var exporter = ExporterFactory.for_file(file);
+								exporter.progress.connect((text, frac) => {
+									GLib.Idle.add(() => {
+										view.buffer.text += (text + "\n");
+										bar.set_fraction(frac);
+										exit_button.set_sensitive(frac >= 0.999999);
+										return false;
+									});
+								});
 								exporter.export(this.model.search_account(selected));
 							} catch(GLib.Error e) {
 								var message = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK, _("Export failed: %s").printf(e.message));

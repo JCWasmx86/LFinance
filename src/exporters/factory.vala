@@ -5,6 +5,7 @@ namespace LFinance {
 
 		internal interface Exporter : GLib.Object {
 			internal abstract void export(Account account) throws GLib.Error;
+			internal signal void progress(string text, double frac);
 		}
 
 		internal class ExporterFactory {
@@ -17,7 +18,6 @@ namespace LFinance {
 					}
 				}
 				var extension = file.substring(dot + 1).down();
-				info("Extension: %s", extension);
 				if(extension == "pdf") // Search for LaTeX
 					return new PDFExporter(file);
 				else if(extension == "md")
