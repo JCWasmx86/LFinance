@@ -59,12 +59,10 @@ namespace LFinance {
 					var old_name = selected.slice(prologue_len, prologue_len + content_len);
 					var md = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.QUESTION, Gtk.ButtonsType.NONE, _("Do you really want to delete the tag %s?").printf(old_name));
 					md.add_buttons(_("_Cancel"), Gtk.ResponseType.CANCEL, _("_Delete"), Gtk.ResponseType.OK);
-					if(md.run() == Gtk.ResponseType.CANCEL) {
-						md.destroy();
-						return;
+					if(md.run() == Gtk.ResponseType.OK) {
+						this.model.remove_tag_by_name(old_name);
 					}
 					md.destroy();
-					this.model.remove_tag_by_name(old_name);
 				});
 				menu.append(@delete);
 				menu.show_all();

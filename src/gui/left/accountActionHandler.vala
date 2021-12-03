@@ -31,12 +31,11 @@ namespace LFinance {
 				remove.activate.connect(() => {
 					var md = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.QUESTION, Gtk.ButtonsType.NONE, _("Do you really want to delete the account %s?").printf(selected));
 					md.add_buttons(_("_Cancel"), Gtk.ResponseType.CANCEL, _("_Delete"), Gtk.ResponseType.OK);
-					if(md.run() == Gtk.ResponseType.CANCEL) {
-						md.destroy();
-						return;
+					var result = md.run();
+					if(md.run() == Gtk.ResponseType.OK) {
+						this.model.remove_account_by_name(selected);
 					}
 					md.destroy();
-					this.model.remove_account_by_name(selected);
 				});
 				menu.append(export);
 				menu.append(remove);

@@ -37,12 +37,10 @@ namespace LFinance {
 				@delete.activate.connect(() => {
 					var md = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.QUESTION, Gtk.ButtonsType.NONE, _("Do you really want to delete this location?"));
 					md.add_buttons(_("_Cancel"), Gtk.ResponseType.CANCEL, _("_Delete"), Gtk.ResponseType.OK);
-					if(md.run() == Gtk.ResponseType.CANCEL) {
-						md.destroy();
-						return;
+					if(md.run() == Gtk.ResponseType.OK) {
+						this.model.remove_location_by_id(selected);
 					}
 					md.destroy();
-					this.model.remove_location_by_id(selected);
 				});
 				menu.append(@delete);
 				menu.show_all();
