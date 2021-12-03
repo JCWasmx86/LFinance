@@ -33,7 +33,7 @@ namespace LFinance {
 			this.header_sorting.append("1", _("Amount"));
 			this.header_sorting.append("2", _("Purpose"));
 			this.header_sorting.append("3", _("Date"));
-			this.header_sorting.append("4", _("Amount (Descending"));
+			this.header_sorting.append("4", _("Amount (Descending)"));
 			this.header_sorting.append("5", _("Purpose (Descending)"));
 			this.header_sorting.append("6", _("Date (Descending)"));
 			this.header_sorting.active_id = "%u".printf(account._sorting);
