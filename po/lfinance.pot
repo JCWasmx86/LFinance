@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lfinance\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-03 19:14+0100\n"
+"POT-Creation-Date: 2021-12-04 19:35+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -192,7 +192,7 @@ msgid "Last year"
 msgstr ""
 
 #: src/gui/left/accountActionHandler.vala:18
-#: src/gui/left/accountActionHandler.vala:20
+#: src/gui/left/accountActionHandler.vala:20 src/main.vala:47
 msgid "Export"
 msgstr ""
 
@@ -270,16 +270,16 @@ msgstr ""
 msgid "About"
 msgstr ""
 
-#: src/main.vala:62
+#: src/main.vala:67
 #, c-format
 msgid "An error occurred saving data: %s\n"
 msgstr ""
 
-#: src/main.vala:73
+#: src/main.vala:78
 #, c-format
 msgid "An error occurred loading LFinance: %s\n"
 msgstr ""
 
-#: src/main.vala:89
+#: src/main.vala:94
 msgid "Copyright © 2021 JCWasmx86"
 msgstr ""

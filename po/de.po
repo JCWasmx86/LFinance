@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lfinance\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-03 19:14+0100\n"
+"POT-Creation-Date: 2021-12-04 19:35+0100\n"
 "PO-Revision-Date: 2021-11-27 17:02+0100\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -192,7 +192,7 @@ msgid "Last year"
 msgstr "Letztes Jahr"
 
 #: src/gui/left/accountActionHandler.vala:18
-#: src/gui/left/accountActionHandler.vala:20
+#: src/gui/left/accountActionHandler.vala:20 src/main.vala:47
 msgid "Export"
 msgstr "Exportieren"
 
@@ -270,16 +270,16 @@ msgstr "Willst du wirklich diesen Tag löschen?"
 msgid "About"
 msgstr "Über"
 
-#: src/main.vala:62
+#: src/main.vala:67
 #, c-format
 msgid "An error occurred saving data: %s\n"
 msgstr "Speichern fehlgeschlagen: %s\n"
 
-#: src/main.vala:73
+#: src/main.vala:78
 #, c-format
 msgid "An error occurred loading LFinance: %s\n"
 msgstr "Ein Fehler ist während dem Laden aufgetreten: %s\n"
 
-#: src/main.vala:89
+#: src/main.vala:94
 msgid "Copyright © 2021 JCWasmx86"
 msgstr "Copryright © 2021 JCWasmx86"
