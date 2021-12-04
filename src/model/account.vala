@@ -22,7 +22,7 @@ namespace LFinance {
 			foreach(var expense in this._expenses)
 				copy._expenses.add(expense);
 			copy._sorting = 3; // Ascending date
-			copy.sort();
+			copy.sort(false);
 			return copy;
 		}
 		internal void set_sorting(uint sorting) {
