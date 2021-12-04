@@ -106,7 +106,11 @@ namespace LFinance {
 			if((key.state & Gdk.ModifierType.CONTROL_MASK) != 0 && (key.keyval == Gdk.Key.s || key.keyval == Gdk.Key.S)) {
 				this.spinner.start();
 				new Thread<void>("save", () => {
-					this.save();
+					try {
+						this.save();
+					} catch(GLib.Error e) {
+						critical(e.message);
+					}
 					this.spinner.stop();
 				});
 			}

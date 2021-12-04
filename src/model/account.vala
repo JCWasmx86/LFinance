@@ -17,6 +17,14 @@ namespace LFinance {
 			this._name = name;
 			this.fire(TriggerType.EDIT_ACCOUNT);
 		}
+		internal Account sorted_copy() {
+			var copy = new Account(this._name);
+			foreach(var expense in this._expenses)
+				copy._expenses.add(expense);
+			copy._sorting = 3; // Ascending date
+			copy.sort();
+			return copy;
+		}
 		internal void set_sorting(uint sorting) {
 			this._sorting = sorting;
 			this.sort(false);

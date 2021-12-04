@@ -6,7 +6,6 @@ namespace LFinance {
 	internal class MDExporter : Exporter, GLib.Object {
 		GLib.File file;
 		Account? account;
-		string? working;
 		double max_frac = 3;
 		uint curr_frac;
 
@@ -19,7 +18,7 @@ namespace LFinance {
 			this.write_file();
 			info("Done");
 		}
-		void write_file() {
+		void write_file() throws GLib.Error {
 			try {
 				this.progress(_("Exporting to Markdown..."), curr_frac / max_frac);
 				curr_frac++;

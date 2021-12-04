@@ -8,7 +8,7 @@ namespace LFinance {
 		Gtk.Widget exit_button;
 
 		internal ExportDialog(string file, Account account) {
-			this.account = account;
+			this.account = account.sorted_copy();
 			this.file = file;
 			this.build_gui();
 		}
