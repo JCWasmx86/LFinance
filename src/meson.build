@@ -1,8 +1,9 @@
 src = [
-	'constants.vala',
 	'account_exporters/factory.vala',
 	'account_exporters/md.vala',
 	'account_exporters/pdf.vala',
+	'constants.vala',
+	'exporters/pdf.vala',
 	'gui/left/accountActionHandler.vala',
 	'gui/left/actionHandler.vala',
 	'gui/left/addPanel.vala',
