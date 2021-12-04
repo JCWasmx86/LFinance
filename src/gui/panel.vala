@@ -118,6 +118,7 @@ namespace LFinance {
 		}
 		internal void export_all() {
 			info("Export all");
+			new PDFModelExporter(this.model, "test.pdf").export();
 		}
 	}
 }

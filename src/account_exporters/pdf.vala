@@ -72,10 +72,11 @@ namespace LFinance {
 		void check_for_packages() throws GLib.Error {
 			this.check_for_package("longtable");
 			this.check_for_package("xcolor");
+			this.check_for_package("inputenc");
 			this.check_for_package("geometry");
 			this.check_for_package("hyphenat");
 		}
-		void check_for_package(string name, bool cleanup_pdf = true) throws GLib.Error {
+		void check_for_package(string name) throws GLib.Error {
 			try {
 				this.progress(_("Checking for package %s...").printf(name), curr_frac / max_frac);
 				curr_frac++;
@@ -88,23 +89,23 @@ namespace LFinance {
 				dos.put_string("\\usepackage{" + name + "}\n");
 				dos.put_string("\\begin{document}\nHello World\n\\end{document}\n");
 				dos.close();
-				var status = this.compile_document(file, cleanup_pdf);
+				var status = this.compile_document(file);
 				if(status == 0) {
 					info("Compiling using package %s succeeded!", name);
 				} else {
 					info("Failed to use package %s with status: %d", name, status);
-					this.cleanup(file, cleanup_pdf);
+					this.cleanup(file);
 					throw new PdfExporterErrors.PACKAGE_NOT_FOUND(_("Package not found: %s").printf(name));
 				}
 				this.progress(_("Found package %s!").printf(name), curr_frac / max_frac);
 				curr_frac++;
-				this.cleanup(file, cleanup_pdf);
+				this.cleanup(file);
 			} catch(GLib.Error e) {
 				warning("%s", e.message);
 				throw new PdfExporterErrors.PACKAGE_NOT_FOUND(e.message);
 			}
 		}
-		void cleanup(GLib.File file, bool cleanup_pdf) {
+		void cleanup(GLib.File file, bool cleanup_pdf = true) {
 			info("Cleaning temp files created after compiling %s", file.get_path());
 			this.clean(file, ".aux");
 			this.clean(file, ".fdb_latexmk");
@@ -138,6 +139,7 @@ namespace LFinance {
 			builder.append("\\documentclass{article}\n");
 			builder.append("\\usepackage[a4paper, total={6in, 8in}]{geometry}\n");
 			builder.append("\\usepackage{longtable}\n");
+			builder.append("\\usepackage[utf8]{inputenc}\n");
 			builder.append("\\usepackage{xcolor}\n\n");
 			builder.append("\\usepackage[none]{hyphenat}\n");
 			builder.append("\\begin{document}\n");
