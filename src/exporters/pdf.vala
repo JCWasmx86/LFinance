@@ -12,11 +12,14 @@ namespace LFinance {
 	 */
 	internal class PDFModelExporter {
 		GLib.File file;
+		Model model;
+
 		double max_frac = 50;
 		uint curr_frac = 0;
 		string? working;
 
 		internal PDFModelExporter(Model model, string file_name) {
+			this.model = model;
 			this.file = GLib.File.new_for_path(file_name);
 		}
 		internal void export() throws GLib.Error {
@@ -66,11 +69,59 @@ namespace LFinance {
 			builder.append("\\title{%s}".printf(_("Accounting Report")));
 			builder.append("\\author{%s}".printf(Environment.get_user_name()));
 			builder.append("\\begin{document}\n");
-			builder.append("\\maketitle");
+			builder.append("\\maketitle\n\\newpage\n\\tableofcontents\n\\newpage\n");
+			foreach(var account in this.model._accounts) {
+				var copy = account.sorted_copy();
+				builder.append(generate_for_account(copy));
+			}
 			builder.append("\\end{document}\n");
 			return builder.str;
 		}
-
+		string generate_for_account(Account account) {
+			var builder = new StringBuilder.sized(800 * account._expenses.size);
+			builder.append("\\section{Account: %s}\n".printf(account._name));
+			builder.append("\\begin{longtable}{|l|l|l|p{5cm}|}\n");
+			builder.append("\\hline \\multicolumn{1}{|c|}{\\textbf{%s}} & \\multicolumn{1}{c|}{\\textbf{%s}} & \\multicolumn{1}{c|}{\\textbf{%s}} & \\multicolumn{1}{c|}{\\textbf{%s}} \\\\ \\hline \\endfirsthead\n".printf(_("Purpose"), _("Date"), _("Amount"), _("Further Information")));
+			builder.append("\\hline \\multicolumn{4}{|r|}{{%s}} \\\\ \\hline \\endfoot\n".printf(_("Continued on the next page")));
+			builder.append("\\hline \\hline \\endlastfoot\n");
+			for(var i = 0; i < account._expenses.size; i++) {
+				var expense = account._expenses[i];
+				builder.append(this.escape_latex(expense._purpose));
+				builder.append(" & ");
+				builder.append(this.escape_latex(expense._date.format("%x")));
+				builder.append(" & ");
+				builder.append(this.escape_latex(expense.format_amount().replace("\u202f", " ")));
+				builder.append(" & ");
+				builder.append(this.build_extra_info(expense));
+				if(i == account._expenses.size)
+					builder.append("\\");
+				else
+					builder.append(" \\\\\n");
+			}
+			builder.append("\\end{longtable}\n");
+			builder.append("\\subsection{Diagrams}\n");
+			// Generate diagrams
+			return builder.str;
+		}
+		string build_extra_info(Expense expense) {
+			var ret = new StringBuilder();
+			if(expense._location != null) {
+				ret.append("\\textbf{");
+				ret.append(this.escape_latex(expense._location._name));
+				if(expense._location._city != null)
+					ret.append(", ").append(this.escape_latex(expense._location._city));
+				ret.append("}");
+				if(expense._tags.size > 0)
+					ret.append(", ");
+			}
+			for(var i = 0; i < expense._tags.size; i++) {
+				var tag = expense._tags[i];
+				ret.append("\\textcolor[RGB]{%u, %u, %u}{\\textbf{[".printf(tag._rgba[0], tag._rgba[1], tag._rgba[2]));
+				ret.append(this.escape_latex(tag._name));
+				ret.append("}]}\\allowbreak");
+			}
+			return ret.str == "" ? "" : ret.str;
+		}
 		void search_for_latex() throws GLib.Error {
 			var latexes = new string[]{"latexmk", "pdflatex", "xelatex", "lualatex"};
 			foreach(var latex in latexes) {
@@ -157,6 +208,31 @@ namespace LFinance {
 			string stdout;
 			Process.spawn_sync(parent_dir.get_path(), args, Environ.get(), SpawnFlags.SEARCH_PATH, null, out stdout, out stderr, out status);
 			return status;
+		}
+		string escape_latex(string input) {
+			// Based on https://github.com/dangmai/escape-latex/blob/master/src/index.js
+			var builder = new StringBuilder.sized(input.length + 20);
+			var map = new Gee.HashMap<string, string>();
+			map["{"] = "\\{";
+			map["}"] = "\\}";
+			map["\\"] = "\\textbackslash{}";
+			map["#"] = "\\#";
+			map["$"] = "\\$";
+			map["%"] = "\\%";
+			map["&"] = "\\&";
+			map["^"] = "\\textasciicircum{}";
+			map["_"] = "\\_";
+			map["~"] = "\\textasciitilde{}";
+			map["\t"] = "\\qquad{}";
+			for(var i = 0; i < input.length; i++) {
+				var as_string = "%c".printf(input[i]);
+				if(map.has_key(as_string)) {
+					builder.append(map[as_string]);
+				} else {
+					builder.append_c(input[i]);
+				}
+			}
+			return builder.str;
 		}
 		internal signal void progress_update(string to_add, double fraction);
 	}
