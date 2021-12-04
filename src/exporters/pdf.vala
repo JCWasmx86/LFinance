@@ -50,7 +50,6 @@ namespace LFinance {
 				this.progress_update(_("Copying output to %s...").printf(this.file.get_path()), curr_frac / max_frac);
 				curr_frac++;
 				GLib.File.new_for_path(replaced).copy(this.file, FileCopyFlags.OVERWRITE|FileCopyFlags.ALL_METADATA);
-				// this.cleanup(file, true);
 				this.progress_update(_("Finished!"), curr_frac / max_frac);
 				curr_frac++;
 			} catch(GLib.Error e) {
@@ -101,6 +100,8 @@ namespace LFinance {
 			builder.append("\\end{longtable}\n");
 			builder.append("\\subsection{Diagrams}\n");
 			// Generate diagrams
+			// https://tex.stackexchange.com/a/8584
+			// https://stackoverflow.com/a/12660022
 			return builder.str;
 		}
 		string build_extra_info(Expense expense) {
