@@ -44,9 +44,14 @@ namespace LFinance {
 			menu_button.@set("halign", Gtk.Align.CENTER);
 			menu_button.image = new Gtk.Image.from_icon_name("open-menu-symbolic", Gtk.IconSize.MENU);
 			menu_button.popup = menu;
+			var export_button = new Gtk.Button.with_label(_("Export"));
+			export_button.clicked.connect(() => {
+				this.panel.export_all();
+			});
 			var title_bar = new Gtk.HeaderBar();
 			title_bar.title = "LFinance";
 			title_bar.show_close_button = true;
+			title_bar.pack_start(export_button);
 			title_bar.pack_end(menu_button);
 			title_bar.show_all();
 			this.set_titlebar(title_bar);

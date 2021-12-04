@@ -21,7 +21,7 @@ namespace LFinance {
 				if(extension == "pdf") // Search for LaTeX
 					return new PDFExporter(file);
 				else if(extension == "md")
-					;
+					return new MDExporter(file);
 				else if(extension == ".csv")
 					;
 				else if(extension == ".html") 

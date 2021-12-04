@@ -112,5 +112,8 @@ namespace LFinance {
 			}
 			return true;
 		}
+		internal void export_all() {
+			info("Export all");
+		}
 	}
 }
