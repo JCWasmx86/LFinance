@@ -14,7 +14,7 @@ namespace LFinance {
 		GLib.File file;
 		Model model;
 
-		double max_frac = 50;
+		double max_frac = 19;
 		uint curr_frac = 0;
 		string? working;
 
@@ -31,7 +31,7 @@ namespace LFinance {
 		}
 		void write_file() throws GLib.Error {
 			try {
-				this.progress_update(_("Exporting to LaTeX..."), curr_frac / max_frac);
+				this.progress_update(_("Exporting to LaTeX…"), curr_frac / max_frac);
 				curr_frac++;
 				FileIOStream iostream;
 				var file = File.new_tmp("tpl_XXXXXX.tex", out iostream);
@@ -39,15 +39,15 @@ namespace LFinance {
 				var dos = new DataOutputStream(os);
 				dos.put_string(this.build());
 				dos.close();
-				this.progress_update(_("Compiling LaTeX..."), curr_frac / max_frac);
+				this.progress_update(_("Compiling LaTeX…"), curr_frac / max_frac);
 				curr_frac++;
-				this.compile_document(file, false);
-				this.progress_update(_("Success!"), curr_frac / max_frac);
+				this.compile_document_multiple_times(file);
+				this.progress_update(_("Compiled LaTeX successfully"), curr_frac / max_frac);
 				curr_frac++;
 				var path = file.get_path();
 				var len = path.length;
 				var replaced = path.splice(len - 4, len, ".pdf");
-				this.progress_update(_("Copying output to %s...").printf(this.file.get_path()), curr_frac / max_frac);
+				this.progress_update(_("Copying output to %s…").printf(this.file.get_path()), curr_frac / max_frac);
 				curr_frac++;
 				GLib.File.new_for_path(replaced).copy(this.file, FileCopyFlags.OVERWRITE|FileCopyFlags.ALL_METADATA);
 				this.progress_update(_("Finished!"), curr_frac / max_frac);
@@ -102,6 +102,7 @@ namespace LFinance {
 			// Generate diagrams
 			// https://tex.stackexchange.com/a/8584
 			// https://stackoverflow.com/a/12660022
+			// x tick label style={rotate=45},anchor=east}
 			return builder.str;
 		}
 		string build_extra_info(Expense expense) {
@@ -124,7 +125,7 @@ namespace LFinance {
 			return ret.str == "" ? "" : ret.str;
 		}
 		void search_for_latex() throws GLib.Error {
-			var latexes = new string[]{"latexmk", "pdflatex", "xelatex", "lualatex"};
+			var latexes = new string[]{"1latexmk", "pdflatex", "xelatex", "lualatex"};
 			foreach(var latex in latexes) {
 				var status = 0;
 				try {
@@ -132,8 +133,8 @@ namespace LFinance {
 					if(status == 0) {
 						this.progress_update(_("Found command: %s").printf(latex), this.curr_frac / this.max_frac);
 						this.curr_frac++;
-						if(latex == "latexmk")
-							this.max_frac -= 3;
+						if(latex != "latexmk")
+							this.max_frac += 8; // Latexmk needs only one round
 						info("Found command: %s", latex);
 						this.working = latex;
 						return;
@@ -154,7 +155,7 @@ namespace LFinance {
 		}
 		void check_for_package(string name) throws GLib.Error {
 			try {
-				this.progress_update(_("Checking for package %s...").printf(name), this.curr_frac / this.max_frac);
+				this.progress_update(_("Checking for package %s…").printf(name), this.curr_frac / this.max_frac);
 				this.curr_frac++;
 				FileIOStream iostream;
 				var file = File.new_tmp("tpl_XXXXXX.tex", out iostream);
@@ -201,7 +202,7 @@ namespace LFinance {
 				info("Error deleting %s: %s", replaced, e.message);
 			}
 		}
-		int compile_document(GLib.File file, bool cleanup_pdf = true) throws GLib.Error {
+		int compile_document(GLib.File file) throws GLib.Error {
 			var parent_dir = file.get_parent();
 			var args = this.working == "latexmk" ? new string[]{this.working, "-pdf", file.get_path(), "-interaction=nonstopmode"} : new string[]{this.working, file.get_path(), "-interaction=nonstopmode"};
 			var status = 0;
@@ -209,6 +210,16 @@ namespace LFinance {
 			string stdout;
 			Process.spawn_sync(parent_dir.get_path(), args, Environ.get(), SpawnFlags.SEARCH_PATH, null, out stdout, out stderr, out status);
 			return status;
+		}
+		void compile_document_multiple_times(GLib.File file) throws GLib.Error {
+			var n = this.working == "latexmk" ? 1 : 5;
+			for(var i = 1; i <= n; i++) {
+				this.progress_update(_("Round %u of %u…").printf(i, n), curr_frac / max_frac);
+				curr_frac++;
+				this.compile_document(file);
+				this.progress_update(_("Success!"), curr_frac / max_frac);
+				curr_frac++;
+			}
 		}
 		string escape_latex(string input) {
 			// Based on https://github.com/dangmai/escape-latex/blob/master/src/index.js

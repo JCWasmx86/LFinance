@@ -42,7 +42,7 @@ namespace LFinance {
 		}
 		void write_file() throws GLib.Error {
 			try {
-				this.progress(_("Exporting to LaTeX..."), curr_frac / max_frac);
+				this.progress(_("Exporting to LaTeX…"), curr_frac / max_frac);
 				curr_frac++;
 				FileIOStream iostream;
 				var file = File.new_tmp("tpl_XXXXXX.tex", out iostream);
@@ -50,7 +50,7 @@ namespace LFinance {
 				var dos = new DataOutputStream(os);
 				dos.put_string(this.build());
 				dos.close();
-				this.progress(_("Compiling LaTeX..."), curr_frac / max_frac);
+				this.progress(_("Compiling LaTeX…"), curr_frac / max_frac);
 				curr_frac++;
 				this.compile_document(file, false);
 				this.progress(_("Success!"), curr_frac / max_frac);
@@ -58,7 +58,7 @@ namespace LFinance {
 				var path = file.get_path();
 				var len = path.length;
 				var replaced = path.splice(len - 4, len, ".pdf");
-				this.progress(_("Copying output to %s...").printf(this.file.get_path()), curr_frac / max_frac);
+				this.progress(_("Copying output to %s…").printf(this.file.get_path()), curr_frac / max_frac);
 				curr_frac++;
 				GLib.File.new_for_path(replaced).copy(this.file, FileCopyFlags.OVERWRITE|FileCopyFlags.ALL_METADATA);
 				this.cleanup(file, true);
@@ -78,7 +78,7 @@ namespace LFinance {
 		}
 		void check_for_package(string name) throws GLib.Error {
 			try {
-				this.progress(_("Checking for package %s...").printf(name), curr_frac / max_frac);
+				this.progress(_("Checking for package %s…").printf(name), curr_frac / max_frac);
 				curr_frac++;
 				FileIOStream iostream;
 				var file = File.new_tmp("tpl_XXXXXX.tex", out iostream);

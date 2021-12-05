@@ -14,6 +14,7 @@ src = [
 	'gui/left/dialogs/coloredRadioButton.vala',
 	'gui/left/dialogs/customColorButton.vala',
 	'gui/left/dialogs/exportAccount.vala',
+	'gui/left/dialogs/exportModel.vala',
 	'gui/left/dialogs/locationEditDialog.vala',
 	'gui/left/dialogs/recommendedColorButton.vala',
 	'gui/left/dialogs/tagEditDialog.vala',

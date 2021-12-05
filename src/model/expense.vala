@@ -74,6 +74,7 @@ namespace LFinance {
 		}
 
 		internal string format_amount() {
+			// Invisible space as a fancy marker
 			return "%s\u202f%.2f".printf(this._currency, this._amount / 100.0);
 		}
 		internal string format() {

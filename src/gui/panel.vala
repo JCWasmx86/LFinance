@@ -117,8 +117,15 @@ namespace LFinance {
 			return true;
 		}
 		internal void export_all() {
-			info("Export all");
-			new PDFModelExporter(this.model, "test.pdf").export();
+			var dialog = new Gtk.FileChooserDialog(_("Export"), null, Gtk.FileChooserAction.SAVE, _("_Cancel"), Gtk.ResponseType.CANCEL, _("Export"), Gtk.ResponseType.OK);
+			dialog.do_overwrite_confirmation = true;
+			var result = dialog.run();
+			var file = dialog.get_filename();
+			dialog.destroy();
+			if(result == Gtk.ResponseType.OK) {
+				var d = new ExportModelDialog(file, this.model);
+				d.export();
+			}
 		}
 	}
 }
