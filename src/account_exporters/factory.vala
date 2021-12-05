@@ -28,7 +28,6 @@ namespace LFinance {
 					throw new ExporterErrors.EXTENSION_NOT_SUPPORTED(_("Not implemented"));
 				else
 					throw new ExporterErrors.EXTENSION_NOT_SUPPORTED(_("Only .pdf, .md, .csv and .html are supported!"));
-				return null; // Won't be reached
 			}
 		}
 }
