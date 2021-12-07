@@ -23,7 +23,7 @@ namespace LFinance {
 		Range build_range(DateTime time) {
 			var idx = 0;
 			var ret = new Range();
-			info("Looking for all after %s!", time.format("%x"));
+			info("Looking for all expenses after %s!", time.format("%x"));
 			for(var i = 0; i < this.expenses.size; i++) {
 				if(this.expenses[i]._date.compare(time) >= 0) {
 					info("Found expense: %s", this.expenses[i]._date.format("%x"));
@@ -57,7 +57,6 @@ namespace LFinance {
 			this.dates = new Gee.ArrayList<DateTime?>();
 		}
 		internal void add_expense(double amount, DateTime date) {
-			info("Adding expense: %lf %s", amount, date.format("%x"));
 			if(this.dates.size == 0 || this.dates[this.dates.size - 1].compare(date) != 0) {
 				this.each_expense.add(amount);
 				if(accumulated.size != 0)
@@ -72,7 +71,6 @@ namespace LFinance {
 				this.accumulated[len - 1] = this.accumulated[len - 1] + amount;
 				this.max_expense_value = double.max(this.each_expense[len - 1], this.max_expense_value);
 			}
-			info("Last accumulated: %lf", this.accumulated[this.accumulated.size - 1]);
 			this.n++;
 		}
 		internal void end_it(DateTime start, DateTime end) {
