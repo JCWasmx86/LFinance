@@ -33,10 +33,7 @@ namespace LFinance {
 					var exporter = new PDFModelExporter(this.model, this.file);
 					exporter.progress_update.connect((text, frac) => {
 						GLib.Idle.add(() => {
-							this.view.buffer.text += (text + "\n");
-							this.progress_bar.set_fraction(frac);
-							// To avoid any floating point inaccuracies...
-							this.exit_button.set_sensitive(frac >= 0.999999);
+						    update_view(text, frac);
 							return false;
 						});
 					});
@@ -48,6 +45,12 @@ namespace LFinance {
 					message.destroy();
 				}
 			});
+		}
+		void update_view(string text, double frac) {
+		    this.view.buffer.text += (text + "\n");
+			this.progress_bar.set_fraction(frac);
+			// To avoid any floating point inaccuracies...
+			this.exit_button.set_sensitive(frac >= 0.999999);
 		}
 	}
 }

@@ -4,6 +4,7 @@ src = [
 	'account_exporters/pdf.vala',
 	'constants.vala',
 	'exporters/pdf.vala',
+	'exporters/stats.vala',
 	'gui/left/accountActionHandler.vala',
 	'gui/left/actionHandler.vala',
 	'gui/left/addPanel.vala',

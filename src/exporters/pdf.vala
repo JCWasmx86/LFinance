@@ -63,17 +63,22 @@ namespace LFinance {
 			builder.append("\\usepackage[a4paper, total={6in, 8in}]{geometry}\n");
 			builder.append("\\usepackage{longtable}\n");
 			builder.append("\\usepackage[utf8]{inputenc}\n");
-			builder.append("\\usepackage{xcolor}\n\n");
-			builder.append("\\usepackage[none]{hyphenat}\n");
+			builder.append("\\usepackage{xcolor}\n");
+			builder.append("\\usepackage{pgfplots}\n");
+			builder.append("\\usepackage{tikz}\n");
+			builder.append("\\usepackage[none]{hyphenat}\n\n");
+			builder.append("\\usepgfplotslibrary{dateplot}\n");
 			builder.append("\\title{%s}".printf(_("Accounting Report")));
 			builder.append("\\author{%s}".printf(Environment.get_user_name()));
 			builder.append("\\begin{document}\n");
+			builder.append("\\def\\monthnames{{1,2,3,4,5,6,7,8,9,10,11,12}}\n");
 			builder.append("\\maketitle\n\\newpage\n\\tableofcontents\n\\newpage\n");
 			foreach(var account in this.model._accounts) {
 				var copy = account.sorted_copy();
 				builder.append(generate_for_account(copy));
 			}
 			builder.append("\\end{document}\n");
+			info("\n%s", builder.str);
 			return builder.str;
 		}
 		string generate_for_account(Account account) {
@@ -98,12 +103,52 @@ namespace LFinance {
 					builder.append(" \\\\\n");
 			}
 			builder.append("\\end{longtable}\n");
-			builder.append("\\subsection{Diagrams}\n");
+			builder.append("\\subsection{%s}\n".printf(_("Diagrams")));
+			var stats = new Stats(account._expenses);
+			this.build_last_week(builder, stats);
 			// Generate diagrams
 			// https://tex.stackexchange.com/a/8584
 			// https://stackoverflow.com/a/12660022
 			// x tick label style={rotate=45},anchor=east}
 			return builder.str;
+		}
+		void build_last_week(StringBuilder builder, Stats stats) {
+		    var r = stats.last_year;
+            builder.append("\\subsubsection{%s}\n".printf(_("Last week")));
+            builder.append("\\begin{tikzpicture}[baseline]\n");
+            builder.append("\\begin{axis}[width=\\textwidth,height=\\axisdefaultheight, date coordinates in=x, xticklabel=\\month-\\day,");
+            builder.append("xmin=").append(this.latexify_date(r.start_date)).append(",xmax=").append(this.latexify_date(r.end_date));
+            builder.append(",ymin=0,ymax=").append("%lf".printf(r.max_expense_value * 1.05)).append(",date ZERO=").append(this.latexify_date(r.start_date));
+            builder.append("]\n");
+            builder.append("\\addplot[smooth,red] coordinates {");
+            for(var i = 0; i < r.each_expense.size; i++) {
+                builder.append("(%s, %lf)\n".printf(this.latexify_date(r.dates[i]), r.each_expense[i]));
+            }
+            builder.append("};\n");
+            builder.append("\\addplot[smooth,blue] coordinates {");
+            builder.append("(%s, %lf)".printf(this.latexify_date(r.dates[0]), r.average_per_day));
+            builder.append("(%s, %lf)".printf(this.latexify_date(r.dates[r.dates.size - 1]), r.average_per_day));
+            builder.append("};\\end{axis}");
+            builder.append("\\end{tikzpicture}\n\\newline");
+            builder.append("\\begin{tikzpicture}[baseline]\n");
+            builder.append("\\begin{axis}[width=\\textwidth,height=\\axisdefaultheight, date coordinates in=x, xticklabel=\\month-\\day,");
+            builder.append("xmin=").append(this.latexify_date(r.start_date)).append(",xmax=").append(this.latexify_date(r.end_date));
+            builder.append(",ymin=0,ymax=").append("%lf".printf(r.accumulated[r.accumulated.size - 1] * 1.05)).append(",date ZERO=").append(this.latexify_date(r.start_date));
+            builder.append("]\n");
+            builder.append("\\addplot[smooth,red] coordinates {");
+            for(var i = 0; i < r.accumulated.size; i++) {
+                builder.append("(%s, %lf)\n".printf(this.latexify_date(r.dates[i]), r.accumulated[i]));
+
+            }
+            builder.append("};\n");
+            builder.append("\\addplot[smooth,blue] coordinates {");
+            builder.append("(%s, %lf)".printf(this.latexify_date(r.dates[0]), r.accumulated[0]));
+            builder.append("(%s, %lf)".printf(this.latexify_date(r.dates[r.dates.size - 1]), r.accumulated[r.accumulated.size - 1]));
+            builder.append("};\\end{axis}");
+            builder.append("\\end{tikzpicture}\n");
+		}
+		string latexify_date(GLib.DateTime time) {
+		    return "%d-%d-%d".printf(time.get_year(), time.get_month(), time.get_day_of_month());
 		}
 		string build_extra_info(Expense expense) {
 			var ret = new StringBuilder();
@@ -125,7 +170,7 @@ namespace LFinance {
 			return ret.str == "" ? "" : ret.str;
 		}
 		void search_for_latex() throws GLib.Error {
-			var latexes = new string[]{"1latexmk", "pdflatex", "xelatex", "lualatex"};
+			var latexes = new string[]{"latexmk", "pdflatex", "xelatex", "lualatex"};
 			foreach(var latex in latexes) {
 				var status = 0;
 				try {
