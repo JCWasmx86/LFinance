@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lfinance\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-09 09:35+0100\n"
+"POT-Creation-Date: 2021-12-09 15:11+0100\n"
 "PO-Revision-Date: 2021-11-27 17:02+0100\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -26,17 +26,18 @@ msgid "Only .pdf, .md, .csv and .html are supported!"
 msgstr "Nur .pdf, .md, .csv und .html werden unterstützt"
 
 #: src/account_exporters/md.vala:23
-msgid "Exporting to Markdown..."
-msgstr "Exportiere als Markdown..."
+msgid "Exporting to Markdown…"
+msgstr "Exportiere als Markdown…"
 
 #: src/account_exporters/md.vala:31 src/account_exporters/pdf.vala:56
 #: src/exporters/pdf.vala:290
 msgid "Success!"
 msgstr "Erfolg!"
 
-#: src/account_exporters/md.vala:33
+#: src/account_exporters/md.vala:33 src/account_exporters/pdf.vala:61
+#: src/exporters/pdf.vala:50
 #, c-format
-msgid "Copying output to %s..."
+msgid "Copying output to %s…"
 msgstr "Kopiere die Ausgabe nach %s…"
 
 #: src/account_exporters/md.vala:36 src/account_exporters/pdf.vala:65
@@ -90,11 +91,6 @@ msgstr "Exportiere als LaTeX…"
 #: src/account_exporters/pdf.vala:53 src/exporters/pdf.vala:42
 msgid "Compiling LaTeX…"
 msgstr "Kompiliere LaTeX…"
-
-#: src/account_exporters/pdf.vala:61 src/exporters/pdf.vala:50
-#, c-format
-msgid "Copying output to %s…"
-msgstr "Kopiere die Ausgabe nach %s…"
 
 #: src/account_exporters/pdf.vala:81 src/exporters/pdf.vala:228
 #, c-format

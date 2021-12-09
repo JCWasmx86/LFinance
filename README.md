@@ -13,7 +13,14 @@ Planned Features:
 
 ## Installation
 
-TODO
+### Fedora
+
+A COPR is provided:
+
+```
+sudo dnf copr enable jcwasmx86/LFinance 
+sudo dnf install lfinance
+```
 
 ## Screenshots
 

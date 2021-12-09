@@ -20,7 +20,7 @@ namespace LFinance {
 		}
 		void write_file() throws GLib.Error {
 			try {
-				this.progress(_("Exporting to Markdown..."), curr_frac / max_frac);
+				this.progress(_("Exporting to Markdown…"), curr_frac / max_frac);
 				curr_frac++;
 				FileIOStream iostream;
 				var file = File.new_tmp("tpl_XXXXXX.md", out iostream);
@@ -30,7 +30,7 @@ namespace LFinance {
 				dos.close();
 				this.progress(_("Success!"), curr_frac / max_frac);
 				curr_frac++;
-				this.progress(_("Copying output to %s...").printf(this.file.get_path()), curr_frac / max_frac);
+				this.progress(_("Copying output to %s…").printf(this.file.get_path()), curr_frac / max_frac);
 				curr_frac++;
 				file.copy(this.file, FileCopyFlags.OVERWRITE|FileCopyFlags.ALL_METADATA);
 				this.progress(_("Finished!"), curr_frac / max_frac);
