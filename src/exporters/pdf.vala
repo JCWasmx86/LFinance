@@ -106,49 +106,74 @@ namespace LFinance {
 			builder.append("\\subsection{%s}\n".printf(_("Diagrams")));
 			var stats = new Stats(account._expenses);
 			this.build_last_week(builder, stats);
-			// Generate diagrams
-			// https://tex.stackexchange.com/a/8584
-			// https://stackoverflow.com/a/12660022
-			// x tick label style={rotate=45},anchor=east}
+			this.build_last_month(builder, stats);
+			this.build_last_year(builder, stats);
+			this.build_total(builder, stats);
 			return builder.str;
 		}
-		void build_last_week(StringBuilder builder, Stats stats) {
-		    var r = stats.last_year;
-            builder.append("\\subsubsection{%s}\n".printf(_("Last week")));
-            builder.append("\\begin{tikzpicture}[baseline]\n");
-            builder.append("\\begin{axis}[width=\\textwidth,height=\\axisdefaultheight, date coordinates in=x, xticklabel=\\month-\\day,");
-            builder.append("xmin=").append(this.latexify_date(r.start_date)).append(",xmax=").append(this.latexify_date(r.end_date));
-            builder.append(",ymin=0,ymax=").append("%lf".printf(r.max_expense_value * 1.05)).append(",date ZERO=").append(this.latexify_date(r.start_date));
-            builder.append("]\n");
-            builder.append("\\addplot[smooth,red] coordinates {");
-            for(var i = 0; i < r.each_expense.size; i++) {
-                builder.append("(%s, %lf)\n".printf(this.latexify_date(r.dates[i]), r.each_expense[i]));
-            }
-            builder.append("};\n");
-            builder.append("\\addplot[smooth,blue] coordinates {");
-            builder.append("(%s, %lf)".printf(this.latexify_date(r.dates[0]), r.average_per_day));
-            builder.append("(%s, %lf)".printf(this.latexify_date(r.dates[r.dates.size - 1]), r.average_per_day));
-            builder.append("};\\end{axis}");
-            builder.append("\\end{tikzpicture}\n\\newline");
-            builder.append("\\begin{tikzpicture}[baseline]\n");
-            builder.append("\\begin{axis}[width=\\textwidth,height=\\axisdefaultheight, date coordinates in=x, xticklabel=\\month-\\day,");
-            builder.append("xmin=").append(this.latexify_date(r.start_date)).append(",xmax=").append(this.latexify_date(r.end_date));
-            builder.append(",ymin=0,ymax=").append("%lf".printf(r.accumulated[r.accumulated.size - 1] * 1.05)).append(",date ZERO=").append(this.latexify_date(r.start_date));
-            builder.append("]\n");
-            builder.append("\\addplot[smooth,red] coordinates {");
-            for(var i = 0; i < r.accumulated.size; i++) {
-                builder.append("(%s, %lf)\n".printf(this.latexify_date(r.dates[i]), r.accumulated[i]));
+		void generate_expense_diagram(StringBuilder builder, Range r, string time) {
+		    // TODO: The averages seem to be wrong
+            builder.append("\\subsubsection{%s}\n".printf(time));
+			builder.append("\\begin{tikzpicture}[baseline]\n");
+			builder.append("\\begin{axis}[x tick label style={rotate=45,anchor=east},legend style={at={(0.5,1.1)},anchor=south},width=\\textwidth,height=\\axisdefaultheight, date coordinates in=x, xticklabel=\\month-\\day,");
+			builder.append("xmin=").append(this.latexify_date(r.start_date)).append(",xmax=").append(this.latexify_date(r.end_date));
+			builder.append(",ymin=0,ymax=").append("%lf".printf(r.max_expense_value * 1.05)).append(",date ZERO=").append(this.latexify_date(r.start_date));
+			builder.append("]\n");
+			builder.append("\\addplot[smooth,red] coordinates {");
+			for(var i = 0; i < r.each_expense.size; i++) {
+				builder.append("(%s, %lf)\n".printf(this.latexify_date(r.dates[i]), r.each_expense[i]));
+			}
+			builder.append("};\n");
+			builder.append("\\addplot[smooth,blue] coordinates {");
+			builder.append("(%s, %lf)".printf(this.latexify_date(r.dates[0]), r.average_per_day));
+			builder.append("(%s, %lf)".printf(this.latexify_date(r.dates[r.dates.size - 1]), r.average_per_day));
+			builder.append("};\n");
+			builder.append("\\legend {").append(_("Amount")).append(",").append(_("Average Amount")).append("}\n");
+			builder.append("\\end{axis}");
+			builder.append("\\end{tikzpicture}\n\\newline");
+			builder.append("\\begin{tikzpicture}[baseline]\n");
+			builder.append("\\begin{axis}[x tick label style={rotate=45,anchor=east},legend style={at={(0.5,1.1)},anchor=south},width=\\textwidth,height=\\axisdefaultheight, date coordinates in=x, xticklabel=\\month-\\day,");
+			builder.append("xmin=").append(this.latexify_date(r.start_date)).append(",xmax=").append(this.latexify_date(r.end_date));
+			builder.append(",ymin=0,ymax=").append("%lf".printf(r.accumulated[r.accumulated.size - 1] * 1.05)).append(",date ZERO=").append(this.latexify_date(r.start_date));
+			builder.append("]\n");
+			builder.append("\\addplot[smooth,red] coordinates {");
+			for(var i = 0; i < r.accumulated.size; i++) {
+				builder.append("(%s, %lf)\n".printf(this.latexify_date(r.dates[i]), r.accumulated[i]));
 
-            }
-            builder.append("};\n");
-            builder.append("\\addplot[smooth,blue] coordinates {");
-            builder.append("(%s, %lf)".printf(this.latexify_date(r.dates[0]), r.accumulated[0]));
-            builder.append("(%s, %lf)".printf(this.latexify_date(r.dates[r.dates.size - 1]), r.accumulated[r.accumulated.size - 1]));
-            builder.append("};\\end{axis}");
-            builder.append("\\end{tikzpicture}\n");
+			}
+			builder.append("};\n");
+			builder.append("\\addplot[smooth,blue] coordinates {");
+			builder.append("(%s, %lf)".printf(this.latexify_date(r.dates[0]), r.accumulated[0]));
+			builder.append("(%s, %lf)".printf(this.latexify_date(r.dates[r.dates.size - 1]), r.accumulated[r.accumulated.size - 1]));
+			builder.append("};\n");
+			builder.append("\\legend {").append(_("Accumulated Amount")).append(",").append(_("Average amount per day")).append("}\n");
+			builder.append("\\end{axis}");
+			builder.append("\\end{tikzpicture}\n");
+		}
+		void build_last_week(StringBuilder builder, Stats stats) {
+			var r = stats.last_week;
+			this.generate_expense_diagram(builder, r, _("Last week"));
+		}
+		void build_last_month(StringBuilder builder, Stats stats) {
+			var r = stats.last_month;
+			if(r.dates.size == stats.last_week.dates.size)
+			    return;
+			this.generate_expense_diagram(builder, r, _("Last month"));
+		}
+		void build_last_year(StringBuilder builder, Stats stats) {
+			var r = stats.last_year;
+			if(r.dates.size == stats.last_month.dates.size)
+			    return;
+			this.generate_expense_diagram(builder, r, _("Last year"));
+		}
+		void build_total(StringBuilder builder, Stats stats) {
+			var r = stats.total;
+			if(r.dates.size == stats.last_year.dates.size)
+			    return;
+			this.generate_expense_diagram(builder, r, _("All time"));
 		}
 		string latexify_date(GLib.DateTime time) {
-		    return "%d-%d-%d".printf(time.get_year(), time.get_month(), time.get_day_of_month());
+			return "%d-%d-%d".printf(time.get_year(), time.get_month(), time.get_day_of_month());
 		}
 		string build_extra_info(Expense expense) {
 			var ret = new StringBuilder();
@@ -188,7 +213,7 @@ namespace LFinance {
 					info("%s", e.message);
 				}
 			}
-			throw new PDFModelExporterErrors.COMMANDS_NOT_FOUND(_("Please install TexLive, LuaLaTeX or XeLaTeX")); // Throw exception
+			throw new PDFModelExporterErrors.COMMANDS_NOT_FOUND(_("Please install TexLive, LuaLaTeX or XeLaTeX"));
 		}
 		void check_for_packages() throws GLib.Error {
 			this.check_for_package("longtable");
