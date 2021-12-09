@@ -35,6 +35,7 @@ namespace LFinance {
 			expense.sort();
 			expense.set_sharp(this.func);
 			this.sort(false);
+			this.fire(TriggerType.ADD_EXPENSE);
 			this.fire(TriggerType.EDIT_ACCOUNT);
 		}
 		internal void fire(TriggerType type) {

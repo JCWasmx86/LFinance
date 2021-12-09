@@ -12,7 +12,9 @@ namespace LFinance {
 				if(result == Gtk.ResponseType.OK) {
 					var text = dialog.get_text();
 					dialog.destroy();
-					model.add_account(new Account(text));
+					var account = new Account(text);
+					account.set_sorting(3);
+					model.add_account(account);
 				} else {
 					dialog.destroy();
 				}
