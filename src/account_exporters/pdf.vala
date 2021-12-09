@@ -7,7 +7,7 @@ namespace LFinance {
 		GLib.File file;
 		Account? account;
 		string? working;
-		double max_frac = 1 + 8 + 4;
+		double max_frac = 1 + 12 + 4;
 		uint curr_frac;
 
 		internal PDFExporter(string file) {
@@ -75,6 +75,7 @@ namespace LFinance {
 			this.check_for_package("inputenc");
 			this.check_for_package("geometry");
 			this.check_for_package("hyphenat");
+			this.check_for_package("eurosym");
 		}
 		void check_for_package(string name) throws GLib.Error {
 			try {
@@ -142,6 +143,7 @@ namespace LFinance {
 			builder.append("\\usepackage[utf8]{inputenc}\n");
 			builder.append("\\usepackage{xcolor}\n\n");
 			builder.append("\\usepackage[none]{hyphenat}\n");
+			builder.append("\\usepackage{eurosym}\n");
 			builder.append("\\begin{document}\n");
 			builder.append("\\begin{longtable}{|l|l|l|p{5cm}|}\n");
 			builder.append("\\hline \\multicolumn{1}{|c|}{\\textbf{%s}} & \\multicolumn{1}{c|}{\\textbf{%s}} & \\multicolumn{1}{c|}{\\textbf{%s}} & \\multicolumn{1}{c|}{\\textbf{%s}} \\\\ \\hline \\endfirsthead\n".printf(_("Purpose"), _("Date"), _("Amount"), _("Further Information")));
@@ -199,12 +201,16 @@ namespace LFinance {
 			map["_"] = "\\_";
 			map["~"] = "\\textasciitilde{}";
 			map["\t"] = "\\qquad{}";
-			for(var i = 0; i < input.length; i++) {
-				var as_string = "%c".printf(input[i]);
+			map["€"] = "\\officialeuro";
+			// Fix for some weird unicode bugs
+			map["\xff\xbf\xbf\xbf\xbf\xbf"] = "";
+			for(var i = 0; i <= input.char_count(); i++) {
+				var ic = input.get_char(i);
+				var as_string = ic.to_string();
 				if(map.has_key(as_string)) {
 					builder.append(map[as_string]);
 				} else {
-					builder.append_c(input[i]);
+					builder.append_unichar(ic);
 				}
 			}
 			return builder.str;

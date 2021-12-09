@@ -14,7 +14,7 @@ namespace LFinance {
 		GLib.File file;
 		Model model;
 
-		double max_frac = 19;
+		double max_frac = 21;
 		uint curr_frac = 0;
 		string? working;
 
@@ -66,6 +66,7 @@ namespace LFinance {
 			builder.append("\\usepackage{xcolor}\n");
 			builder.append("\\usepackage{pgfplots}\n");
 			builder.append("\\usepackage{tikz}\n");
+			builder.append("\\usepackage{eurosym}\n");
 			builder.append("\\usepackage[none]{hyphenat}\n\n");
 			builder.append("\\usepgfplotslibrary{dateplot}\n");
 			builder.append("\\title{%s}".printf(_("Accounting Report")));
@@ -222,6 +223,7 @@ namespace LFinance {
 			this.check_for_package("hyphenat");
 			this.check_for_package("tikz");
 			this.check_for_package("pgfplots");
+			this.check_for_package("eurosym");
 		}
 		void check_for_package(string name) throws GLib.Error {
 			try {
@@ -306,12 +308,17 @@ namespace LFinance {
 			map["_"] = "\\_";
 			map["~"] = "\\textasciitilde{}";
 			map["\t"] = "\\qquad{}";
-			for(var i = 0; i < input.length; i++) {
-				var as_string = "%c".printf(input[i]);
+			map["€"] = "\\officialeuro";
+			// Fix for some weird unicode bugs
+			map["\xff\xbf\xbf\xbf\xbf\xbf"] = "";
+			for(var i = 0; i <= input.char_count(); i++) {
+				var ic = input.get_char(i);
+				var as_string = ic.to_string();
+				info(as_string);
 				if(map.has_key(as_string)) {
 					builder.append(map[as_string]);
 				} else {
-					builder.append_c(input[i]);
+					builder.append_unichar(ic);
 				}
 			}
 			return builder.str;
