@@ -112,8 +112,8 @@ namespace LFinance {
 			return builder.str;
 		}
 		void generate_expense_diagram(StringBuilder builder, Range r, string time) {
-		    // TODO: The averages seem to be wrong
-            builder.append("\\subsubsection{%s}\n".printf(time));
+			// TODO: The averages seem to be wrong
+			builder.append("\\subsubsection{%s}\n".printf(time));
 			builder.append("\\begin{tikzpicture}[baseline]\n");
 			builder.append("\\begin{axis}[x tick label style={rotate=45,anchor=east},legend style={at={(0.5,1.1)},anchor=south},width=\\textwidth,height=\\axisdefaultheight, date coordinates in=x, xticklabel=\\month-\\day,");
 			builder.append("xmin=").append(this.latexify_date(r.start_date)).append(",xmax=").append(this.latexify_date(r.end_date));
@@ -157,19 +157,19 @@ namespace LFinance {
 		void build_last_month(StringBuilder builder, Stats stats) {
 			var r = stats.last_month;
 			if(r.dates.size == stats.last_week.dates.size)
-			    return;
+				return;
 			this.generate_expense_diagram(builder, r, _("Last month"));
 		}
 		void build_last_year(StringBuilder builder, Stats stats) {
 			var r = stats.last_year;
 			if(r.dates.size == stats.last_month.dates.size)
-			    return;
+				return;
 			this.generate_expense_diagram(builder, r, _("Last year"));
 		}
 		void build_total(StringBuilder builder, Stats stats) {
 			var r = stats.total;
 			if(r.dates.size == stats.last_year.dates.size)
-			    return;
+				return;
 			this.generate_expense_diagram(builder, r, _("All time"));
 		}
 		string latexify_date(GLib.DateTime time) {
