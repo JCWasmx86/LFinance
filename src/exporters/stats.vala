@@ -39,7 +39,23 @@ namespace LFinance {
 			return ret;
 		}
 	}
+	internal class MonthData {
+		internal string name;
+		internal double amount;
+		internal uint64 count;
+		internal int index;
+
+		internal MonthData(int index, string s) {
+			this.index = index;
+			this.name = s;
+		}
+		internal void add_expense(double d) {
+			this.amount += d;
+			this.count++;
+		}
+	}
 	internal class Range {
+		internal Gee.Map<int, MonthData> months;
 		internal Gee.List<double?> each_expense;
 		internal Gee.List<double?> accumulated;
 		internal Gee.List<DateTime> dates;
@@ -52,11 +68,18 @@ namespace LFinance {
 
 		internal Range() {
 			this.n = 0;
+			this.months = new Gee.HashMap<int, MonthData>();
 			this.each_expense = new Gee.ArrayList<double?>();
 			this.accumulated = new Gee.ArrayList<double?>();
 			this.dates = new Gee.ArrayList<DateTime?>();
 		}
 		internal void add_expense(double amount, DateTime date) {
+			if(months.has_key(date.get_month())) {
+				months[date.get_month()].add_expense(amount);
+			} else {
+				months[date.get_month()] = new MonthData(date.get_month(), date.format("%B"));
+				months[date.get_month()].add_expense(amount);
+			}
 			if(this.dates.size == 0 || this.dates[this.dates.size - 1].compare(date) != 0) {
 				this.each_expense.add(amount);
 				if(accumulated.size != 0)

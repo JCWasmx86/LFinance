@@ -66,6 +66,7 @@ namespace LFinance {
 			builder.append("\\usepackage{xcolor}\n");
 			builder.append("\\usepackage{pgfplots}\n");
 			builder.append("\\usepackage{tikz}\n");
+			builder.append("\\usepackage{pgf-pie}\n");
 			builder.append("\\usepackage{eurosym}\n");
 			builder.append("\\usepackage[none]{hyphenat}\n\n");
 			builder.append("\\usepgfplotslibrary{dateplot}\n");
@@ -126,8 +127,10 @@ namespace LFinance {
 			}
 			builder.append("};\n");
 			builder.append("\\addplot[smooth,blue] coordinates {");
-			builder.append("(%s, %lf)".printf(this.latexify_date(r.dates[0]), r.average_per_day));
-			builder.append("(%s, %lf)".printf(this.latexify_date(r.dates[r.dates.size - 1]), r.average_per_day));
+			var date_diff = r.dates[r.dates.size - 1].difference(r.dates[0]) / TimeSpan.DAY;
+			var avg = r.accumulated[r.accumulated.size - 1] / date_diff;
+			builder.append("(%s, %lf)".printf(this.latexify_date(r.dates[0]), avg));
+			builder.append("(%s, %lf)".printf(this.latexify_date(r.dates[r.dates.size - 1]), avg));
 			builder.append("};\n");
 			builder.append("\\legend {").append(_("Amount")).append(",").append(_("Average Amount")).append("}\n");
 			builder.append("\\end{axis}");
@@ -140,16 +143,15 @@ namespace LFinance {
 			builder.append("\\addplot[smooth,red] coordinates {");
 			for(var i = 0; i < r.accumulated.size; i++) {
 				builder.append("(%s, %lf)\n".printf(this.latexify_date(r.dates[i]), r.accumulated[i]));
-
 			}
 			builder.append("};\n");
 			builder.append("\\addplot[smooth,blue] coordinates {");
-			builder.append("(%s, %lf)".printf(this.latexify_date(r.dates[0]), r.accumulated[0]));
-			builder.append("(%s, %lf)".printf(this.latexify_date(r.dates[r.dates.size - 1]), r.accumulated[r.accumulated.size - 1]));
+			builder.append("(%s, %lf)".printf(this.latexify_date(r.dates[0]), 0));
+			builder.append("(%s, %lf)".printf(this.latexify_date(r.dates[r.dates.size - 1]), date_diff * avg));
 			builder.append("};\n");
 			builder.append("\\legend {").append(_("Accumulated Amount")).append(",").append(_("Average amount per day")).append("}\n");
 			builder.append("\\end{axis}");
-			builder.append("\\end{tikzpicture}\n");
+			builder.append("\\end{tikzpicture}\n\\newline");
 		}
 		void build_last_week(StringBuilder builder, Stats stats) {
 			var r = stats.last_week;
@@ -166,12 +168,38 @@ namespace LFinance {
 			if(r.dates.size == stats.last_month.dates.size)
 				return;
 			this.generate_expense_diagram(builder, r, _("Last year"));
+			builder.append("\n");
+			this.generate_pie_chart_for_months(builder, r.months, _("Expenses by month"));
 		}
 		void build_total(StringBuilder builder, Stats stats) {
 			var r = stats.total;
 			if(r.dates.size == stats.last_year.dates.size)
 				return;
 			this.generate_expense_diagram(builder, r, _("All time"));
+			builder.append("\n");
+			this.generate_pie_chart_for_months(builder, r.months, _("Expenses by month"));
+		}
+		void generate_pie_chart_for_months(StringBuilder builder, Gee.Map<int, MonthData> data, string s) {
+			builder.append("\\newpage");
+			builder.append("\\paragraph{").append(s).append("}\n");
+			builder.append("\\begin{tikzpicture}\n").append("\\pie[text=legend] {");
+			var sum = 0.0;
+			var n = 0;
+			data.entries.foreach(a => {
+				sum += a.value.amount;
+				n++;
+				return true;
+			});
+			var iter = data.values.order_by((a, b) => a.index == b.index ? 0 : (a.index > b.index ? 1 : -1));
+			iter.next();
+			while(true) {
+				var month = iter.get();
+				builder.append("%.2lf".printf((month.amount / sum) * 100)).append("/").append(month.name);
+				if(!iter.next())
+					break;
+				builder.append(",");
+			}
+			builder.append("}\n\\end{tikzpicture}\n");
 		}
 		string latexify_date(GLib.DateTime time) {
 			return "%d-%d-%d".printf(time.get_year(), time.get_month(), time.get_day_of_month());
