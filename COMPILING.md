@@ -1,3 +1,5 @@
+*IMPORTANT*: i18n and l10n are broken at the moment. E.g. the exported PDF will look really crippled
+
 # Compiling
 
 The at the moment only Fedora and Debian are supported. These instructions may work on Debian-derived distributons like Ubuntu.
