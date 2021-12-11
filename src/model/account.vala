@@ -10,8 +10,8 @@ namespace LFinance {
 		internal Account(string name) {
 			this._name = name;
 			this._expenses = new Gee.ArrayList<Expense>();
-			sharp = false;
-			func = null;
+			this.sharp = false;
+			this.func = null;
 		}
 		internal void set_name(string name) {
 			this._name = name;
