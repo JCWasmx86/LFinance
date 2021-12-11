@@ -1,3 +1,5 @@
+using Json;
+
 namespace LFinance {
 	internal class ModelV2Builder : ModelBuilder, GLib.Object {
 		Json.Object root;
@@ -8,12 +10,12 @@ namespace LFinance {
 
 		internal Model build() throws GLib.Error {
 			var ret = new Model();
-			ParsingErrors.check_node(this.root, "tags", Json.NodeType.ARRAY);
+			ParsingErrors.check_node(this.root, "tags", NodeType.ARRAY);
 			var tags = this.root.get_array_member("tags");
 			for(var i = 0; i < tags.get_length(); i++) {
 				var tag = tags.get_object_element(i);
-				ParsingErrors.check_node(tag, "name", Json.NodeType.VALUE);
-				ParsingErrors.check_node(tag, "color", Json.NodeType.ARRAY);
+				ParsingErrors.check_node(tag, "name", NodeType.VALUE);
+				ParsingErrors.check_node(tag, "color", NodeType.ARRAY);
 				var name = tag.get_string_member("name");
 				var colors = tag.get_array_member("color");
 				var color = new uint8[4];
@@ -24,43 +26,43 @@ namespace LFinance {
 				ret.add_tag(new Tag(name, color));
 			}
 			info("Loaded %u tags",tags.get_length());
-			ParsingErrors.check_node(this.root, "locations", Json.NodeType.ARRAY);
+			ParsingErrors.check_node(this.root, "locations", NodeType.ARRAY);
 			var locations = this.root.get_array_member("locations");
 			for(var i = 0; i < locations.get_length(); i++) {
 				var location = locations.get_object_element(i);
-				ParsingErrors.check_node(location, "name", Json.NodeType.VALUE);
-				ParsingErrors.check_node(location, "city", Json.NodeType.VALUE);
-				ParsingErrors.check_node(location, "info", Json.NodeType.VALUE);
+				ParsingErrors.check_node(location, "name", NodeType.VALUE);
+				ParsingErrors.check_node(location, "city", NodeType.VALUE);
+				ParsingErrors.check_node(location, "info", NodeType.VALUE);
 				var name = location.get_string_member("name");
 				var city = location.has_member("city") ? location.get_string_member("city") : null;
 				var _info = location.has_member("info") ? location.get_string_member("info") : null;
 				ret.add_location(new Location(name, city, _info));
 			}
 			info("Loaded %u locations",locations.get_length());
-			ParsingErrors.check_node(this.root, "accounts", Json.NodeType.ARRAY);
+			ParsingErrors.check_node(this.root, "accounts", NodeType.ARRAY);
 			var accounts = this.root.get_array_member("accounts");
 			for(var i = 0; i < accounts.get_length(); i++) {
 				var account = accounts.get_object_element(i);
-				ParsingErrors.check_node(account, "name", Json.NodeType.VALUE);
+				ParsingErrors.check_node(account, "name", NodeType.VALUE);
 				var account_ret = new Account(account.get_string_member("name"));
-				ParsingErrors.check_node(account, "sorting", Json.NodeType.VALUE);
+				ParsingErrors.check_node(account, "sorting", NodeType.VALUE);
 				var sorting = account.get_int_member("sorting") & 0xFF;
 				account_ret.set_sorting((uint)sorting);
-				ParsingErrors.check_node(account, "expenses", Json.NodeType.ARRAY);
+				ParsingErrors.check_node(account, "expenses", NodeType.ARRAY);
 				var expenses = account.get_array_member("expenses");
 				for(var j = 0; j < expenses.get_length(); j++) {
 					var expense = expenses.get_object_element(j);
-					ParsingErrors.check_node(expense, "purpose", Json.NodeType.VALUE);
+					ParsingErrors.check_node(expense, "purpose", NodeType.VALUE);
 					var expense_ret = new Expense(expense.get_string_member("purpose"));
-					ParsingErrors.check_node(expense, "amount", Json.NodeType.VALUE);
+					ParsingErrors.check_node(expense, "amount", NodeType.VALUE);
 					expense_ret.set_amount(expense.get_int_member("amount") & 0xFFFFFFFF);
-					ParsingErrors.check_node(expense, "currency", Json.NodeType.VALUE);
+					ParsingErrors.check_node(expense, "currency", NodeType.VALUE);
 					expense_ret.set_currency(expense.get_string_member("currency"));
-					ParsingErrors.check_node(expense, "date", Json.NodeType.OBJECT);
+					ParsingErrors.check_node(expense, "date", NodeType.OBJECT);
 					var date = expense.get_object_member("date");
-					ParsingErrors.check_node(date, "year", Json.NodeType.VALUE);
-					ParsingErrors.check_node(date, "month", Json.NodeType.VALUE);
-					ParsingErrors.check_node(date, "day", Json.NodeType.VALUE);
+					ParsingErrors.check_node(date, "year", NodeType.VALUE);
+					ParsingErrors.check_node(date, "month", NodeType.VALUE);
+					ParsingErrors.check_node(date, "day", NodeType.VALUE);
 					expense_ret.set_date(new DateTime(new TimeZone.local(),
 										(int)date.get_int_member("year"),
 										(int)date.get_int_member("month"),
@@ -69,7 +71,7 @@ namespace LFinance {
 						var city = expense.has_member("location_city") ? expense.get_string_member("location_city") : null;
 						expense_ret.set_location(ret.search_location(expense.get_string_member("location"), city));
 					}
-					ParsingErrors.check_node(expense, "tags", Json.NodeType.ARRAY);
+					ParsingErrors.check_node(expense, "tags", NodeType.ARRAY);
 					var assigned_tags = expense.get_array_member("tags");
 					for(var k = 0; k < assigned_tags.get_length(); k++) {
 						expense_ret.add_tag(ret.search_tag(assigned_tags.get_string_element(k)));

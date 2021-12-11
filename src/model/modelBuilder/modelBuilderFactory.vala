@@ -1,7 +1,9 @@
+using Json;
+
 namespace LFinance {
 	internal errordomain ParsingErrors {
 		INVALID_DATA, KEY_MISSING, WRONG_TYPE;
-		internal static void check_node(Json.Object root, string key, Json.NodeType type) throws GLib.Error {
+		internal static void check_node(Json.Object root, string key, NodeType type) throws GLib.Error {
 			if(!root.has_member(key)) {
 				throw new ParsingErrors.KEY_MISSING("Key \"%s\" not found!", key);
 			}
@@ -16,17 +18,17 @@ namespace LFinance {
 	}
 	internal class ModelBuilderFactory {
 		internal static ModelBuilder from_file(string file) throws Error {
-			var parser = new Json.Parser();
+			var parser = new Parser();
 			parser.load_from_file(file);
 			var node = parser.get_root();
-			if(node == null || node.get_node_type() != Json.NodeType.OBJECT) {
+			if(node == null || node.get_node_type() != NodeType.OBJECT) {
 				throw new ParsingErrors.INVALID_DATA("No object found");
 			}
 			var root = node.get_object();
 			if(root == null) {
 				throw new ParsingErrors.INVALID_DATA("No JSON-object found");
 			}
-			ParsingErrors.check_node(root, "version", Json.NodeType.VALUE);
+			ParsingErrors.check_node(root, "version", NodeType.VALUE);
 			var version = root.get_int_member("version");
 			switch(version) {
 				case 1:
