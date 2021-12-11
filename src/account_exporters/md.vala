@@ -20,21 +20,21 @@ namespace LFinance {
 		}
 		void write_file() throws GLib.Error {
 			try {
-				this.progress(_("Exporting to Markdown…"), curr_frac / max_frac);
-				curr_frac++;
+				this.progress(_("Exporting to Markdown…"), this.curr_frac / this.max_frac);
+				this.curr_frac++;
 				FileIOStream iostream;
 				var file = File.new_tmp("tpl_XXXXXX.md", out iostream);
 				var os = iostream.output_stream;
 				var dos = new DataOutputStream(os);
 				dos.put_string(this.build());
 				dos.close();
-				this.progress(_("Success!"), curr_frac / max_frac);
-				curr_frac++;
-				this.progress(_("Copying output to %s…").printf(this.file.get_path()), curr_frac / max_frac);
-				curr_frac++;
+				this.progress(_("Success!"), this.curr_frac / this.max_frac);
+				this.curr_frac++;
+				this.progress(_("Copying output to %s…").printf(this.file.get_path()), this.curr_frac / this.max_frac);
+				this.curr_frac++;
 				file.copy(this.file, FileCopyFlags.OVERWRITE|FileCopyFlags.ALL_METADATA);
-				this.progress(_("Finished!"), curr_frac / max_frac);
-				curr_frac++;
+				this.progress(_("Finished!"), this.curr_frac / this.max_frac);
+				this.curr_frac++;
 			} catch(GLib.Error e) {
 				info("%s", e.message);
 				throw new MDExporterErrors.GENERIC_ERROR(e.message);

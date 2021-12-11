@@ -74,11 +74,12 @@ namespace LFinance {
 			this.dates = new Gee.ArrayList<DateTime?>();
 		}
 		internal void add_expense(double amount, DateTime date) {
-			if(months.has_key(date.get_month())) {
-				months[date.get_month()].add_expense(amount);
+			var month = date.get_month();
+			if(this.months.has_key(month)) {
+				this.months[month].add_expense(amount);
 			} else {
-				months[date.get_month()] = new MonthData(date.get_month(), date.format("%B"));
-				months[date.get_month()].add_expense(amount);
+				this.months[month] = new MonthData(month, date.format("%B"));
+				this.months[month].add_expense(amount);
 			}
 			if(this.dates.size == 0 || this.dates[this.dates.size - 1].compare(date) != 0) {
 				this.each_expense.add(amount);
@@ -89,18 +90,19 @@ namespace LFinance {
 				this.max_expense_value = double.max(amount, this.max_expense_value);
 				this.dates.add(date);
 			} else {
-				var len = this.each_expense.size;
-				this.each_expense[len - 1] = this.each_expense[len - 1] + amount;
-				this.accumulated[len - 1] = this.accumulated[len - 1] + amount;
-				this.max_expense_value = double.max(this.each_expense[len - 1], this.max_expense_value);
+				var len = this.each_expense.size - 1;
+				this.each_expense[len] = this.each_expense[len] + amount;
+				this.accumulated[len] = this.accumulated[len] + amount;
+				this.max_expense_value = double.max(this.each_expense[len], this.max_expense_value);
 			}
 			this.n++;
 		}
 		internal void end_it(DateTime start, DateTime end) {
 			this.start_date = start;
 			this.end_date = end;
-			this.average_per_day = this.accumulated[this.accumulated.size - 1] / (this.end_date.difference(this.start_date) / TimeSpan.DAY);
-			this.average = this.accumulated[this.accumulated.size - 1] / this.each_expense.size;
+			var len = this.accumulated.size - 1;
+			this.average_per_day = this.accumulated[len] / (this.end_date.difference(this.start_date) / TimeSpan.DAY);
+			this.average = this.accumulated[len] / this.each_expense.size;
 		}
 	}
 }

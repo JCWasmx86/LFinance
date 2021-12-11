@@ -28,8 +28,8 @@ namespace LFinance {
 				try {
 					Process.spawn_sync("/", new string[]{latex, "--version"}, Environ.get(), SpawnFlags.SEARCH_PATH, null, null, null, out status);
 					if(status == 0) {
-						this.progress(_("Found command: %s").printf(latex), curr_frac / max_frac);
-						curr_frac++;
+						this.progress(_("Found command: %s").printf(latex), this.curr_frac / this.max_frac);
+						this.curr_frac++;
 						info("Found command: %s", latex);
 						this.working = latex;
 						return;
@@ -42,28 +42,28 @@ namespace LFinance {
 		}
 		void write_file() throws GLib.Error {
 			try {
-				this.progress(_("Exporting to LaTeX…"), curr_frac / max_frac);
-				curr_frac++;
+				this.progress(_("Exporting to LaTeX…"), this.curr_frac / this.max_frac);
+				this.curr_frac++;
 				FileIOStream iostream;
 				var file = File.new_tmp("tpl_XXXXXX.tex", out iostream);
 				var os = iostream.output_stream;
 				var dos = new DataOutputStream(os);
 				dos.put_string(this.build());
 				dos.close();
-				this.progress(_("Compiling LaTeX…"), curr_frac / max_frac);
-				curr_frac++;
+				this.progress(_("Compiling LaTeX…"), this.curr_frac / this.max_frac);
+				this.curr_frac++;
 				this.compile_document(file, false);
-				this.progress(_("Success!"), curr_frac / max_frac);
-				curr_frac++;
+				this.progress(_("Success!"), this.curr_frac / this.max_frac);
+				this.curr_frac++;
 				var path = file.get_path();
 				var len = path.length;
 				var replaced = path.splice(len - 4, len, ".pdf");
-				this.progress(_("Copying output to %s…").printf(this.file.get_path()), curr_frac / max_frac);
-				curr_frac++;
+				this.progress(_("Copying output to %s…").printf(this.file.get_path()), this.curr_frac / this.max_frac);
+				this.curr_frac++;
 				GLib.File.new_for_path(replaced).copy(this.file, FileCopyFlags.OVERWRITE|FileCopyFlags.ALL_METADATA);
 				this.cleanup(file, true);
-				this.progress(_("Finished!"), curr_frac / max_frac);
-				curr_frac++;
+				this.progress(_("Finished!"), this.curr_frac / this.max_frac);
+				this.curr_frac++;
 			} catch(GLib.Error e) {
 				info("%s", e.message);
 				throw new PdfExporterErrors.COMPILATION_FAILED(e.message);
@@ -79,8 +79,8 @@ namespace LFinance {
 		}
 		void check_for_package(string name) throws GLib.Error {
 			try {
-				this.progress(_("Checking for package %s…").printf(name), curr_frac / max_frac);
-				curr_frac++;
+				this.progress(_("Checking for package %s…").printf(name), this.curr_frac / this.max_frac);
+				this.curr_frac++;
 				FileIOStream iostream;
 				var file = File.new_tmp("tpl_XXXXXX.tex", out iostream);
 				var os = iostream.output_stream;
@@ -98,8 +98,8 @@ namespace LFinance {
 					this.cleanup(file);
 					throw new PdfExporterErrors.PACKAGE_NOT_FOUND(_("Package not found: %s").printf(name));
 				}
-				this.progress(_("Found package %s!").printf(name), curr_frac / max_frac);
-				curr_frac++;
+				this.progress(_("Found package %s!").printf(name), this.curr_frac / this.max_frac);
+				this.curr_frac++;
 				this.cleanup(file);
 			} catch(GLib.Error e) {
 				warning("%s", e.message);

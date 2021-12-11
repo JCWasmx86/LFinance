@@ -31,27 +31,27 @@ namespace LFinance {
 		}
 		void write_file() throws GLib.Error {
 			try {
-				this.progress_update(_("Exporting to LaTeX…"), curr_frac / max_frac);
-				curr_frac++;
+				this.progress_update(_("Exporting to LaTeX…"), this.curr_frac / this.max_frac);
+				this.curr_frac++;
 				FileIOStream iostream;
 				var file = File.new_tmp("tpl_XXXXXX.tex", out iostream);
 				var os = iostream.output_stream;
 				var dos = new DataOutputStream(os);
 				dos.put_string(this.build());
 				dos.close();
-				this.progress_update(_("Compiling LaTeX…"), curr_frac / max_frac);
-				curr_frac++;
+				this.progress_update(_("Compiling LaTeX…"), this.curr_frac / this.max_frac);
+				this.curr_frac++;
 				this.compile_document_multiple_times(file);
-				this.progress_update(_("Compiled LaTeX successfully"), curr_frac / max_frac);
-				curr_frac++;
+				this.progress_update(_("Compiled LaTeX successfully"), this.curr_frac / this.max_frac);
+				this.curr_frac++;
 				var path = file.get_path();
 				var len = path.length;
 				var replaced = path.splice(len - 4, len, ".pdf");
-				this.progress_update(_("Copying output to %s…").printf(this.file.get_path()), curr_frac / max_frac);
-				curr_frac++;
+				this.progress_update(_("Copying output to %s…").printf(this.file.get_path()), this.curr_frac / this.max_frac);
+				this.curr_frac++;
 				GLib.File.new_for_path(replaced).copy(this.file, FileCopyFlags.OVERWRITE|FileCopyFlags.ALL_METADATA);
-				this.progress_update(_("Finished!"), curr_frac / max_frac);
-				curr_frac++;
+				this.progress_update(_("Finished!"), this.curr_frac / this.max_frac);
+				this.curr_frac++;
 			} catch(GLib.Error e) {
 				info("%s", e.message);
 				throw new PdfExporterErrors.COMPILATION_FAILED(e.message);
@@ -315,11 +315,11 @@ namespace LFinance {
 		void compile_document_multiple_times(GLib.File file) throws GLib.Error {
 			var n = this.working == "latexmk" ? 1 : 5;
 			for(var i = 1; i <= n; i++) {
-				this.progress_update(_("Round %u of %u…").printf(i, n), curr_frac / max_frac);
-				curr_frac++;
+				this.progress_update(_("Round %u of %u…").printf(i, n), this.curr_frac / this.max_frac);
+				this.curr_frac++;
 				this.compile_document(file);
-				this.progress_update(_("Success!"), curr_frac / max_frac);
-				curr_frac++;
+				this.progress_update(_("Success!"), this.curr_frac / this.max_frac);
+				this.curr_frac++;
 			}
 		}
 		string escape_latex(string input) {
