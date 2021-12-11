@@ -13,8 +13,8 @@ namespace LFinance {
 				var menu = new Gtk.Menu();
 				var edit = new Gtk.MenuItem.with_label(_("Edit"));
 				edit.activate.connect(() => {
-					var location = model.search_location_by_id(selected);
-					var dialog = new LocationEditDialog(selected, model);
+					var location = this.model.search_location_by_id(selected);
+					var dialog = new LocationEditDialog(selected, this.model);
 					var result = dialog.run();
 					var name = dialog.get_name();
 					var city = dialog.get_city();
@@ -26,10 +26,10 @@ namespace LFinance {
 						location.set_city(city);
 						location.set_info(info);
 						dialog.destroy();
-						model._locations.sort((a, b) => {
+						this.model._locations.sort((a, b) => {
 							return a._name.collate(b._name);
 						});
-						model.fire(TriggerType.GENERAL);
+						this.model.fire(TriggerType.GENERAL);
 					}
 				});
 				menu.append(edit);

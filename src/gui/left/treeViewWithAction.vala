@@ -29,7 +29,7 @@ namespace LFinance {
 			var column = new Gtk.TreeViewColumn();
 			column.set_title(this.title);
 			column.pack_start(this.renderer, true);
-			column.add_attribute(this.renderer, type, 0);
+			column.add_attribute(this.renderer, this.type, 0);
 			this.append_column(column);
 			this.set_model(this.store);
 		}
@@ -43,7 +43,7 @@ namespace LFinance {
 				this.store.get_value(iter, 0, out val);
 				var val2 = Value(typeof(string));
 				this.store.get_value(iter, 1, out val2);
-				handler.handle_mouse_press((string)val, event);
+				this.handler.handle_mouse_press((string)val, event);
 				return false;
 			});
 			this.renderer.edited.connect((path, new_text) => {
@@ -64,7 +64,7 @@ namespace LFinance {
 				selected.get_selected(out model, out iter);
 				var val = Value(typeof(string));
 				this.store.get_value(iter, 0, out val);
-				handler.handle_key_press((string)val, event);
+				this.handler.handle_key_press((string)val, event);
 				return false;
 			});
 		}

@@ -14,7 +14,7 @@ namespace LFinance {
 					dialog.destroy();
 					var account = new Account(text);
 					account.set_sorting(3);
-					model.add_account(account);
+					this.model.add_account(account);
 				} else {
 					dialog.destroy();
 				}
@@ -27,7 +27,7 @@ namespace LFinance {
 				if(result == Gtk.ResponseType.OK) {
 					var loc = dialog.build_location();
 					dialog.destroy();
-					model.add_location(loc);
+					this.model.add_location(loc);
 				} else {
 					dialog.destroy();
 				}
@@ -46,7 +46,7 @@ namespace LFinance {
 					rgba[2] = (uint8)uint.parse(color.substring(5, 2), 16);
 					if(color.length == 9)
 						rgba[3] = (uint8)uint.parse(color.substring(7, 2), 16);
-					model.add_tag(new Tag(name, rgba));
+					this.model.add_tag(new Tag(name, rgba));
 				}
 				dialog.destroy();
 			});

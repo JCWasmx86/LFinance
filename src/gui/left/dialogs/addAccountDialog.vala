@@ -13,7 +13,7 @@ namespace LFinance {
 			this.add_buttons(_("_Cancel"), Gtk.ResponseType.CANCEL, _("Create Account"), Gtk.ResponseType.OK);
 			var label = new Gtk.Label(_("Name:"));
 			this.entry = new Gtk.Entry();
-			entry.changed.connect(() => {
+			this.entry.changed.connect(() => {
 				var btn = ((Gtk.Button)this.get_widget_for_response(Gtk.ResponseType.OK));
 				var text = this.get_text();
 				if(text.length == 0 || this.model.account_exists(text)) {

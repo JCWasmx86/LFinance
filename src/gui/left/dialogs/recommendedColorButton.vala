@@ -10,7 +10,7 @@ namespace LFinance {
 		}
 		internal void set_text(string text) {
 			if(this.get_child() is Gtk.Label) {
-				((Gtk.Label)this.get_child()).set_markup("<b><span color=\"%s\">%s</span></b>".printf(color, text));
+				((Gtk.Label)this.get_child()).set_markup("<b><span color=\"%s\">%s</span></b>".printf(this.color, text));
 			}
 		}
 	}

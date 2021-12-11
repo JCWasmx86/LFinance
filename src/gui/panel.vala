@@ -5,14 +5,14 @@ namespace LFinance {
 		Gtk.Spinner spinner;
 		AccountInfo right;
 		Model model;
-		int obj;
-		int obj2;
+		int rebuild_lock;
+		int save_lock;
 		SelectAccountFunc func;
 
 		internal LFinancePanel() throws Error {
 			Object(orientation: Gtk.Orientation.HORIZONTAL, spacing: 2);
-			this.obj = 0;
-			this.obj2 = 0;
+			this.rebuild_lock = 0;
+			this.save_lock = 0;
 			this.load_model();
 			this.build_gui();
 			this.model.set_sharp(type => {
@@ -29,7 +29,7 @@ namespace LFinance {
 			this.left_box.pack_start(this.spinner, false, false, 2);
 			this.pack_start(this.left_box, true, true, 2);
 
-			this.right = new AccountInfo(model);
+			this.right = new AccountInfo(this.model);
 			this.right.rebuild(null);
 			this.pack_start(this.right, true, true, 2);
 			this.set_events(Gdk.EventMask.ALL_EVENTS_MASK);
@@ -65,8 +65,8 @@ namespace LFinance {
 
 		void rebuild(TriggerType type) {
 			info("Rebuilding GUI!");
-			lock(this.obj) {
-				this.left.rebuild(type, func);
+			lock(this.rebuild_lock) {
+				this.left.rebuild(type, this.func);
 				this.right.rebuild(type);
 				Gdk.threads_add_idle_full(Priority.HIGH_IDLE + 20, () => {
 					this.left.show_all();
@@ -77,7 +77,7 @@ namespace LFinance {
 			}
 		}
 		internal void save() throws Error {
-			lock(this.obj2) {
+			lock(this.save_lock) {
 				var generator = new Json.Generator();
 				generator.set_root(this.model.serialize());
 				generator.indent_char = '\t';

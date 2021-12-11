@@ -29,7 +29,7 @@ namespace LFinance {
 				if(c2.length == 0)
 					continue;
 				var btn = new RecommendedColorButton(c2, this.colored_radio_buttons);
-				btn.join_group(custom_color);
+				btn.join_group(this.custom_color);
 				btn.set_text(_("Sample text"));
 				this.colored_radio_buttons.add(btn);
 				box.pack_start(btn, true, true, 2);
@@ -48,7 +48,7 @@ namespace LFinance {
 		}
 		void connect_signals() {
 			this.custom_color.toggled.connect(() => {
-				this.color_button.set_visible(custom_color.get_active());
+				this.color_button.set_visible(this.custom_color.get_active());
 			});
 			this.color_button.color_set.connect(() => {
 				var rgba = color_button.get_rgba();
@@ -60,14 +60,14 @@ namespace LFinance {
 			});
 			this.entry.changed.connect(() => {
 				var text = _("Sample text");
-				var et = entry.buffer.text;
+				var et = this.entry.buffer.text;
 				if(et.length != 0)
 					text = et;
 				foreach(var btn in this.colored_radio_buttons) {
 					btn.set_text(text);
 				}
 				var btn = (Gtk.Button)this.get_widget_for_response(Gtk.ResponseType.OK);
-				if(et.length == 0 || model.search_tag(et) != null) {
+				if(et.length == 0 || this.model.search_tag(et) != null) {
 					btn.set_sensitive(false);
 				} else {
 					btn.set_sensitive(true);

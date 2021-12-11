@@ -30,7 +30,7 @@ namespace LFinance {
 			this.show_all();
 			new Thread<void>("question", () => {
 				try {
-					var exporter = ExporterFactory.for_file(file);
+					var exporter = ExporterFactory.for_file(this.file);
 					exporter.progress.connect((text, frac) => {
 						Idle.add(() => {
 							this.view.buffer.text += (text + "\n");

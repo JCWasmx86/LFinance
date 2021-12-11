@@ -15,7 +15,7 @@ namespace LFinance {
 			if(this.model.search_tag(@new) != null)
 				return false;
 			replacement = @old.substring(0, prologue_len) + @new + "</span></b>";
-			model.rename_tag(old_name, @new);
+			this.model.rename_tag(old_name, @new);
 			return false;
 		}
 		void handle_mouse_press(string selected, Gdk.EventButton event) {
@@ -28,7 +28,7 @@ namespace LFinance {
 					var content_len = selected.length - (prologue_len + epilogue_len);
 					var old_name = selected.slice(prologue_len, prologue_len + content_len);
 					var tag = this.model.search_tag(old_name);
-					var dialog = new TagEditDialog(tag, model);
+					var dialog = new TagEditDialog(tag, this.model);
 					var result = dialog.run();
 					var new_name = dialog.get_new_name();
 					var rgba = dialog.get_rgba();
@@ -36,10 +36,10 @@ namespace LFinance {
 					if(result == Gtk.ResponseType.OK) {
 							tag.set_name(new_name);
 							tag.set_rgba(rgba);
-							model._tags.sort((a, b) => {
+							this.model._tags.sort((a, b) => {
 								return a._name.collate(b._name);
 							});
-							model._accounts.foreach(a => {
+							this.model._accounts.foreach(a => {
 								foreach(var expense in a._expenses) {
 									expense._tags.sort((a, b) => {
 										return a._name.collate(b._name);
@@ -47,7 +47,7 @@ namespace LFinance {
 								}
 								return true;
 							});
-							model.fire(TriggerType.GENERAL);
+							this.model.fire(TriggerType.GENERAL);
 					}
 				});
 				menu.append(edit);
