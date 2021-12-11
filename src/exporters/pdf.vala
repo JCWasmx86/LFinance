@@ -193,7 +193,9 @@ namespace LFinance {
 			iter.next();
 			while(true) {
 				var month = iter.get();
-				builder.append("%.2lf".printf((month.amount / sum) * 100)).append("/").append(month.name);
+				// The ',' is replaced, as otherwise there could be some problems
+				// with LaTeX.
+				builder.append("%.2lf".printf((month.amount / sum) * 100).replace(",", ".")).append("/").append(month.name);
 				if(!iter.next())
 					break;
 				builder.append(",");
