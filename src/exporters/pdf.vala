@@ -114,7 +114,6 @@ namespace LFinance {
 			return builder.str;
 		}
 		void generate_expense_diagram(StringBuilder builder, Range r, string time) {
-			// TODO: The averages seem to be wrong
 			builder.append("\\subsubsection{%s}\n".printf(time));
 			builder.append("\\begin{tikzpicture}[baseline]\n");
 			builder.append("\\begin{axis}[x tick label style={rotate=45,anchor=east},legend style={at={(0.5,1.1)},anchor=south},width=\\textwidth,height=\\axisdefaultheight, date coordinates in=x, xticklabel=\\month-\\day,");
