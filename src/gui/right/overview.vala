@@ -34,7 +34,7 @@ namespace LFinance {
 			this.name_entry.set_text(this.account._name);
 			this.btn = new Gtk.Button.with_label(_("Edit"));
 			this.reset = new Gtk.Button.with_label(_("Reset"));
-			reset.get_style_context().add_class("destructive-action");
+			this.reset.get_style_context().add_class("destructive-action");
 			this.first_line.pack_start(this.name_entry, true, true, 2);
 			this.first_line.pack_start(this.btn, false, false, 2);
 			this.pack_start(this.first_line, false, false, 2);

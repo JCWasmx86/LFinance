@@ -15,9 +15,9 @@ namespace LFinance {
 			this.model = model;
 			this.overview = null;
 			this.expenses = null;
-			if(model._accounts.size == 0)
+			if(this.model._accounts.size == 0)
 				return;
-			this.to_render = model._accounts[0];
+			this.to_render = this.model._accounts[0];
 		}
 		internal void select(string? account_name) {
 			if(account_name != null)

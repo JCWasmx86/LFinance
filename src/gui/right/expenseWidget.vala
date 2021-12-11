@@ -45,7 +45,7 @@ namespace LFinance {
 			this.tags = new Gee.ArrayList<TagButton>();
 			this.tags_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
 			if(expense._location != null) {
-				this.location = new LocationButton(expense._location);
+				this.location = new LocationButton(this.expense._location);
 				this.tags_box.pack_start(this.location, false, true, 2);
 			}
 			foreach(var t in this.expense._tags) {

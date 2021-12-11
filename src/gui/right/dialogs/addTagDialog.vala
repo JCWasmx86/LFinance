@@ -27,7 +27,7 @@ namespace LFinance {
 				if(found)
 					continue;
 				var radio = new Gtk.RadioButton.with_label(buttons, tag._name);
-				buttons.append(radio);
+				this.buttons.append(radio);
 				b.add(radio);
 			}
 			var scr = new Gtk.ScrolledWindow(null, null);

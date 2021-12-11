@@ -53,7 +53,7 @@ namespace LFinance {
 			this.tags_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 2);
 			this.tags = new Gee.ArrayList<Gtk.CheckButton>();
 			this.tag_names = new Gee.ArrayList<string>();
-			this.tags_scw.add(tags_box);
+			this.tags_scw.add(this.tags_box);
 			foreach(var tag in model._tags) {
 				var c = tag._rgba;
 				var markup = "<b><span foreground=\"#%02x%02x%02x%02x\" >%s</span></b>".printf(c[0], c[1], c[2], c[3], tag._name);
@@ -87,7 +87,7 @@ namespace LFinance {
 			this.first_line.pack_start(this.amount_box, true, true, 2);
 			this.location = new Gtk.ComboBoxText();
 			this.location.append("", "");
-			foreach(var loc in model._locations) {
+			foreach(var loc in this.model._locations) {
 				this.location.append(loc.id_string(), loc.id_string());
 			}
 			this.location.set_active(0); // Default no location
@@ -135,7 +135,7 @@ namespace LFinance {
 			var idx = 0;
 			foreach(var cb in this.tags) {
 				if(cb.get_active()) {
-					expense.add_tag(model.search_tag(this.tag_names[idx]));
+					expense.add_tag(this.model.search_tag(this.tag_names[idx]));
 				}
 				idx++;
 			}
@@ -185,7 +185,7 @@ namespace LFinance {
 				var id = this.location.active_id;
 				this.location.remove_all();
 				this.location.append("", "");
-				foreach(var loc in model._locations) {
+				foreach(var loc in this.model._locations) {
 					this.location.append(loc.id_string(), loc.id_string());
 				}
 				if(!this.location.set_active_id(id)) {

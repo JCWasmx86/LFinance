@@ -36,7 +36,7 @@ namespace LFinance {
 			this.header_sorting.append("4", _("Amount (Descending)"));
 			this.header_sorting.append("5", _("Purpose (Descending)"));
 			this.header_sorting.append("6", _("Date (Descending)"));
-			this.header_sorting.active_id = "%u".printf(account._sorting);
+			this.header_sorting.active_id = "%u".printf(this.account._sorting);
 			this.header_sorting.changed.connect(() => {
 				uint sorting = 0;
 				this.header_sorting.active_id.scanf("%u", out sorting);
@@ -47,7 +47,7 @@ namespace LFinance {
 			this.pack_start(this.header, false, true, 2);
 		}
 		void build_creation_widget() {
-			this.epw = new CreateExpenseWidget(account, model);
+			this.epw = new CreateExpenseWidget(this.account, this.model);
 			this.pack_start(this.epw, true, true, 2);
 		}
 		void build_list() {
@@ -63,7 +63,7 @@ namespace LFinance {
 
 		internal void rebuild(TriggerType? type) {
 			if(type == null) {
-				this.header_sorting.active_id = "%u".printf(account._sorting);
+				this.header_sorting.active_id = "%u".printf(this.account._sorting);
 				this.widgets.foreach(a => {
 					expenses.remove(a);
 					return true;

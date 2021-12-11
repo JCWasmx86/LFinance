@@ -21,7 +21,7 @@ namespace LFinance {
 			button.tooltip_text = _("Delete Tag");
 			button.clicked.connect(() => {
 				var parent = this.get_parent();
-				btns.remove(this);
+				this.btns.remove(this);
 				parent.remove(this);
 			});
 			this.pack_start(button, false, false, 2);
