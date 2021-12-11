@@ -80,7 +80,7 @@ namespace LFinance {
 				builder.append(generate_for_account(copy));
 			}
 			builder.append("\\end{document}\n");
-			info("\n%s", builder.str);
+			// info("\n%s", builder.str);
 			return builder.str;
 		}
 		string generate_for_account(Account account) {
@@ -338,13 +338,20 @@ namespace LFinance {
 			map["~"] = "\\textasciitilde{}";
 			map["\t"] = "\\qquad{}";
 			map["€"] = "\\officialeuro";
+			map["ä"] = "{\\\"a}";
+			map["ö"] = "{\\\"o}";
+			map["ü"] = "{\\\"u}";
+			map["Ä"] = "{\\\"A}";
+			map["Ö"] = "{\\\"O}";
+			map["Ü"] = "{\\\"U}";
+			map["ß"] = "{\\ss}";
 			// Fix for some weird unicode bugs
 			map["\xff\xbf\xbf\xbf\xbf\xbf"] = "";
-			for(var i = 0; i <= input.char_count(); i++) {
+			for(var i = 0; i <= input.char_count() + 1; i++) {
 				var ic = input.get_char(i);
 				var as_string = ic.to_string();
-				info(as_string);
 				if(map.has_key(as_string)) {
+					info("%s => %s", as_string, map[as_string]);
 					builder.append(map[as_string]);
 				} else {
 					builder.append_unichar(ic);

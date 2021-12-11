@@ -76,6 +76,8 @@ namespace LFinance {
 				}
 			// TODO: Sorting could be smarter to avoid reconstructing the expenses
 			} else if(type == TriggerType.ADD_EXPENSE || type == TriggerType.DELETE_EXPENSE || type == TriggerType.ACCOUNT_EXPENSES_SORT) {
+				if(type == TriggerType.ADD_EXPENSE)
+					this.epw.set_expanded(false);
 				this.widgets.foreach(a => {
 					expenses.remove(a);
 					return true;
