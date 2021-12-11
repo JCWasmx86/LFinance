@@ -1,5 +1,5 @@
 namespace LFinance {
-	interface ActionHandler : GLib.Object {
+	interface ActionHandler : Object {
 		// If true, accept the change, else reject
 		internal abstract bool handle_edit(string old, string @new, out string replacement);
 		internal abstract void handle_mouse_press(string selected, Gdk.EventButton event);

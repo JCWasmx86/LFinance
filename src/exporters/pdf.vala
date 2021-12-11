@@ -11,7 +11,7 @@ namespace LFinance {
 	 * 5. Remove all tmp files
 	 */
 	internal class PDFModelExporter {
-		GLib.File file;
+		File file;
 		Model model;
 
 		double max_frac = 21;
@@ -20,16 +20,16 @@ namespace LFinance {
 
 		internal PDFModelExporter(Model model, string file_name) {
 			this.model = model;
-			this.file = GLib.File.new_for_path(file_name);
+			this.file = File.new_for_path(file_name);
 		}
-		internal void export() throws GLib.Error {
+		internal void export() throws Error {
 			this.search_for_latex();
 			// longtable, xcolor, geometry, hyphenat, tikz, pdfplots
 			this.check_for_packages();
 			this.write_file();
 			info("Done");
 		}
-		void write_file() throws GLib.Error {
+		void write_file() throws Error {
 			try {
 				this.progress_update(_("Exporting to LaTeX…"), this.curr_frac / this.max_frac);
 				this.curr_frac++;
@@ -49,10 +49,10 @@ namespace LFinance {
 				var replaced = path.splice(len - 4, len, ".pdf");
 				this.progress_update(_("Copying output to %s…").printf(this.file.get_path()), this.curr_frac / this.max_frac);
 				this.curr_frac++;
-				GLib.File.new_for_path(replaced).copy(this.file, FileCopyFlags.OVERWRITE|FileCopyFlags.ALL_METADATA);
+				File.new_for_path(replaced).copy(this.file, FileCopyFlags.OVERWRITE|FileCopyFlags.ALL_METADATA);
 				this.progress_update(_("Finished!"), this.curr_frac / this.max_frac);
 				this.curr_frac++;
-			} catch(GLib.Error e) {
+			} catch(Error e) {
 				info("%s", e.message);
 				throw new PdfExporterErrors.COMPILATION_FAILED(e.message);
 			}
@@ -202,7 +202,7 @@ namespace LFinance {
 			}
 			builder.append("}\n\\end{tikzpicture}\n");
 		}
-		string latexify_date(GLib.DateTime time) {
+		string latexify_date(DateTime time) {
 			return "%d-%d-%d".printf(time.get_year(), time.get_month(), time.get_day_of_month());
 		}
 		string build_extra_info(Expense expense) {
@@ -224,7 +224,7 @@ namespace LFinance {
 			}
 			return ret.str == "" ? "" : ret.str;
 		}
-		void search_for_latex() throws GLib.Error {
+		void search_for_latex() throws Error {
 			var latexes = new string[]{"latexmk", "pdflatex", "xelatex", "lualatex"};
 			foreach(var latex in latexes) {
 				var status = 0;
@@ -245,7 +245,7 @@ namespace LFinance {
 			}
 			throw new PDFModelExporterErrors.COMMANDS_NOT_FOUND(_("Please install TexLive, LuaLaTeX or XeLaTeX"));
 		}
-		void check_for_packages() throws GLib.Error {
+		void check_for_packages() throws Error {
 			this.check_for_package("longtable");
 			this.check_for_package("xcolor");
 			this.check_for_package("geometry");
@@ -254,7 +254,7 @@ namespace LFinance {
 			this.check_for_package("pgfplots");
 			this.check_for_package("eurosym");
 		}
-		void check_for_package(string name) throws GLib.Error {
+		void check_for_package(string name) throws Error {
 			try {
 				this.progress_update(_("Checking for package %s…").printf(name), this.curr_frac / this.max_frac);
 				this.curr_frac++;
@@ -278,12 +278,12 @@ namespace LFinance {
 				this.progress_update(_("Found package %s!").printf(name), this.curr_frac / this.max_frac);
 				this.curr_frac++;
 				this.cleanup(file);
-			} catch(GLib.Error e) {
+			} catch(Error e) {
 				warning("%s", e.message);
 				throw new PdfExporterErrors.PACKAGE_NOT_FOUND(e.message);
 			}
 		}
-		void cleanup(GLib.File file, bool cleanup_pdf = true) {
+		void cleanup(File file, bool cleanup_pdf = true) {
 			info("Cleaning temp files created after compiling %s", file.get_path());
 			this.clean(file, ".aux");
 			this.clean(file, ".fdb_latexmk");
@@ -293,7 +293,7 @@ namespace LFinance {
 			if(cleanup_pdf)
 				this.clean(file, ".pdf");
 		}
-		void clean(GLib.File file, string extension) {
+		void clean(File file, string extension) {
 			var path = file.get_path();
 			var len = path.length;
 			var replaced = path.splice(len - 4, len, extension);
@@ -303,7 +303,7 @@ namespace LFinance {
 				info("Error deleting %s: %s", replaced, e.message);
 			}
 		}
-		int compile_document(GLib.File file) throws GLib.Error {
+		int compile_document(File file) throws Error {
 			var parent_dir = file.get_parent();
 			var args = this.working == "latexmk" ? new string[]{this.working, "-pdf", file.get_path(), "-interaction=nonstopmode"} : new string[]{this.working, file.get_path(), "-interaction=nonstopmode"};
 			var status = 0;
@@ -312,7 +312,7 @@ namespace LFinance {
 			Process.spawn_sync(parent_dir.get_path(), args, Environ.get(), SpawnFlags.SEARCH_PATH, null, out stdout, out stderr, out status);
 			return status;
 		}
-		void compile_document_multiple_times(GLib.File file) throws GLib.Error {
+		void compile_document_multiple_times(File file) throws Error {
 			var n = this.working == "latexmk" ? 1 : 5;
 			for(var i = 1; i <= n; i++) {
 				this.progress_update(_("Round %u of %u…").printf(i, n), this.curr_frac / this.max_frac);

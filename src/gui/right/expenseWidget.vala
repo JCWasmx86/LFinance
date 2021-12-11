@@ -71,7 +71,7 @@ namespace LFinance {
 						border: 1px solid #3F4747;
 					}
 				""");
-			} catch(GLib.Error e) {
+			} catch(Error e) {
 				warning("Gtk.CssProvider::load_from_data failed: %s", e.message);
 			}
 			this.get_style_context().add_class("bordered");

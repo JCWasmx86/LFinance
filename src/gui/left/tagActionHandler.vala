@@ -1,5 +1,5 @@
 namespace LFinance {
-	class TagActionHandler : GLib.Object, ActionHandler {
+	class TagActionHandler : Object, ActionHandler {
 		Model model;
 		internal TagActionHandler(Model model) {
 			this.model = model;

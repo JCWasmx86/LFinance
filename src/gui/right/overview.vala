@@ -40,7 +40,7 @@ namespace LFinance {
 			this.pack_start(this.first_line, false, false, 2);
 		}
 		void build_store() {
-			this.store = new Gtk.ListStore(4, GLib.Type.STRING, GLib.Type.STRING, GLib.Type.STRING, GLib.Type.STRING);
+			this.store = new Gtk.ListStore(4, Type.STRING, Type.STRING, Type.STRING, Type.STRING);
 			var time = new Gtk.TreeViewColumn.with_attributes(_("Timespan"), new Gtk.CellRendererText(), "text", 0, null);
 			var nExpenses = new Gtk.TreeViewColumn.with_attributes(_("Number of Expenses"), new Gtk.CellRendererText(), "text", 1, null);
 			var average = new Gtk.TreeViewColumn.with_attributes(_("Average Amount"), new Gtk.CellRendererText(), "text", 2, null);

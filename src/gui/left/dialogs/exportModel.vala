@@ -32,13 +32,13 @@ namespace LFinance {
 				try {
 					var exporter = new PDFModelExporter(this.model, this.file);
 					exporter.progress_update.connect((text, frac) => {
-						GLib.Idle.add(() => {
+						Idle.add(() => {
 						update_view(text, frac);
 							return false;
 						});
 					});
 					exporter.export();
-				} catch(GLib.Error e) {
+				} catch(Error e) {
 					this.destroy();
 					var message = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK, _("Export failed: %s").printf(e.message));
 					message.run();

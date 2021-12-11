@@ -8,7 +8,7 @@ namespace LFinance {
 			this.root = root;
 		}
 
-		internal Model build() throws GLib.Error {
+		internal Model build() throws Error {
 			var ret = new Model();
 			ParsingErrors.check_node(this.root, "tags", NodeType.ARRAY);
 			var tags = this.root.get_array_member("tags");

@@ -1,5 +1,5 @@
 namespace LFinance {
-	class AccountActionHandler : GLib.Object, ActionHandler {
+	class AccountActionHandler : Object, ActionHandler {
 		Model model;
 		SelectAccountFunc func;
 

@@ -1,5 +1,5 @@
 namespace LFinance {
-	class LocationActionHandler : GLib.Object, ActionHandler {
+	class LocationActionHandler : Object, ActionHandler {
 		Model model;
 		internal LocationActionHandler(Model model) {
 			this.model = model;

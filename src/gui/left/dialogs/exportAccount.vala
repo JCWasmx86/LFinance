@@ -32,7 +32,7 @@ namespace LFinance {
 				try {
 					var exporter = ExporterFactory.for_file(file);
 					exporter.progress.connect((text, frac) => {
-						GLib.Idle.add(() => {
+						Idle.add(() => {
 							this.view.buffer.text += (text + "\n");
 							this.progress_bar.set_fraction(frac);
 							// To avoid any floating point inaccuracies…
@@ -41,7 +41,7 @@ namespace LFinance {
 						});
 					});
 					exporter.export(this.account);
-				} catch(GLib.Error e) {
+				} catch(Error e) {
 					this.destroy();
 					var message = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK, _("Export failed: %s").printf(e.message));
 					message.run();

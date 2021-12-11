@@ -1,10 +1,10 @@
 namespace LFinance {
 	public static int main(string[] args) {
-		Intl.setlocale(GLib.LocaleCategory.ALL, "");
-		string langpack_dir = GLib.Path.build_filename(Constants.APPLICATION_INSTALL_PREFIX, "share", "locale");
-		GLib.Intl.bindtextdomain(Constants.APPLICATION_ID, langpack_dir);
-		GLib.Intl.bind_textdomain_codeset(Constants.APPLICATION_ID, "UTF-8");
-		GLib.Intl.textdomain(Constants.APPLICATION_ID);
+		Intl.setlocale(LocaleCategory.ALL, "");
+		string langpack_dir = Path.build_filename(Constants.APPLICATION_INSTALL_PREFIX, "share", "locale");
+		Intl.bindtextdomain(Constants.APPLICATION_ID, langpack_dir);
+		Intl.bind_textdomain_codeset(Constants.APPLICATION_ID, "UTF-8");
+		Intl.textdomain(Constants.APPLICATION_ID);
 		Environment.set_application_name("LFinance");
 		Gtk.Window.set_default_icon_name("jcwasmx86.lfinance");
 		return new LFinance().run(args);
@@ -63,7 +63,7 @@ namespace LFinance {
 			// If yes, return true
 			try {
 				this.panel.save();
-			} catch(GLib.Error e) {
+			} catch(Error e) {
 				var dialog = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK, _("An error occurred saving data: %s\n").printf(e.message));
 				dialog.run();
 				return true;
@@ -74,7 +74,7 @@ namespace LFinance {
 		void init_widgets() {
 			try {
 				this.panel = new LFinancePanel();
-			} catch(GLib.Error e) {
+			} catch(Error e) {
 				var dialog = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK, _("An error occurred loading LFinance: %s\n").printf(e.message));
 				dialog.run();
 				Process.exit(-1);

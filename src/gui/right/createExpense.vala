@@ -131,7 +131,7 @@ namespace LFinance {
 			}
 			// TODO: Add combobox for currency
 			expense.set_currency("€");
-			expense.set_date(new GLib.DateTime.local(this.calendar.year, this.calendar.month + 1, this.calendar.day, 0, 0, 0));
+			expense.set_date(new DateTime.local(this.calendar.year, this.calendar.month + 1, this.calendar.day, 0, 0, 0));
 			var idx = 0;
 			foreach(var cb in this.tags) {
 				if(cb.get_active()) {
@@ -145,7 +145,7 @@ namespace LFinance {
 			this.purpose.buffer.set_text("".data);
 			this.amount.buffer.set_text("".data);
 			this.location.set_active(0);
-			var date = new GLib.DateTime.now_local();
+			var date = new DateTime.now_local();
 			this.calendar.select_day(date.get_day_of_month());
 			this.calendar.select_month(date.get_month() - 1, date.get_year());
 			foreach(var btn in this.tags) {

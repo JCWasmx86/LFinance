@@ -3,25 +3,25 @@ namespace LFinance {
 		COMPILATION_FAILED, COMMANDS_NOT_FOUND, PACKAGE_NOT_FOUND
 	}
 
-	internal class PDFExporter : Exporter, GLib.Object {
-		GLib.File file;
+	internal class PDFExporter : Exporter, Object {
+		File file;
 		Account? account;
 		string? working;
 		double max_frac = 1 + 12 + 4;
 		uint curr_frac;
 
 		internal PDFExporter(string file) {
-			this.file = GLib.File.new_for_path(file);
+			this.file = File.new_for_path(file);
 		}
 
-		internal void export(Account account) throws GLib.Error {
+		internal void export(Account account) throws Error {
 			this.account = account;
 			this.search_for_latex();
 			this.check_for_packages();
 			this.write_file();
 			info("Done");
 		}
-		void search_for_latex() throws GLib.Error {
+		void search_for_latex() throws Error {
 			var latexes = new string[]{"latexmk", "pdflatex", "xelatex", "lualatex"};
 			foreach(var latex in latexes) {
 				var status = 0;
@@ -40,7 +40,7 @@ namespace LFinance {
 			}
 			throw new PdfExporterErrors.COMMANDS_NOT_FOUND(_("Please install TexLive, LuaLaTeX or XeLaTeX")); // Throw exception
 		}
-		void write_file() throws GLib.Error {
+		void write_file() throws Error {
 			try {
 				this.progress(_("Exporting to LaTeX…"), this.curr_frac / this.max_frac);
 				this.curr_frac++;
@@ -60,16 +60,16 @@ namespace LFinance {
 				var replaced = path.splice(len - 4, len, ".pdf");
 				this.progress(_("Copying output to %s…").printf(this.file.get_path()), this.curr_frac / this.max_frac);
 				this.curr_frac++;
-				GLib.File.new_for_path(replaced).copy(this.file, FileCopyFlags.OVERWRITE|FileCopyFlags.ALL_METADATA);
+				File.new_for_path(replaced).copy(this.file, FileCopyFlags.OVERWRITE|FileCopyFlags.ALL_METADATA);
 				this.cleanup(file, true);
 				this.progress(_("Finished!"), this.curr_frac / this.max_frac);
 				this.curr_frac++;
-			} catch(GLib.Error e) {
+			} catch(Error e) {
 				info("%s", e.message);
 				throw new PdfExporterErrors.COMPILATION_FAILED(e.message);
 			}
 		}
-		void check_for_packages() throws GLib.Error {
+		void check_for_packages() throws Error {
 			this.check_for_package("longtable");
 			this.check_for_package("xcolor");
 			this.check_for_package("inputenc");
@@ -77,7 +77,7 @@ namespace LFinance {
 			this.check_for_package("hyphenat");
 			this.check_for_package("eurosym");
 		}
-		void check_for_package(string name) throws GLib.Error {
+		void check_for_package(string name) throws Error {
 			try {
 				this.progress(_("Checking for package %s…").printf(name), this.curr_frac / this.max_frac);
 				this.curr_frac++;
@@ -101,12 +101,12 @@ namespace LFinance {
 				this.progress(_("Found package %s!").printf(name), this.curr_frac / this.max_frac);
 				this.curr_frac++;
 				this.cleanup(file);
-			} catch(GLib.Error e) {
+			} catch(Error e) {
 				warning("%s", e.message);
 				throw new PdfExporterErrors.PACKAGE_NOT_FOUND(e.message);
 			}
 		}
-		void cleanup(GLib.File file, bool cleanup_pdf = true) {
+		void cleanup(File file, bool cleanup_pdf = true) {
 			info("Cleaning temp files created after compiling %s", file.get_path());
 			this.clean(file, ".aux");
 			this.clean(file, ".fdb_latexmk");
@@ -116,7 +116,7 @@ namespace LFinance {
 			if(cleanup_pdf)
 				this.clean(file, ".pdf");
 		}
-		void clean(GLib.File file, string extension) {
+		void clean(File file, string extension) {
 			var path = file.get_path();
 			var len = path.length;
 			var replaced = path.splice(len - 4, len, extension);
@@ -126,7 +126,7 @@ namespace LFinance {
 				info("Error deleting %s: %s", replaced, e.message);
 			}
 		}
-		int compile_document(GLib.File file, bool cleanup_pdf = true) throws GLib.Error {
+		int compile_document(File file, bool cleanup_pdf = true) throws Error {
 			var parent_dir = file.get_parent();
 			var args = this.working == "latexmk" ? new string[]{this.working, "-pdf", file.get_path(), "-interaction=nonstopmode"} : new string[]{this.working, file.get_path(), "-interaction=nonstopmode"};
 			var status = 0;

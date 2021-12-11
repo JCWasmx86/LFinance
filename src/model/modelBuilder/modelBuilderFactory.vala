@@ -3,7 +3,7 @@ using Json;
 namespace LFinance {
 	internal errordomain ParsingErrors {
 		INVALID_DATA, KEY_MISSING, WRONG_TYPE;
-		internal static void check_node(Json.Object root, string key, NodeType type) throws GLib.Error {
+		internal static void check_node(Json.Object root, string key, NodeType type) throws Error {
 			if(!root.has_member(key)) {
 				throw new ParsingErrors.KEY_MISSING("Key \"%s\" not found!", key);
 			}
@@ -14,7 +14,7 @@ namespace LFinance {
 		}
 	}
 	internal interface ModelBuilder : GLib.Object {
-		internal abstract Model build() throws GLib.Error;
+		internal abstract Model build() throws Error;
 	}
 	internal class ModelBuilderFactory {
 		internal static ModelBuilder from_file(string file) throws Error {

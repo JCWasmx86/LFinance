@@ -38,7 +38,7 @@ namespace LFinance {
 			}
 			this.overview.select(this.to_render);
 			this.expenses.select(this.to_render);
-			Gdk.threads_add_idle_full(GLib.Priority.HIGH_IDLE + 20, () => {
+			Gdk.threads_add_idle_full(Priority.HIGH_IDLE + 20, () => {
 				this.show_all();
 				return false;
 			});

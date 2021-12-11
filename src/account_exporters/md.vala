@@ -3,22 +3,22 @@ namespace LFinance {
 		GENERIC_ERROR
 	}
 
-	internal class MDExporter : Exporter, GLib.Object {
-		GLib.File file;
+	internal class MDExporter : Exporter, Object {
+		File file;
 		Account? account;
 		double max_frac = 3;
 		uint curr_frac;
 
 		internal MDExporter(string file) {
-			this.file = GLib.File.new_for_path(file);
+			this.file = File.new_for_path(file);
 		}
 
-		internal void export(Account account) throws GLib.Error {
+		internal void export(Account account) throws Error {
 			this.account = account;
 			this.write_file();
 			info("Done");
 		}
-		void write_file() throws GLib.Error {
+		void write_file() throws Error {
 			try {
 				this.progress(_("Exporting to Markdown…"), this.curr_frac / this.max_frac);
 				this.curr_frac++;
@@ -35,7 +35,7 @@ namespace LFinance {
 				file.copy(this.file, FileCopyFlags.OVERWRITE|FileCopyFlags.ALL_METADATA);
 				this.progress(_("Finished!"), this.curr_frac / this.max_frac);
 				this.curr_frac++;
-			} catch(GLib.Error e) {
+			} catch(Error e) {
 				info("%s", e.message);
 				throw new MDExporterErrors.GENERIC_ERROR(e.message);
 			}

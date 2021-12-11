@@ -108,7 +108,7 @@ namespace LFinance {
 				new Thread<void>("save", () => {
 					try {
 						this.save();
-					} catch(GLib.Error e) {
+					} catch(Error e) {
 						critical(e.message);
 					}
 					this.spinner.stop();

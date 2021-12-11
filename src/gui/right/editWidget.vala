@@ -150,7 +150,7 @@ namespace LFinance {
 					if(radio.get_active()) {
 						var btn = new ExtendedTagButton(model.search_tag(radio.label), account, expense, this.tags);
 						this.tags.add(btn);
-						Gdk.threads_add_idle_full(GLib.Priority.HIGH_IDLE + 20, () => {
+						Gdk.threads_add_idle_full(Priority.HIGH_IDLE + 20, () => {
 							this.third_line.pack_start(btn, false, false, 2);
 							this.third_line.show_all();
 							this.third_line.queue_draw();

@@ -3,13 +3,13 @@ namespace LFinance {
 			EXTENSION_NOT_SUPPORTED
 		}
 
-		internal interface Exporter : GLib.Object {
-			internal abstract void export(Account account) throws GLib.Error;
+		internal interface Exporter : Object {
+			internal abstract void export(Account account) throws Error;
 			internal signal void progress(string text, double frac);
 		}
 
 		internal class ExporterFactory {
-			internal static Exporter? for_file(string file) throws GLib.Error {
+			internal static Exporter? for_file(string file) throws Error {
 				var dot = 0;
 				for(var i = file.length; i >= 0; i--) {
 					if(file[i] == '.') {

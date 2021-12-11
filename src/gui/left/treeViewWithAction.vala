@@ -10,7 +10,7 @@ namespace LFinance {
 
 		internal TreeViewWithAction(string s, ActionHandler handler, string type =  "text", bool editable = true) {
 			this.get_selection().set_mode(Gtk.SelectionMode.BROWSE);
-			this.store = new Gtk.ListStore(3, GLib.Type.STRING, GLib.Type.STRING, GLib.Type.STRING);
+			this.store = new Gtk.ListStore(3, Type.STRING, Type.STRING, Type.STRING);
 			this.hover_selection = true;
 			this.enable_search = true;
 			this.editable = editable;

@@ -7,7 +7,7 @@ namespace LFinance {
 			this.root = root;
 		}
 
-		internal Model build() throws GLib.Error {
+		internal Model build() throws Error {
 			var ret = new Model();
 			var account = new Account(_("default"));
 			ParsingErrors.check_node(this.root, "data", NodeType.ARRAY);
