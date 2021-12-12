@@ -58,3 +58,27 @@ deps = [
 	project_config_dep
 ]
 executable('lfinance', sources: src, dependencies: deps, install: true)
+test_deps = [
+	dependency('glib-2.0'),
+	dependency('gobject-2.0'),
+	dependency('gee-0.8'),
+	dependency('json-glib-1.0'),
+]
+test_sources = [
+	'test/testUtils.vala',
+	'model/account.vala',
+	'model/expense.vala',
+	'model/location.vala',
+	'model/modelBuilder/modelBuilderFactory.vala',
+	'model/modelBuilder/V1Builder.vala',
+	'model/modelBuilder/V2Builder.vala',
+	'model/model.vala',
+	'model/shared.vala',
+	'model/tag.vala'
+]
+model_builder_test = executable('model_builder_test', sources: test_sources + ['test/modelBuilderTest.vala'], dependencies : test_deps)
+test('model_builder_test', model_builder_test)
+v1_test = executable('v1_test', sources: test_sources + ['test/v1Test.vala'], dependencies : test_deps)
+test('v1_test', v1_test)
+v2_test = executable('v2_test', sources: test_sources + ['test/v2Test.vala'], dependencies : test_deps)
+test('v2_test', v2_test)
