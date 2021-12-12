@@ -22,7 +22,8 @@ project_config_dep = declare_dependency(sources: config_file, include_directorie
 i18n = import('i18n')
 data_dir = join_paths(meson.source_root(), 'data')
 po_dir = join_paths(meson.source_root(), 'po')
-
+vapi_dir = meson.current_source_dir() / 'vapi'
+add_project_arguments(['--vapidir', vapi_dir], language: 'vala')
 subdir('data')
 subdir('src')
 subdir('po')

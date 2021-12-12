@@ -82,20 +82,3 @@ This is the current storage format used by LFinance.
 
 `sorting` follows the format of version 1.
 New are `tags` and `locations`: These allow the user to classify every expense.
-
-#### Binary formats
-
-These aren't implemented at the moment, but may be soon.
-```
-enum DataFormat {
-	ZLIB_COMPRESSED, ENCRYPTED, COMPRESSED_AND_ENCRYPTED
-}
-struct lfinance_binary_data {
-	uchar data[4]; // NOSJ
-	u8 version; // To allow breaking changes
-	DataFormat format;
-	u64 size;
-	u8 bytes[size];
-}
-```
-The current version is 0.

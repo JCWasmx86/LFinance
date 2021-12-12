@@ -3,6 +3,10 @@ src = [
 	'account_exporters/md.vala',
 	'account_exporters/pdf.vala',
 	'constants.vala',
+	'crypto/decryption.vala',
+	'crypto/derive.vala',
+	'crypto/encryption.vala',
+	'crypto/encryptedFileWriter.vala',
 	'exporters/pdf.vala',
 	'exporters/stats.vala',
 	'gui/left/accountActionHandler.vala',
@@ -55,7 +59,8 @@ deps = [
 	dependency('json-glib-1.0'),
 	dependency('gtk+-3.0'),
 	meson.get_compiler('vala').find_library('posix'),
-	project_config_dep
+	project_config_dep,
+	dependency('libgcrypt')
 ]
 executable('lfinance', sources: src, dependencies: deps, install: true)
 test_deps = [
@@ -63,9 +68,13 @@ test_deps = [
 	dependency('gobject-2.0'),
 	dependency('gee-0.8'),
 	dependency('json-glib-1.0'),
+	dependency('libgcrypt')
 ]
 test_sources = [
 	'test/testUtils.vala',
+	'crypto/decryption.vala',
+	'crypto/derive.vala',
+	'crypto/encryption.vala',
 	'model/account.vala',
 	'model/expense.vala',
 	'model/location.vala',
@@ -82,3 +91,5 @@ v1_test = executable('v1_test', sources: test_sources + ['test/v1Test.vala'], de
 test('v1_test', v1_test)
 v2_test = executable('v2_test', sources: test_sources + ['test/v2Test.vala'], dependencies : test_deps)
 test('v2_test', v2_test)
+crypto_test = executable('crypto_test', sources: test_sources + ['test/cryptoTest.vala'], dependencies : test_deps)
+test('crypto_test', crypto_test)
