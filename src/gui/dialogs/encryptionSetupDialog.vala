@@ -29,6 +29,9 @@ namespace LFinance {
 			var ca = this.get_content_area();
 			ca.pack_start(box, false, false, 2);
 			ca.pack_start(box2, false, false, 2);
+			var warning = new Gtk.Label("");
+			warning.set_markup("<b><span color=\"#FF0000\">%s</span></b>".printf(_("If you forget your password, your data is lost and can't be recovered!")));
+			ca.pack_start(warning, true, true, 2);
 			this.get_widget_for_response(Gtk.ResponseType.OK).set_sensitive(false);
 			this.show_all();
 		}
