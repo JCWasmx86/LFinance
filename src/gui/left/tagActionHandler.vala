@@ -59,6 +59,7 @@ namespace LFinance {
 					var old_name = selected.slice(prologue_len, prologue_len + content_len);
 					var md = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.QUESTION, Gtk.ButtonsType.NONE, _("Do you really want to delete the tag %s?").printf(old_name));
 					md.add_buttons(_("_Cancel"), Gtk.ResponseType.CANCEL, _("Delete"), Gtk.ResponseType.OK);
+					md.get_widget_for_response(Gtk.ResponseType.OK).get_style_context().add_class("destructive-action");
 					if(md.run() == Gtk.ResponseType.OK) {
 						this.model.remove_tag_by_name(old_name);
 					}
@@ -78,6 +79,7 @@ namespace LFinance {
 				var old_name = selected.slice(prologue_len, prologue_len + content_len);
 				var md = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.QUESTION, Gtk.ButtonsType.NONE, _("Do you really want to delete the tag %s?").printf(old_name));
 				md.add_buttons(_("_Cancel"), Gtk.ResponseType.CANCEL, _("Delete"), Gtk.ResponseType.OK);
+				md.get_widget_for_response(Gtk.ResponseType.OK).get_style_context().add_class("destructive-action");
 				if(md.run() == Gtk.ResponseType.OK) {
 					this.model.remove_tag_by_name(old_name);
 				}

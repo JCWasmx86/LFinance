@@ -37,6 +37,7 @@ namespace LFinance {
 				@delete.activate.connect(() => {
 					var md = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.QUESTION, Gtk.ButtonsType.NONE, _("Do you really want to delete this location?"));
 					md.add_buttons(_("_Cancel"), Gtk.ResponseType.CANCEL, _("Delete"), Gtk.ResponseType.OK);
+					md.get_widget_for_response(Gtk.ResponseType.OK).get_style_context().add_class("destructive-action");
 					if(md.run() == Gtk.ResponseType.OK) {
 						this.model.remove_location_by_id(selected);
 					}
@@ -52,6 +53,7 @@ namespace LFinance {
 			if(key.keyval == Gdk.Key.Delete) {
 				var md = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.QUESTION, Gtk.ButtonsType.NONE, _("Do you really want to delete this location?"));
 				md.add_buttons(_("_Cancel"), Gtk.ResponseType.CANCEL, _("Delete"), Gtk.ResponseType.OK);
+				md.get_widget_for_response(Gtk.ResponseType.OK).get_style_context().add_class("destructive-action");
 				if(md.run() == Gtk.ResponseType.OK) {
 					this.model.remove_location_by_id(selected);
 				}

@@ -347,6 +347,8 @@ namespace LFinance {
 			map["ß"] = "{\\ss}";
 			// Fix for some weird unicode bugs
 			map["\xff\xbf\xbf\xbf\xbf\xbf"] = "";
+			// This shouldn't work, but it works without
+			// any complaints
 			for(var i = 0; i <= input.char_count() + 1; i++) {
 				var ic = input.get_char(i);
 				var as_string = ic.to_string();
