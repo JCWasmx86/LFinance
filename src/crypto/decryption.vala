@@ -14,10 +14,11 @@ namespace LFinance {
 			return new uint8[0];
 		}
 		// https://stackoverflow.com/a/3284136
-		uchar[] out_buffer = new uchar[(data.length / 16 + 1) * 16];
+		var len = (data.length / 16 + 1) * 16;
+		uchar[] out_buffer = new uchar[len];
 		error = cipher.decrypt(out_buffer, data);
 		if(error != ErrorCode.NO_ERROR) {
-			warning("Cipher::set_key failed: %s", error.to_string());
+			warning("Cipher::decrypt failed: %s", error.to_string());
 			return new uint8[0];
 		}
 		return out_buffer;

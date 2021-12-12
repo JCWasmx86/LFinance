@@ -7,12 +7,14 @@ namespace LFinance {
 		Model model;
 		int rebuild_lock;
 		int save_lock;
+		internal string password;
 		SelectAccountFunc func;
 
-		internal LFinancePanel() throws Error {
+		internal LFinancePanel(string password) throws Error {
 			Object(orientation: Gtk.Orientation.HORIZONTAL, spacing: 2);
 			this.rebuild_lock = 0;
 			this.save_lock = 0;
+			this.password = password;
 			this.load_model();
 			this.build_gui();
 			this.model.set_sharp(type => {
@@ -40,11 +42,14 @@ namespace LFinance {
 			var before = get_monotonic_time() / factor;
 			var data_dir = Environment.get_user_data_dir();
 			var files = new string[]{Environment.get_home_dir() + "/.spendings.json",
-										data_dir + "/LFinance/data.json"};
-			if(FileUtils.test(files[1], FileTest.EXISTS)) {
-				this.model = ModelBuilderFactory.from_file(files[1]).build();
+										data_dir + "/LFinance/data.json", data_dir + "/LFinance/data.json.enc"};
+
+			if(FileUtils.test(files[2], FileTest.EXISTS)) {
+				this.model = ModelBuilderFactory.from_file(files[2], this.password, true).build();
+			}else if(FileUtils.test(files[1], FileTest.EXISTS)) {
+				this.model = ModelBuilderFactory.from_file(files[1], this.password).build();
 			} else if(FileUtils.test(files[0], FileTest.EXISTS)) {
-				this.model = ModelBuilderFactory.from_file(files[0]).build();
+				this.model = ModelBuilderFactory.from_file(files[0], this.password).build();
 				try {
 					File.new_for_path(data_dir + "/LFinance").make_directory_with_parents();
 				} catch(Error e) {
@@ -52,6 +57,7 @@ namespace LFinance {
 				}
 			} else {
 				this.model = new Model();
+				this.model.add_account(new Account(_("default")));
 				try {
 					File.new_for_path(data_dir + "/LFinance").make_directory_with_parents();
 				} catch(Error e) {
@@ -139,6 +145,21 @@ namespace LFinance {
 		}
 		internal bool already_encrypted() {
 			return this.model.encrypted;
+		}
+		internal void setup_encryption() {
+			var dialog = new EncryptionSetupDialog();
+			var r = dialog.run();
+			if(r == Gtk.ResponseType.OK) {
+				var pwd = dialog.get_password();
+				this.model.secure(pwd);
+				try {
+					File.new_for_path(Environment.get_user_data_dir() + "/LFinance/data.json").delete();
+				} catch(Error e) {
+					warning(e.message);
+				}
+				this.save();
+			}
+			dialog.destroy();
 		}
 	}
 }

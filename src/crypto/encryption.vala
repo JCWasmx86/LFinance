@@ -20,7 +20,7 @@ namespace LFinance {
 		uchar[] out_buffer = new uchar[(padded.length / 16 + 1) * 16];
 		error = cipher.encrypt(out_buffer, padded.data);
 		if(error != ErrorCode.NO_ERROR) {
-			warning("Cipher::set_key failed: %s", error.to_string());
+			warning("Cipher::encrypt failed: %s", error.to_string());
 			return new uint8[0];
 		}
 		return out_buffer;

@@ -3,12 +3,16 @@ using Json;
 namespace LFinance {
 	internal class ModelV1Builder : ModelBuilder, GLib.Object {
 		Json.Object root;
-		internal ModelV1Builder(Json.Object root) {
+		string password;
+		bool pwd;
+		internal ModelV1Builder(Json.Object root, string password, bool pwd) {
 			this.root = root;
+			this.pwd = pwd;
+			this.password = password;
 		}
 
 		internal Model build() throws Error {
-			var ret = new Model();
+			var ret = this.pwd ? new Model(true, this.password) : new Model();
 			var account = new Account(_("default"));
 			ParsingErrors.check_node(this.root, "data", NodeType.ARRAY);
 			var data = this.root.get_array_member("data");

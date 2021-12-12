@@ -9,6 +9,7 @@ src = [
 	'crypto/encryptedFileWriter.vala',
 	'exporters/pdf.vala',
 	'exporters/stats.vala',
+	'gui/dialogs/encryptionSetupDialog.vala',
 	'gui/left/accountActionHandler.vala',
 	'gui/left/actionHandler.vala',
 	'gui/left/addPanel.vala',
@@ -68,7 +69,8 @@ test_deps = [
 	dependency('gobject-2.0'),
 	dependency('gee-0.8'),
 	dependency('json-glib-1.0'),
-	dependency('libgcrypt')
+	dependency('libgcrypt'),
+	meson.get_compiler('vala').find_library('posix'),
 ]
 test_sources = [
 	'test/testUtils.vala',

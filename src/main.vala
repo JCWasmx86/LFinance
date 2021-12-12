@@ -30,13 +30,35 @@ namespace LFinance {
 	internal class LFinanceWindow : Gtk.ApplicationWindow {
 		LFinancePanel panel;
 		Gtk.Button lock_button;
-
+		string password = "";
 		internal LFinanceWindow(Gtk.Application app) {
 			Object(application: app);
 			this.title = "LFinance";
 			this.set_default_size(1368, 768);
 			GLib.resources_register(resources_get_resource());
 			Gtk.IconTheme.get_default().add_resource_path("/jcwasmx86/LFinance/icons/scalable/actions");
+			if(ModelBuilderFactory.encrypted_data()) {
+				var dialog = new Gtk.Dialog();
+				dialog.title = _("Password required");
+				dialog.modal = false;
+				dialog.add_buttons(_("Exit"), Gtk.ResponseType.CANCEL, _("Unlock"), Gtk.ResponseType.OK);
+				var entry = new Gtk.Entry();
+				entry.set_placeholder_text(_("Password"));
+				entry.set_visibility(false);
+				entry.changed.connect(() => {
+					dialog.get_widget_for_response(Gtk.ResponseType.OK).set_sensitive(entry.text.length != 0);
+				});
+				dialog.get_widget_for_response(Gtk.ResponseType.OK).set_sensitive(false);
+				dialog.get_content_area().pack_start(entry, true, true, 2);
+				dialog.show_all();
+				var r = dialog.run();
+				if(r == Gtk.ResponseType.OK) {
+					this.password = entry.text;
+					dialog.destroy();
+				} else {
+					Posix.exit(0);
+				}
+			}
 			this.build_header_bar();
 			this.init_widgets();
 		}
@@ -56,6 +78,11 @@ namespace LFinance {
 			});
 			this.lock_button = new Gtk.Button.from_icon_name("key-symbolic", Gtk.IconSize.MENU);
 			this.lock_button.tooltip_text = _("Encrypt your data");
+			this.lock_button.clicked.connect(() => {
+				this.panel.setup_encryption();
+				if(this.panel.already_encrypted())
+					this.lock_button.destroy();
+			});
 			var title_bar = new Gtk.HeaderBar();
 			title_bar.title = "LFinance";
 			title_bar.show_close_button = true;
@@ -82,7 +109,8 @@ namespace LFinance {
 		}
 		void init_widgets() {
 			try {
-				this.panel = new LFinancePanel();
+				this.panel = new LFinancePanel(this.password);
+				this.panel.password = this.password;
 				if(this.panel.already_encrypted()) {
 					this.lock_button.destroy();
 				}

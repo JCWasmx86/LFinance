@@ -188,5 +188,9 @@ namespace LFinance {
 					return true;
 			return false;
 		}
+		internal void secure(string pwd) {
+			this.encrypted = true;
+			this.password = pwd;
+		}
 	}
 }
