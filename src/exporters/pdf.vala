@@ -349,7 +349,7 @@ namespace LFinance {
 			map["\xff\xbf\xbf\xbf\xbf\xbf"] = "";
 			// This shouldn't work, but it works without
 			// any complaints
-			for(var i = 0; i <= input.char_count() + 1; i++) {
+			for(var i = 0; i < input.char_count(); i++) {
 				var ic = input.get_char(i);
 				var as_string = ic.to_string();
 				if(map.has_key(as_string)) {

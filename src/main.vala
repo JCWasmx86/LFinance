@@ -3,7 +3,7 @@ namespace LFinance {
 	[CCode (cname="resources_get_resource")]
 	extern Resource resources_get_resource();
 	public static int main(string[] args) {
-		Intl.setlocale(LocaleCategory.ALL, "");
+		Intl.setlocale();
 		string langpack_dir = Path.build_filename(Constants.APPLICATION_INSTALL_PREFIX, "share", "locale");
 		Intl.bindtextdomain(Constants.APPLICATION_ID, langpack_dir);
 		Intl.bind_textdomain_codeset(Constants.APPLICATION_ID, "UTF-8");
