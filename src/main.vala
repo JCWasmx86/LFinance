@@ -1,4 +1,7 @@
 namespace LFinance {
+
+	[CCode (cname="resources_get_resource")]
+	extern Resource resources_get_resource();
 	public static int main(string[] args) {
 		Intl.setlocale(LocaleCategory.ALL, "");
 		string langpack_dir = Path.build_filename(Constants.APPLICATION_INSTALL_PREFIX, "share", "locale");
@@ -26,11 +29,14 @@ namespace LFinance {
 	}
 	internal class LFinanceWindow : Gtk.ApplicationWindow {
 		LFinancePanel panel;
+		Gtk.Button lock_button;
 
 		internal LFinanceWindow(Gtk.Application app) {
 			Object(application: app);
 			this.title = "LFinance";
 			this.set_default_size(1368, 768);
+			GLib.resources_register(resources_get_resource());
+			Gtk.IconTheme.get_default().add_resource_path("/jcwasmx86/LFinance/icons/scalable/actions");
 			this.build_header_bar();
 			this.init_widgets();
 		}
@@ -48,10 +54,13 @@ namespace LFinance {
 			export_button.clicked.connect(() => {
 				this.panel.export_all();
 			});
+			this.lock_button = new Gtk.Button.from_icon_name("key-symbolic", Gtk.IconSize.MENU);
+			this.lock_button.tooltip_text = _("Encrypt your data");
 			var title_bar = new Gtk.HeaderBar();
 			title_bar.title = "LFinance";
 			title_bar.show_close_button = true;
 			title_bar.pack_start(export_button);
+			title_bar.pack_start(lock_button);
 			title_bar.pack_end(menu_button);
 			title_bar.show_all();
 			this.set_titlebar(title_bar);
@@ -74,6 +83,9 @@ namespace LFinance {
 		void init_widgets() {
 			try {
 				this.panel = new LFinancePanel();
+				if(this.panel.already_encrypted()) {
+					this.lock_button.destroy();
+				}
 			} catch(Error e) {
 				var dialog = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK, _("An error occurred loading LFinance: %s\n").printf(e.message));
 				dialog.run();

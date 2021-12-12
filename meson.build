@@ -20,6 +20,7 @@ config_file = configure_file(output: 'config.h', configuration: config_h)
 project_config_dep = declare_dependency(sources: config_file, include_directories: include_directories('.'))
 
 i18n = import('i18n')
+gnome = import('gnome')
 data_dir = join_paths(meson.source_root(), 'data')
 po_dir = join_paths(meson.source_root(), 'po')
 vapi_dir = meson.current_source_dir() / 'vapi'

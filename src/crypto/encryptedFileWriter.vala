@@ -1,6 +1,6 @@
 namespace LFinance {
 	internal class EncryptedFileWriter {
-		void write(File file, string data, string password) throws Error {
+		internal void write(File file, string data, string password) throws Error {
 			var ios = file.replace(null, false, FileCreateFlags.PRIVATE);
 			var dos = new DataOutputStream(ios);
 			dos.put_byte(0xEE);

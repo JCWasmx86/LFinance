@@ -6,13 +6,17 @@ namespace LFinance {
 
 		bool sharp;
 		unowned TriggerFunc func;
+		internal bool encrypted{get; private set;}
+		internal string password{get; private set;}
 
-		internal Model() {
+		internal Model(bool encrypted = false, string password = "") {
 			this._tags = new Gee.ArrayList<Tag>();
 			this._locations = new Gee.ArrayList<Location>();
 			this._accounts = new Gee.ArrayList<Account>();
 			this.sharp = false;
 			this.func = t => {};
+			this.encrypted = encrypted;
+			this.password = password;
 		}
 
 		internal void add_tag(Tag tag) {

@@ -90,15 +90,25 @@ namespace LFinance {
 				} catch(Error e) {
 					warning("Error creating directory: %s", e.message);
 				}
-				var new_save_file = base_dir + "/data.json";
-				var old_save_file = save_dir + "/%d_%d_%d.json".printf(date.get_hour(), date.get_minute(), date.get_second());
+				var suffix = model.encrypted ? ".enc" : "";
+				var new_save_file = base_dir + "/data.json" + suffix;
+				var old_save_file = save_dir + "/%d_%d_%d.json%s".printf(date.get_hour(), date.get_minute(), date.get_second(), suffix);
 				try {
 					info("Copying old save file to %s", old_save_file);
 					File.new_for_path(new_save_file).copy(File.new_for_path(old_save_file), FileCopyFlags.OVERWRITE, null, null);
 				} catch(Error e) {
 					warning("Error copying file: %s", e.message);
 				}
-				generator.to_file(new_save_file);
+				if(!model.encrypted)
+					generator.to_file(new_save_file);
+				else {
+					try {
+						var efw = new EncryptedFileWriter();
+						efw.write(File.new_for_path(new_save_file), generator.to_gstring(new StringBuilder()).str, model.password);
+					} catch(Error e) {
+						critical(e.message);
+					}
+				}
 			}
 		}
 
@@ -126,6 +136,9 @@ namespace LFinance {
 				var d = new ExportModelDialog(file, this.model);
 				d.export();
 			}
+		}
+		internal bool already_encrypted() {
+			return this.model.encrypted;
 		}
 	}
 }

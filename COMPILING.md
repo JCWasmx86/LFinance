@@ -9,13 +9,13 @@ The at the moment only Fedora and Debian are supported. These instructions may w
 ### Fedora
 
 ```
-sudo dnf install git glib2-devel pkgconf-pkg-config meson ninja-build vala libgee-devel json-glib-devel gtk3-devel
+sudo dnf install git glib2-devel pkgconf-pkg-config meson ninja-build vala libgee-devel json-glib-devel gtk3-devel libgcrypt-devel
 ```
 
 ### Debian
 
 ```
-sudo apt install git libglib2.0-dev meson ninja-build valac libgee-0.8-dev libjson-glib-dev libgtk-3-dev
+sudo apt install git libglib2.0-dev meson ninja-build valac libgee-0.8-dev libjson-glib-dev libgtk-3-dev libgcrypt-dev
 ```
 
 ## Build

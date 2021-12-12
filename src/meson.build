@@ -62,7 +62,7 @@ deps = [
 	project_config_dep,
 	dependency('libgcrypt')
 ]
-executable('lfinance', sources: src, dependencies: deps, install: true)
+executable('lfinance', sources: src + [resources], dependencies: deps, install: true)
 test_deps = [
 	dependency('glib-2.0'),
 	dependency('gobject-2.0'),
