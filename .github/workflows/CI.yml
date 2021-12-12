@@ -17,6 +17,7 @@ jobs:
           mkdir build && cd build
           meson ..
           ninja
+          ninja test
   get_fedora_releases:
     name: Get Fedora Releases
     runs-on: ubuntu-latest
@@ -46,3 +47,4 @@ jobs:
            mkdir build && cd build
            meson ..
            ninja
+           ninja test
