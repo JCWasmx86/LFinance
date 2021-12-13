@@ -2,6 +2,7 @@ namespace LFinance {
 
 	[CCode (cname="resources_get_resource")]
 	extern Resource resources_get_resource();
+
 	public static int main(string[] args) {
 		Intl.setlocale();
 		string langpack_dir = Path.build_filename(Constants.APPLICATION_INSTALL_PREFIX, "share", "locale");

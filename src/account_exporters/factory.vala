@@ -22,12 +22,10 @@ namespace LFinance {
 					return new PDFExporter(file);
 				else if(extension == "md")
 					return new MDExporter(file);
-				else if(extension == "csv")
-					throw new ExporterErrors.EXTENSION_NOT_SUPPORTED(_("Not implemented"));
 				else if(extension == "html")
 					throw new ExporterErrors.EXTENSION_NOT_SUPPORTED(_("Not implemented"));
 				else
-					throw new ExporterErrors.EXTENSION_NOT_SUPPORTED(_("Only .pdf, .md, .csv and .html are supported!"));
+					throw new ExporterErrors.EXTENSION_NOT_SUPPORTED(_("Only .pdf, .md and .html are supported!"));
 			}
 		}
 }
