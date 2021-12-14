@@ -39,6 +39,7 @@ namespace LFinance {
 			GLib.resources_register (resources_get_resource ());
 			Gtk.IconTheme.get_default ().add_resource_path ("/jcwasmx86/LFinance/icons/scalable/actions");
 			if(ModelBuilderFactory.encrypted_data ()) {
+				bool wrong = false;
 				var dialog = new Gtk.Dialog ();
 				dialog.title = _("Password required");
 				dialog.modal = false;
@@ -53,14 +54,36 @@ namespace LFinance {
 				});
 				dialog.get_widget_for_response (Gtk.ResponseType.OK).set_sensitive (false);
 				dialog.get_content_area ().pack_start (entry, true, true, 2);
-				dialog.show_all ();
-				var r = dialog.run ();
-				if(r == Gtk.ResponseType.OK) {
-					this.password = entry.text;
-					dialog.destroy ();
-				} else {
-					Posix.exit (0);
+				entry.activate.connect (() => {
+					dialog.response (Gtk.ResponseType.OK);
+				});
+				bool added_once = false;
+				while(true) {
+					if(wrong && !added_once) {
+						var label = new Gtk.Label ("");
+						label.set_markup ("<i><span color=\"#FF0000\">%s</span></i>".printf (_(
+															     "Wrong password!")));
+						dialog.get_content_area ().pack_start (label, true, true, 2);
+						added_once = true;
+					}
+					entry.text = "";
+					entry.grab_focus ();
+					dialog.show_all ();
+					var r = dialog.run ();
+					if(r == Gtk.ResponseType.OK) {
+						this.password = entry.text;
+						try {
+							if(ModelBuilderFactory.check_password (this.password))
+								break;
+						} catch (Error e) {
+
+						}
+						wrong = true;
+					} else {
+						Posix.exit (0);
+					}
 				}
+				dialog.destroy ();
 			}
 			this.build_header_bar ();
 			this.init_widgets ();

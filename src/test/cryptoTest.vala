@@ -33,15 +33,15 @@ namespace LFinance {
 
 		static void encryption() {
 			var pwd = "reallySecurePassword";
-			var encrypted = encrypt ("data", pwd);
+			var encrypted = encrypt ("data".data, pwd);
 			info ("Encrypted: %s", CryptoTest.format (encrypted));
-			var encrypted2 = encrypt ("data", pwd);
+			var encrypted2 = encrypt ("data".data, pwd);
 			info ("Encrypted: %s", CryptoTest.format (encrypted2));
 			assert (CryptoTest.format (encrypted) == CryptoTest.format (encrypted2));
 			var pwd2 = "otherPass";
-			var encrypted3 = encrypt ("data", pwd);
+			var encrypted3 = encrypt ("data".data, pwd);
 			info ("Encrypted: %s", CryptoTest.format (encrypted3));
-			var encrypted4 = encrypt ("data", pwd2);
+			var encrypted4 = encrypt ("data".data, pwd2);
 			info ("Encrypted: %s", CryptoTest.format (encrypted4));
 			assert (CryptoTest.format (encrypted3) != CryptoTest.format (encrypted4));
 		}
@@ -49,7 +49,7 @@ namespace LFinance {
 		static void decryption() {
 			var pwd = "reallySecurePassword";
 			var clear_text = "abcabcabcfoodatadata";
-			var encrypted = encrypt (clear_text, pwd);
+			var encrypted = encrypt (clear_text.data, pwd);
 			info ("Encrypted: %s", CryptoTest.format (encrypted));
 			var decrypted = decrypt (encrypted, pwd);
 			info ("Decrypted: %s", CryptoTest.format (decrypted));
@@ -62,7 +62,7 @@ namespace LFinance {
 		static void decryption_fail() {
 			var pwd = "reallySecurePassword";
 			var clear_text = "abcabcabcfoodatadata";
-			var encrypted = encrypt (clear_text, pwd);
+			var encrypted = encrypt (clear_text.data, pwd);
 			info ("Encrypted: %s", CryptoTest.format (encrypted));
 			var decrypted = decrypt (encrypted, pwd + "_fail");
 			info ("Decrypted: %s", CryptoTest.format (decrypted));

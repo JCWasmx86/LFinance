@@ -65,7 +65,8 @@ namespace LFinance {
 			var decrypted = decrypt (bytes, password);
 			var sb = new StringBuilder.sized (clear_text_len);
 			for(var i = 0; i < clear_text_len; i++) {
-				sb.append_c ((char)decrypted[i]);
+				// +4 for marker value
+				sb.append_c ((char)decrypted[i + 4]);
 			}
 			var str = sb.str;
 			var parser = new Parser ();
@@ -80,6 +81,20 @@ namespace LFinance {
 			if(File.new_for_path (encrypted).query_exists ())
 				return true;
 			return false;
+		}
+		internal static bool check_password(string password) throws GLib.Error {
+			var path = Environment.get_user_data_dir () + "/LFinance/data.json.enc";
+			var file = File.new_for_path (path);
+			var @in = file.read ();
+			var dis = new DataInputStream (@in);
+			dis.set_byte_order (DataStreamByteOrder.LITTLE_ENDIAN);
+			dis.skip (18);
+			var bytes = new uint8[16];
+			size_t read;
+			dis.read_all (bytes, out read, null);
+			var decrypted = decrypt (bytes, password);
+			return decrypted[0] == 0xAA || decrypted[1] == 0xBB || decrypted[2] == 0xCC ||
+			       decrypted[3] == 0xDD;
 		}
 	}
 }

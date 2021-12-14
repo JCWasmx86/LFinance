@@ -17,7 +17,13 @@ namespace LFinance {
 			dos.put_byte ('D');
 			dos.put_byte (0); // Version 0
 			var clear_text_len = data.length;
-			var encrypted_bytes = encrypt (data, password);
+			var new_data = new uint8[data.length + 4];
+			new_data[0] = 0xAA;
+			new_data[1] = 0xBB;
+			new_data[2] = 0xCC;
+			new_data[3] = 0xDD;
+			Posix.memcpy (&new_data[4], data.data, data.data.length);
+			var encrypted_bytes = encrypt (new_data, password);
 			var encrypted_byte_len = encrypted_bytes.length;
 			dos.set_byte_order (DataStreamByteOrder.LITTLE_ENDIAN);
 			dos.put_int32 (clear_text_len);
