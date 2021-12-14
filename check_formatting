@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+function unformatted() {
+	echo $i is has formatting errors\!
+	rm $i.uncrustify
+	exit 1
+}
+
+for i in $(find src/ -type f|grep .vala$); do
+	echo Checking $i
+	uncrustify -c uncrustify.cfg $i >/dev/null 2>&1
+	[ $(diff $i $i.uncrustify|wc -l) != "0" ] && unformatted $i
+	rm $i.uncrustify
+done
