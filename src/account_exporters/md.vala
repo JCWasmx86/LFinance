@@ -10,69 +10,73 @@ namespace LFinance {
 		uint curr_frac;
 
 		internal MDExporter(string file) {
-			this.file = File.new_for_path(file);
+			this.file = File.new_for_path (file);
 		}
 
 		internal void export(Account account) throws Error {
 			this.account = account;
-			this.write_file();
-			info("Done");
+			this.write_file ();
+			info ("Done");
 		}
 		void write_file() throws Error {
 			try {
-				this.progress(_("Exporting to Markdown…"), this.curr_frac / this.max_frac);
+				this.progress (_("Exporting to Markdown…"), this.curr_frac / this.max_frac);
 				this.curr_frac++;
 				FileIOStream iostream;
-				var file = File.new_tmp("tpl_XXXXXX.md", out iostream);
+				var file = File.new_tmp ("tpl_XXXXXX.md", out iostream);
 				var os = iostream.output_stream;
-				var dos = new DataOutputStream(os);
-				dos.put_string(this.build());
-				dos.close();
-				this.progress(_("Success!"), this.curr_frac / this.max_frac);
+				var dos = new DataOutputStream (os);
+				dos.put_string (this.build ());
+				dos.close ();
+				this.progress (_("Success!"), this.curr_frac / this.max_frac);
 				this.curr_frac++;
-				this.progress(_("Copying output to %s…").printf(this.file.get_path()), this.curr_frac / this.max_frac);
+				this.progress (_("Copying output to %s…").printf (
+						       this.file.get_path ()), this.curr_frac / this.max_frac);
 				this.curr_frac++;
-				file.copy(this.file, FileCopyFlags.OVERWRITE|FileCopyFlags.ALL_METADATA);
-				this.progress(_("Finished!"), this.curr_frac / this.max_frac);
+				file.copy (this.file, FileCopyFlags.OVERWRITE | FileCopyFlags.ALL_METADATA);
+				this.progress (_("Finished!"), this.curr_frac / this.max_frac);
 				this.curr_frac++;
 			} catch(Error e) {
-				info("%s", e.message);
-				throw new MDExporterErrors.GENERIC_ERROR(e.message);
+				info ("%s", e.message);
+				throw new MDExporterErrors.GENERIC_ERROR (e.message);
 			}
 		}
 		string build() {
-			var sb = new StringBuilder();
-			sb.append(_("# Expenses for account %s").printf(this.account._name)).append("\n\n");
-			sb.append("| %s    | %s     | %s    | %s    | %s    |\n".printf(_("Purpose"), _("Date"), _("Amount"), _("Location"), _("Tags")));
-			sb.append("| :---: | :----: | :---: | :---: | :---: |\n");
+			var sb = new StringBuilder ();
+			sb.append (_("# Expenses for account %s").printf (this.account._name)).append ("\n\n");
+			sb.append ("| %s    | %s     | %s    | %s    | %s    |\n".printf (_("Purpose"), _("Date"),
+											  _("Amount"), _("Location"),
+											  _("Tags")));
+			sb.append ("| :---: | :----: | :---: | :---: | :---: |\n");
 			for(var i = 0; i < this.account._expenses.size; i++) {
 				var expense = this.account._expenses[i];
-				sb.append("|");
-				sb.append(" %s |".printf(this.escape_md(expense._purpose)));
-				sb.append(" %s |".printf(this.escape_md(expense._date.format("%x"))));
-				sb.append(" %s |".printf(this.escape_md(expense.format_amount().replace("\u202f", " "))));
+				sb.append ("|");
+				sb.append (" %s |".printf (this.escape_md (expense._purpose)));
+				sb.append (" %s |".printf (this.escape_md (expense._date.format ("%x"))));
+				sb.append (" %s |".printf (this.escape_md (expense.format_amount ().replace ("\u202f",
+													     " "))));
 				if(expense._location != null) {
-					sb.append(this.escape_md(expense._location._name));
+					sb.append (this.escape_md (expense._location._name));
 					if(expense._location._city != null)
-						sb.append(", ").append(this.escape_md(expense._location._city));
-					sb.append(" |");
+						sb.append (", ").append (this.escape_md (expense._location._city));
+					sb.append (" |");
 				} else {
-					sb.append("/ |");
+					sb.append ("/ |");
 				}
 				for(var j = 0; j < expense._tags.size; j++) {
 					var tag = expense._tags[j];
-					sb.append("`");
-					sb.append(this.escape_md(tag._name));
-					sb.append("`");
+					sb.append ("`");
+					sb.append (this.escape_md (tag._name));
+					sb.append ("`");
 					if(j != expense._tags.size - 1)
-						sb.append(", ");
+						sb.append (", ");
 				}
-				sb.append("|\n");
+				sb.append ("|\n");
 			}
 			return sb.str;
 		}
 		string escape_md(string input) {
-			var builder = new StringBuilder.sized(input.length + 20);
+			var builder = new StringBuilder.sized (input.length + 20);
 			var map = new Gee.HashMap<string, string>();
 			map["\\"] = "\\\\";
 			map["`"] = "\\`";
@@ -93,11 +97,11 @@ namespace LFinance {
 			map["!"] = "\\!";
 			map["|"] = "\\|";
 			for(var i = 0; i < input.length; i++) {
-				var as_string = "%c".printf(input[i]);
-				if(map.has_key(as_string)) {
-					builder.append(map[as_string]);
+				var as_string = "%c".printf (input[i]);
+				if(map.has_key (as_string)) {
+					builder.append (map[as_string]);
 				} else {
-					builder.append_c(input[i]);
+					builder.append_c (input[i]);
 				}
 			}
 			return builder.str;

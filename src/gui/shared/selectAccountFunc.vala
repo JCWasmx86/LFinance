@@ -1,3 +1,3 @@
 namespace LFinance {
-	internal delegate void SelectAccountFunc(string name);
+	internal delegate void SelectAccountFunc (string name);
 }

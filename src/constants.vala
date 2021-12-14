@@ -1,17 +1,18 @@
 namespace LFinance {
 	class Constants {
-		[CCode (cheader_filename="config.h", cname="APPLICATION_ID")]
+		[CCode (cheader_filename = "config.h", cname = "APPLICATION_ID")]
 		internal extern const string APPLICATION_ID;
-		[CCode (cheader_filename="config.h", cname="PACKAGE_VERSION")]
+		[CCode (cheader_filename = "config.h", cname = "PACKAGE_VERSION")]
 		internal extern const string PACKAGE_VERSION;
-		[CCode (cheader_filename="config.h", cname="APPLICATION_INSTALL_PREFIX")]
+		[CCode (cheader_filename = "config.h", cname = "APPLICATION_INSTALL_PREFIX")]
 		internal extern const string APPLICATION_INSTALL_PREFIX;
 	}
 	internal class Colors {
 		// From https://stackoverflow.com/a/20298027
 		// and from the GNOME HIG(Starting at #E85EBE): https://developer.gnome.org/hig/reference/palette.html
 		internal static string[] get_colors() {
-			return """
+			return
+				"""
 				#000000
 				#00FF00
 				#0000FF
@@ -120,7 +121,7 @@ namespace LFinance {
 				#5E5C64
 				#3D3846
 				#241F31
-			""".replace("\t\t\t\t", "").replace(" ", "").split("\n");
+			""".replace ("\t\t\t\t", "").replace (" ", "").split ("\n");
 		}
 	}
 }
