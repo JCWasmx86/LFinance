@@ -6,6 +6,8 @@ function unformatted() {
 	exit 1
 }
 
+echo Using uncrustify: $(uncrustify --version)
+
 for i in $(find src/ -type f|grep .vala$); do
 	echo Checking $i
 	uncrustify -c uncrustify.cfg $i >/dev/null 2>&1
