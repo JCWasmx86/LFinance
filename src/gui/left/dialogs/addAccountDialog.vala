@@ -23,6 +23,9 @@ namespace LFinance {
 					btn.set_sensitive (true);
 				}
 			});
+			this.entry.activate.connect (() => {
+				this.response (Gtk.ResponseType.OK);
+			});
 			this.get_content_area ().pack_start (label, true, true, 2);
 			this.get_content_area ().pack_start (this.entry, true, true, 2);
 			((Gtk.Button) this.get_widget_for_response (Gtk.ResponseType.OK)).set_sensitive (false);
