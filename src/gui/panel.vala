@@ -166,10 +166,10 @@ namespace LFinance {
 				try {
 					File.new_for_path (Environment.get_user_data_dir () +
 							   "/LFinance/data.json").delete();
+					this.save ();
 				} catch(Error e) {
 					warning (e.message);
 				}
-				this.save ();
 			}
 			dialog.destroy ();
 		}

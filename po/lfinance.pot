@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lfinance\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-09 15:11+0100\n"
+"POT-Creation-Date: 2021-12-14 15:11+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,278 +17,46 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/account_exporters/factory.vala:26 src/account_exporters/factory.vala:28
-msgid "Not implemented"
+#: src/model/modelBuilder/V1Builder.vala:18 src/gui/panel.vala:60
+msgid "default"
 msgstr ""
 
-#: src/account_exporters/factory.vala:30
-msgid "Only .pdf, .md, .csv and .html are supported!"
-msgstr ""
-
-#: src/account_exporters/md.vala:23
-msgid "Exporting to Markdown…"
-msgstr ""
-
-#: src/account_exporters/md.vala:31 src/account_exporters/pdf.vala:56
-#: src/exporters/pdf.vala:290
-msgid "Success!"
-msgstr ""
-
-#: src/account_exporters/md.vala:33 src/account_exporters/pdf.vala:61
-#: src/exporters/pdf.vala:50
+#. TODO: Some currencies don't have basic units or a different
+#. rate.
+#. https://github.com/ourworldincode/currency/blob/main/currencies.json
+#. TODO: Align the three-em dashes
+#: src/model/expense.vala:88
 #, c-format
-msgid "Copying output to %s…"
+msgid "%s ⸻ %s ⸻ %s"
 msgstr ""
 
-#: src/account_exporters/md.vala:36 src/account_exporters/pdf.vala:65
-#: src/exporters/pdf.vala:53
-msgid "Finished!"
+#: src/gui/right/dialogs/addTagDialog.vala:10
+msgid "Add tag"
 msgstr ""
 
-#: src/account_exporters/md.vala:45
-#, c-format
-msgid "# Expenses for account %s"
-msgstr ""
-
-#: src/account_exporters/md.vala:46 src/account_exporters/pdf.vala:147
-#: src/exporters/pdf.vala:88 src/gui/right/expenseList.vala:34
-msgid "Purpose"
-msgstr ""
-
-#: src/account_exporters/md.vala:46 src/account_exporters/pdf.vala:147
-#: src/exporters/pdf.vala:88 src/gui/right/expenseList.vala:35
-msgid "Date"
-msgstr ""
-
-#: src/account_exporters/md.vala:46 src/account_exporters/pdf.vala:147
-#: src/exporters/pdf.vala:88 src/exporters/pdf.vala:131
-#: src/gui/right/expenseList.vala:33
-msgid "Amount"
-msgstr ""
-
-#: src/account_exporters/md.vala:46
-msgid "Location"
-msgstr ""
-
-#: src/account_exporters/md.vala:46 src/gui/left/bigList.vala:26
-msgid "Tags"
-msgstr ""
-
-#: src/account_exporters/pdf.vala:31 src/exporters/pdf.vala:204
-#, c-format
-msgid "Found command: %s"
-msgstr ""
-
-#: src/account_exporters/pdf.vala:41 src/exporters/pdf.vala:216
-msgid "Please install TexLive, LuaLaTeX or XeLaTeX"
-msgstr ""
-
-#: src/account_exporters/pdf.vala:45 src/exporters/pdf.vala:34
-msgid "Exporting to LaTeX…"
-msgstr ""
-
-#: src/account_exporters/pdf.vala:53 src/exporters/pdf.vala:42
-msgid "Compiling LaTeX…"
-msgstr ""
-
-#: src/account_exporters/pdf.vala:81 src/exporters/pdf.vala:228
-#, c-format
-msgid "Checking for package %s…"
-msgstr ""
-
-#: src/account_exporters/pdf.vala:98 src/exporters/pdf.vala:245
-#, c-format
-msgid "Package not found: %s"
-msgstr ""
-
-#: src/account_exporters/pdf.vala:100 src/exporters/pdf.vala:247
-#, c-format
-msgid "Found package %s!"
-msgstr ""
-
-#: src/account_exporters/pdf.vala:147 src/exporters/pdf.vala:88
-msgid "Further Information"
-msgstr ""
-
-#: src/account_exporters/pdf.vala:148 src/exporters/pdf.vala:89
-msgid "Continued on the next page"
-msgstr ""
-
-#: src/exporters/pdf.vala:45
-msgid "Compiled LaTeX successfully"
-msgstr ""
-
-#: src/exporters/pdf.vala:71
-msgid "Accounting Report"
-msgstr ""
-
-#: src/exporters/pdf.vala:106
-msgid "Diagrams"
-msgstr ""
-
-#: src/exporters/pdf.vala:131 src/gui/right/overview.vala:46
-msgid "Average Amount"
-msgstr ""
-
-#: src/exporters/pdf.vala:149
-msgid "Accumulated Amount"
-msgstr ""
-
-#: src/exporters/pdf.vala:149
-msgid "Average amount per day"
-msgstr ""
-
-#: src/exporters/pdf.vala:155 src/gui/right/overview.vala:104
-msgid "Last week"
-msgstr ""
-
-#: src/exporters/pdf.vala:161 src/gui/right/overview.vala:106
-msgid "Last month"
-msgstr ""
-
-#: src/exporters/pdf.vala:167 src/gui/right/overview.vala:108
-msgid "Last year"
-msgstr ""
-
-#: src/exporters/pdf.vala:173
-msgid "All time"
-msgstr ""
-
-#: src/exporters/pdf.vala:287
-#, c-format
-msgid "Round %u of %u…"
-msgstr ""
-
-#: src/gui/left/accountActionHandler.vala:18
-#: src/gui/left/accountActionHandler.vala:20 src/gui/panel.vala:120
-#: src/main.vala:47
-msgid "Export"
-msgstr ""
-
-#: src/gui/left/accountActionHandler.vala:20
-#, c-format
-msgid "Export %s"
-msgstr ""
-
-#: src/gui/left/accountActionHandler.vala:20
-#: src/gui/left/accountActionHandler.vala:33
-#: src/gui/left/accountActionHandler.vala:51
-#: src/gui/left/dialogs/addAccountDialog.vala:13
+#: src/gui/right/dialogs/addTagDialog.vala:17
+#: src/gui/right/expenseWidget.vala:91
 #: src/gui/left/dialogs/addLocationDialog.vala:18
+#: src/gui/left/dialogs/locationEditDialog.vala:24
+#: src/gui/left/dialogs/tagEditDialog.vala:20
+#: src/gui/left/dialogs/addAccountDialog.vala:13
 #: src/gui/left/dialogs/addTagDialog.vala:19
-#: src/gui/left/dialogs/locationEditDialog.vala:23
-#: src/gui/left/dialogs/tagEditDialog.vala:19
-#: src/gui/left/locationActionHandler.vala:39
-#: src/gui/left/locationActionHandler.vala:54
-#: src/gui/left/tagActionHandler.vala:61 src/gui/left/tagActionHandler.vala:80
-#: src/gui/panel.vala:120 src/gui/right/dialogs/addTagDialog.vala:16
-#: src/gui/right/expenseWidget.vala:83
+#: src/gui/left/locationActionHandler.vala:47
+#: src/gui/left/locationActionHandler.vala:68
+#: src/gui/left/accountActionHandler.vala:26
+#: src/gui/left/accountActionHandler.vala:46
+#: src/gui/left/accountActionHandler.vala:71
+#: src/gui/left/tagActionHandler.vala:69 src/gui/left/tagActionHandler.vala:95
+#: src/gui/dialogs/encryptionSetupDialog.vala:13 src/gui/panel.vala:146
 msgid "_Cancel"
 msgstr ""
 
-#: src/gui/left/accountActionHandler.vala:30
-#: src/gui/left/accountActionHandler.vala:33
-#: src/gui/left/accountActionHandler.vala:51
-#: src/gui/left/locationActionHandler.vala:36
-#: src/gui/left/locationActionHandler.vala:39
-#: src/gui/left/locationActionHandler.vala:54
-#: src/gui/left/tagActionHandler.vala:54 src/gui/left/tagActionHandler.vala:61
-#: src/gui/left/tagActionHandler.vala:80 src/gui/right/expenseWidget.vala:83
-msgid "Delete"
+#: src/gui/right/dialogs/addTagDialog.vala:17
+msgid "Add Tag"
 msgstr ""
 
-#: src/gui/left/accountActionHandler.vala:32
-#: src/gui/left/accountActionHandler.vala:50
-#, c-format
-msgid "Do you really want to delete the account %s?"
-msgstr ""
-
-#: src/gui/left/addPanel.vala:8 src/gui/left/dialogs/addAccountDialog.vala:7
-#: src/gui/left/dialogs/addAccountDialog.vala:13
-msgid "Create Account"
-msgstr ""
-
-#: src/gui/left/addPanel.vala:21 src/gui/left/dialogs/addLocationDialog.vala:10
-#: src/gui/left/dialogs/addLocationDialog.vala:18
-msgid "Create Location"
-msgstr ""
-
-#: src/gui/left/addPanel.vala:34 src/gui/left/dialogs/addTagDialog.vala:11
-#: src/gui/left/dialogs/addTagDialog.vala:19
-msgid "Create Tag"
-msgstr ""
-
-#: src/gui/left/bigList.vala:16
-msgid "Accounts"
-msgstr ""
-
-#: src/gui/left/bigList.vala:21
-msgid "Locations"
-msgstr ""
-
-#: src/gui/left/dialogs/addAccountDialog.vala:14
-#: src/gui/left/dialogs/addLocationDialog.vala:19
-#: src/gui/left/dialogs/addTagDialog.vala:21
-#: src/gui/left/dialogs/locationEditDialog.vala:17
-msgid "Name:"
-msgstr ""
-
-#: src/gui/left/dialogs/addLocationDialog.vala:21
-#: src/gui/left/dialogs/locationEditDialog.vala:19
-msgid "City:"
-msgstr ""
-
-#: src/gui/left/dialogs/addLocationDialog.vala:23
-#: src/gui/left/dialogs/locationEditDialog.vala:21
-msgid "Further information"
-msgstr ""
-
-#: src/gui/left/dialogs/addTagDialog.vala:33
-#: src/gui/left/dialogs/addTagDialog.vala:62
-msgid "Sample text"
-msgstr ""
-
-#: src/gui/left/dialogs/customColorButton.vala:6
-#: src/gui/left/dialogs/customColorButton.vala:15
-msgid "Select your own color"
-msgstr ""
-
-#: src/gui/left/dialogs/exportAccount.vala:24
-#: src/gui/left/dialogs/exportModel.vala:24
-msgid "_Close"
-msgstr ""
-
-#: src/gui/left/dialogs/exportAccount.vala:46
-#: src/gui/left/dialogs/exportModel.vala:43
-#, c-format
-msgid "Export failed: %s"
-msgstr ""
-
-#: src/gui/left/dialogs/locationEditDialog.vala:8
-msgid "Edit location"
-msgstr ""
-
-#: src/gui/left/dialogs/locationEditDialog.vala:23
-#: src/gui/left/dialogs/tagEditDialog.vala:19
-#: src/gui/left/locationActionHandler.vala:14
-#: src/gui/left/tagActionHandler.vala:24 src/gui/right/expenseWidget.vala:61
-#: src/gui/right/overview.vala:35 src/gui/right/overview.vala:63
-#: src/gui/right/overview.vala:89 src/gui/right/overview.vala:148
-msgid "Edit"
-msgstr ""
-
-#: src/gui/left/dialogs/tagEditDialog.vala:7
-msgid "Edit tag"
-msgstr ""
-
-#: src/gui/left/locationActionHandler.vala:38
-#: src/gui/left/locationActionHandler.vala:53
-msgid "Do you really want to delete this location?"
-msgstr ""
-
-#: src/gui/left/tagActionHandler.vala:60 src/gui/left/tagActionHandler.vala:79
-#, c-format
-msgid "Do you really want to delete the tag %s?"
+#: src/gui/right/createExpenseWidget.vala:7
+msgid "Add Expense"
 msgstr ""
 
 #: src/gui/right/accountInfo.vala:31 src/gui/right/accountInfo.vala:63
@@ -304,118 +72,397 @@ msgstr ""
 msgid "Create an account!"
 msgstr ""
 
-#: src/gui/right/createExpense.vala:43
+#: src/gui/right/createExpense.vala:44
 msgid "Add"
 msgstr ""
 
-#: src/gui/right/createExpense.vala:45 src/gui/right/overview.vala:36
+#: src/gui/right/createExpense.vala:46 src/gui/right/overview.vala:37
 msgid "Reset"
 msgstr ""
 
-#: src/gui/right/createExpense.vala:77
+#: src/gui/right/createExpense.vala:82
 msgid "Purpose:"
 msgstr ""
 
-#: src/gui/right/createExpense.vala:83
+#: src/gui/right/createExpense.vala:88
 msgid "Amount:"
 msgstr ""
 
-#: src/gui/right/createExpenseWidget.vala:6
-msgid "Add Expense"
-msgstr ""
-
-#: src/gui/right/dialogs/addTagDialog.vala:9
-msgid "Add tag"
-msgstr ""
-
-#: src/gui/right/dialogs/addTagDialog.vala:16
-msgid "Add Tag"
-msgstr ""
-
-#: src/gui/right/editWidget.vala:78
+#: src/gui/right/editWidget.vala:81
 msgid "Save edits"
 msgstr ""
 
-#: src/gui/right/editWidget.vala:81
+#: src/gui/right/editWidget.vala:84
 msgid "Reset changes"
 msgstr ""
 
-#: src/gui/right/expenseList.vala:31
+#: src/gui/right/expenseList.vala:32
 msgid "Sort by:"
 msgstr ""
 
-#: src/gui/right/expenseList.vala:36
-msgid "Amount (Descending)"
+#: src/gui/right/expenseList.vala:34 src/account_exporters/md.vala:48
+#: src/account_exporters/pdf.vala:168 src/exporters/pdf.vala:96
+#: src/exporters/pdf.vala:149
+msgid "Amount"
+msgstr ""
+
+#: src/gui/right/expenseList.vala:35 src/account_exporters/md.vala:47
+#: src/account_exporters/pdf.vala:168 src/exporters/pdf.vala:96
+msgid "Purpose"
+msgstr ""
+
+#: src/gui/right/expenseList.vala:36 src/account_exporters/md.vala:47
+#: src/account_exporters/pdf.vala:168 src/exporters/pdf.vala:96
+msgid "Date"
 msgstr ""
 
 #: src/gui/right/expenseList.vala:37
-msgid "Purpose (Descending)"
+msgid "Amount (Descending)"
 msgstr ""
 
 #: src/gui/right/expenseList.vala:38
+msgid "Purpose (Descending)"
+msgstr ""
+
+#: src/gui/right/expenseList.vala:39
 msgid "Date (Descending)"
 msgstr ""
 
-#: src/gui/right/expenseWidget.vala:40
+#: src/gui/right/extendedTagButton.vala:28
+msgid "Delete Tag"
+msgstr ""
+
+#: src/gui/right/overview.vala:36 src/gui/right/overview.vala:74
+#: src/gui/right/overview.vala:100 src/gui/right/overview.vala:162
+#: src/gui/right/expenseWidget.vala:63
+#: src/gui/left/dialogs/locationEditDialog.vala:24
+#: src/gui/left/dialogs/tagEditDialog.vala:20
+#: src/gui/left/locationActionHandler.vala:17
+#: src/gui/left/tagActionHandler.vala:27
+msgid "Edit"
+msgstr ""
+
+#: src/gui/right/overview.vala:45
+msgid "Timespan"
+msgstr ""
+
+#: src/gui/right/overview.vala:49
+msgid "Number of Expenses"
+msgstr ""
+
+#: src/gui/right/overview.vala:53 src/exporters/pdf.vala:149
+msgid "Average Amount"
+msgstr ""
+
+#: src/gui/right/overview.vala:56
+msgid "Total Amount"
+msgstr ""
+
+#: src/gui/right/overview.vala:81
+msgid "Save"
+msgstr ""
+
+#: src/gui/right/overview.vala:113
+msgid "Total time"
+msgstr ""
+
+#: src/gui/right/overview.vala:115 src/exporters/pdf.vala:186
+msgid "Last week"
+msgstr ""
+
+#: src/gui/right/overview.vala:117 src/exporters/pdf.vala:193
+msgid "Last month"
+msgstr ""
+
+#: src/gui/right/overview.vala:119 src/exporters/pdf.vala:200
+msgid "Last year"
+msgstr ""
+
+#: src/gui/right/expenseWidget.vala:42
 msgid "Remove this expense"
 msgstr ""
 
-#: src/gui/right/expenseWidget.vala:82
+#: src/gui/right/expenseWidget.vala:88
 #, c-format
 msgid "Do you really want to delete expense “%s”?"
 msgstr ""
 
-#: src/gui/right/extendedTagButton.vala:21
-msgid "Delete Tag"
+#: src/gui/right/expenseWidget.vala:91
+#: src/gui/left/locationActionHandler.vala:39
+#: src/gui/left/locationActionHandler.vala:47
+#: src/gui/left/locationActionHandler.vala:68
+#: src/gui/left/accountActionHandler.vala:38
+#: src/gui/left/accountActionHandler.vala:46
+#: src/gui/left/accountActionHandler.vala:71
+#: src/gui/left/tagActionHandler.vala:57 src/gui/left/tagActionHandler.vala:69
+#: src/gui/left/tagActionHandler.vala:95
+msgid "Delete"
 msgstr ""
 
-#: src/gui/right/overview.vala:44
-msgid "Timespan"
+#: src/gui/left/dialogs/customColorButton.vala:6
+#: src/gui/left/dialogs/customColorButton.vala:17
+msgid "Select your own color"
 msgstr ""
 
-#: src/gui/right/overview.vala:45
-msgid "Number of Expenses"
+#: src/gui/left/dialogs/addLocationDialog.vala:10
+#: src/gui/left/dialogs/addLocationDialog.vala:19 src/gui/left/addPanel.vala:23
+msgid "Create Location"
 msgstr ""
 
-#: src/gui/right/overview.vala:47
-msgid "Total Amount"
+#: src/gui/left/dialogs/addLocationDialog.vala:20
+#: src/gui/left/dialogs/locationEditDialog.vala:18
+#: src/gui/left/dialogs/addAccountDialog.vala:15
+#: src/gui/left/dialogs/addTagDialog.vala:21
+msgid "Name:"
 msgstr ""
 
-#: src/gui/right/overview.vala:70
-msgid "Save"
+#: src/gui/left/dialogs/addLocationDialog.vala:22
+#: src/gui/left/dialogs/locationEditDialog.vala:20
+msgid "City:"
 msgstr ""
 
-#: src/gui/right/overview.vala:102
-msgid "Total time"
+#: src/gui/left/dialogs/addLocationDialog.vala:24
+#: src/gui/left/dialogs/locationEditDialog.vala:22
+msgid "Further information"
 msgstr ""
 
-#: src/main.vala:38
+#: src/gui/left/dialogs/locationEditDialog.vala:9
+msgid "Edit location"
+msgstr ""
+
+#: src/gui/left/dialogs/tagEditDialog.vala:8
+msgid "Edit tag"
+msgstr ""
+
+#: src/gui/left/dialogs/addAccountDialog.vala:7
+#: src/gui/left/dialogs/addAccountDialog.vala:14 src/gui/left/addPanel.vala:8
+msgid "Create Account"
+msgstr ""
+
+#: src/gui/left/dialogs/addTagDialog.vala:11
+#: src/gui/left/dialogs/addTagDialog.vala:19 src/gui/left/addPanel.vala:36
+msgid "Create Tag"
+msgstr ""
+
+#: src/gui/left/dialogs/addTagDialog.vala:33
+#: src/gui/left/dialogs/addTagDialog.vala:62
+msgid "Sample text"
+msgstr ""
+
+#: src/gui/left/dialogs/exportAccount.vala:25
+#: src/gui/left/dialogs/exportModel.vala:25
+msgid "_Close"
+msgstr ""
+
+#: src/gui/left/dialogs/exportAccount.vala:51
+#: src/gui/left/dialogs/exportModel.vala:48
+#, c-format
+msgid "Export failed: %s"
+msgstr ""
+
+#: src/gui/left/bigList.vala:17
+msgid "Accounts"
+msgstr ""
+
+#: src/gui/left/bigList.vala:24
+msgid "Locations"
+msgstr ""
+
+#: src/gui/left/bigList.vala:30 src/account_exporters/md.vala:49
+msgid "Tags"
+msgstr ""
+
+#: src/gui/left/locationActionHandler.vala:46
+#: src/gui/left/locationActionHandler.vala:67
+msgid "Do you really want to delete this location?"
+msgstr ""
+
+#: src/gui/left/accountActionHandler.vala:22
+#: src/gui/left/accountActionHandler.vala:27 src/gui/panel.vala:145
+#: src/gui/panel.vala:147 src/main.vala:78
+msgid "Export"
+msgstr ""
+
+#: src/gui/left/accountActionHandler.vala:25
+#, c-format
+msgid "Export %s"
+msgstr ""
+
+#: src/gui/left/accountActionHandler.vala:44
+#: src/gui/left/accountActionHandler.vala:69
+#, c-format
+msgid "Do you really want to delete the account %s?"
+msgstr ""
+
+#: src/gui/left/tagActionHandler.vala:67 src/gui/left/tagActionHandler.vala:93
+#, c-format
+msgid "Do you really want to delete the tag %s?"
+msgstr ""
+
+#: src/gui/dialogs/encryptionSetupDialog.vala:7
+msgid "Setup Encryption"
+msgstr ""
+
+#: src/gui/dialogs/encryptionSetupDialog.vala:13
+msgid "Encrypt Data"
+msgstr ""
+
+#: src/gui/dialogs/encryptionSetupDialog.vala:18
+msgid "Enter password:"
+msgstr ""
+
+#: src/gui/dialogs/encryptionSetupDialog.vala:25
+msgid "Confirm password:"
+msgstr ""
+
+#: src/gui/dialogs/encryptionSetupDialog.vala:36
+msgid "If you forget your password, your data is lost and can't be recovered!"
+msgstr ""
+
+#: src/account_exporters/md.vala:23
+msgid "Exporting to Markdown…"
+msgstr ""
+
+#: src/account_exporters/md.vala:31 src/account_exporters/pdf.vala:59
+#: src/exporters/pdf.vala:375
+msgid "Success!"
+msgstr ""
+
+#: src/account_exporters/md.vala:33 src/account_exporters/pdf.vala:64
+#: src/exporters/pdf.vala:51
+#, c-format
+msgid "Copying output to %s…"
+msgstr ""
+
+#: src/account_exporters/md.vala:37 src/account_exporters/pdf.vala:71
+#: src/exporters/pdf.vala:57
+msgid "Finished!"
+msgstr ""
+
+#: src/account_exporters/md.vala:46
+#, c-format
+msgid "# Expenses for account %s"
+msgstr ""
+
+#: src/account_exporters/md.vala:48
+msgid "Location"
+msgstr ""
+
+#: src/account_exporters/pdf.vala:33 src/exporters/pdf.vala:274
+#, c-format
+msgid "Found command: %s"
+msgstr ""
+
+#: src/account_exporters/pdf.vala:44 src/exporters/pdf.vala:288
+msgid "Please install TexLive, LuaLaTeX or XeLaTeX"
+msgstr ""
+
+#: src/account_exporters/pdf.vala:48 src/exporters/pdf.vala:35
+msgid "Exporting to LaTeX…"
+msgstr ""
+
+#: src/account_exporters/pdf.vala:56 src/exporters/pdf.vala:43
+msgid "Compiling LaTeX…"
+msgstr ""
+
+#: src/account_exporters/pdf.vala:88 src/exporters/pdf.vala:301
+#, c-format
+msgid "Checking for package %s…"
+msgstr ""
+
+#: src/account_exporters/pdf.vala:106 src/exporters/pdf.vala:319
+#, c-format
+msgid "Package not found: %s"
+msgstr ""
+
+#: src/account_exporters/pdf.vala:109 src/exporters/pdf.vala:322
+#, c-format
+msgid "Found package %s!"
+msgstr ""
+
+#: src/account_exporters/pdf.vala:168 src/exporters/pdf.vala:96
+msgid "Further Information"
+msgstr ""
+
+#: src/account_exporters/pdf.vala:170 src/exporters/pdf.vala:98
+msgid "Continued on the next page"
+msgstr ""
+
+#: src/account_exporters/factory.vala:27
+msgid "Not implemented"
+msgstr ""
+
+#: src/account_exporters/factory.vala:30
+msgid "Only .pdf, .md and .html are supported!"
+msgstr ""
+
+#: src/exporters/pdf.vala:46
+msgid "Compiled LaTeX successfully"
+msgstr ""
+
+#: src/exporters/pdf.vala:77
+msgid "Accounting Report"
+msgstr ""
+
+#: src/exporters/pdf.vala:115
+msgid "Diagrams"
+msgstr ""
+
+#: src/exporters/pdf.vala:177
+msgid "Accumulated Amount"
+msgstr ""
+
+#: src/exporters/pdf.vala:178
+msgid "Average amount per day"
+msgstr ""
+
+#: src/exporters/pdf.vala:202 src/exporters/pdf.vala:211
+msgid "Expenses by month"
+msgstr ""
+
+#: src/exporters/pdf.vala:209
+msgid "All time"
+msgstr ""
+
+#: src/exporters/pdf.vala:371
+#, c-format
+msgid "Round %u of %u…"
+msgstr ""
+
+#: src/main.vala:43
+msgid "Password required"
+msgstr ""
+
+#: src/main.vala:45
+msgid "Exit"
+msgstr ""
+
+#: src/main.vala:45
+msgid "Unlock"
+msgstr ""
+
+#: src/main.vala:48
+msgid "Password"
+msgstr ""
+
+#: src/main.vala:69
 msgid "About"
 msgstr ""
 
-#: src/main.vala:67
+#: src/main.vala:83
+msgid "Encrypt your data"
+msgstr ""
+
+#: src/main.vala:108
 #, c-format
 msgid "An error occurred saving data: %s\n"
 msgstr ""
 
-#: src/main.vala:78
+#: src/main.vala:126
 #, c-format
 msgid "An error occurred loading LFinance: %s\n"
 msgstr ""
 
-#: src/main.vala:94
+#: src/main.vala:143
 msgid "Copyright © 2021 JCWasmx86"
-msgstr ""
-
-#. TODO: Some currencies don't have basic units or a different
-#. rate.
-#. https://github.com/ourworldincode/currency/blob/main/currencies.json
-#. TODO: Align the three-em dashes
-#: src/model/expense.vala:86
-#, c-format
-msgid "%s ⸻ %s ⸻ %s"
-msgstr ""
-
-#: src/model/modelBuilder/V1Builder.vala:10
-msgid "default"
 msgstr ""
