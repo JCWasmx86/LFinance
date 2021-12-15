@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lfinance\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-14 15:11+0100\n"
+"POT-Creation-Date: 2021-12-15 19:17+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -102,7 +102,7 @@ msgstr ""
 
 #: src/gui/right/expenseList.vala:34 src/account_exporters/md.vala:48
 #: src/account_exporters/pdf.vala:168 src/exporters/pdf.vala:96
-#: src/exporters/pdf.vala:149
+#: src/exporters/pdf.vala:154
 msgid "Amount"
 msgstr ""
 
@@ -150,7 +150,7 @@ msgstr ""
 msgid "Number of Expenses"
 msgstr ""
 
-#: src/gui/right/overview.vala:53 src/exporters/pdf.vala:149
+#: src/gui/right/overview.vala:53 src/exporters/pdf.vala:154
 msgid "Average Amount"
 msgstr ""
 
@@ -166,15 +166,15 @@ msgstr ""
 msgid "Total time"
 msgstr ""
 
-#: src/gui/right/overview.vala:115 src/exporters/pdf.vala:186
+#: src/gui/right/overview.vala:115 src/exporters/pdf.vala:193
 msgid "Last week"
 msgstr ""
 
-#: src/gui/right/overview.vala:117 src/exporters/pdf.vala:193
+#: src/gui/right/overview.vala:117 src/exporters/pdf.vala:200
 msgid "Last month"
 msgstr ""
 
-#: src/gui/right/overview.vala:119 src/exporters/pdf.vala:200
+#: src/gui/right/overview.vala:119 src/exporters/pdf.vala:207
 msgid "Last year"
 msgstr ""
 
@@ -279,7 +279,7 @@ msgstr ""
 
 #: src/gui/left/accountActionHandler.vala:22
 #: src/gui/left/accountActionHandler.vala:27 src/gui/panel.vala:145
-#: src/gui/panel.vala:147 src/main.vala:78
+#: src/gui/panel.vala:147 src/main.vala:101
 msgid "Export"
 msgstr ""
 
@@ -324,7 +324,7 @@ msgid "Exporting to Markdown…"
 msgstr ""
 
 #: src/account_exporters/md.vala:31 src/account_exporters/pdf.vala:59
-#: src/exporters/pdf.vala:375
+#: src/exporters/pdf.vala:382
 msgid "Success!"
 msgstr ""
 
@@ -348,12 +348,12 @@ msgstr ""
 msgid "Location"
 msgstr ""
 
-#: src/account_exporters/pdf.vala:33 src/exporters/pdf.vala:274
+#: src/account_exporters/pdf.vala:33 src/exporters/pdf.vala:281
 #, c-format
 msgid "Found command: %s"
 msgstr ""
 
-#: src/account_exporters/pdf.vala:44 src/exporters/pdf.vala:288
+#: src/account_exporters/pdf.vala:44 src/exporters/pdf.vala:295
 msgid "Please install TexLive, LuaLaTeX or XeLaTeX"
 msgstr ""
 
@@ -365,17 +365,17 @@ msgstr ""
 msgid "Compiling LaTeX…"
 msgstr ""
 
-#: src/account_exporters/pdf.vala:88 src/exporters/pdf.vala:301
+#: src/account_exporters/pdf.vala:88 src/exporters/pdf.vala:308
 #, c-format
 msgid "Checking for package %s…"
 msgstr ""
 
-#: src/account_exporters/pdf.vala:106 src/exporters/pdf.vala:319
+#: src/account_exporters/pdf.vala:106 src/exporters/pdf.vala:326
 #, c-format
 msgid "Package not found: %s"
 msgstr ""
 
-#: src/account_exporters/pdf.vala:109 src/exporters/pdf.vala:322
+#: src/account_exporters/pdf.vala:109 src/exporters/pdf.vala:329
 #, c-format
 msgid "Found package %s!"
 msgstr ""
@@ -408,61 +408,65 @@ msgstr ""
 msgid "Diagrams"
 msgstr ""
 
-#: src/exporters/pdf.vala:177
+#: src/exporters/pdf.vala:184
 msgid "Accumulated Amount"
 msgstr ""
 
-#: src/exporters/pdf.vala:178
+#: src/exporters/pdf.vala:185
 msgid "Average amount per day"
 msgstr ""
 
-#: src/exporters/pdf.vala:202 src/exporters/pdf.vala:211
+#: src/exporters/pdf.vala:209 src/exporters/pdf.vala:218
 msgid "Expenses by month"
 msgstr ""
 
-#: src/exporters/pdf.vala:209
+#: src/exporters/pdf.vala:216
 msgid "All time"
 msgstr ""
 
-#: src/exporters/pdf.vala:371
+#: src/exporters/pdf.vala:378
 #, c-format
 msgid "Round %u of %u…"
 msgstr ""
 
-#: src/main.vala:43
+#: src/main.vala:44
 msgid "Password required"
 msgstr ""
 
-#: src/main.vala:45
+#: src/main.vala:46
 msgid "Exit"
 msgstr ""
 
-#: src/main.vala:45
+#: src/main.vala:46
 msgid "Unlock"
 msgstr ""
 
-#: src/main.vala:48
+#: src/main.vala:49
 msgid "Password"
 msgstr ""
 
-#: src/main.vala:69
+#: src/main.vala:65
+msgid "Wrong password!"
+msgstr ""
+
+#: src/main.vala:92
 msgid "About"
 msgstr ""
 
-#: src/main.vala:83
+#: src/main.vala:106
 msgid "Encrypt your data"
 msgstr ""
 
-#: src/main.vala:108
+#: src/main.vala:131
 #, c-format
 msgid "An error occurred saving data: %s\n"
 msgstr ""
 
-#: src/main.vala:126
+#: src/main.vala:149
 #, c-format
 msgid "An error occurred loading LFinance: %s\n"
 msgstr ""
 
-#: src/main.vala:143
+#: src/main.vala:166
 msgid "Copyright © 2021 JCWasmx86"
 msgstr ""

@@ -131,20 +131,25 @@ namespace LFinance {
 															      r
 															      .
 															      end_date));
-			builder.append (",ymin=0,ymax=").append ("%lf".printf (r.max_expense_value * 1.05)).append (
+			builder.append (",ymin=0,ymax=").append ("%lf".printf (r.max_expense_value * 1.05).replace (",",
+														    "."))
+			.append (
 				",date ZERO=").append (this.latexify_date (r.start_date));
 			builder.append ("]\n");
 			builder.append ("\\addplot[smooth,red] coordinates {");
 			for(var i = 0; i < r.each_expense.size; i++) {
-				builder.append ("(%s, %lf)\n".printf (this.latexify_date (
-									      r.dates[i]), r.each_expense[i]));
+				builder.append ("(%s, %s)\n".printf (this.latexify_date (
+									     r.dates[i]),
+								     "%lf".printf (r.each_expense[i]).replace (",",
+													       ".")));
 			}
 			builder.append ("};\n");
 			builder.append ("\\addplot[smooth,blue] coordinates {");
 			var date_diff = r.dates[r.dates.size - 1].difference (r.dates[0]) / TimeSpan.DAY;
 			var avg = r.accumulated[r.accumulated.size - 1] / date_diff;
-			builder.append ("(%s, %lf)".printf (this.latexify_date (r.dates[0]), avg));
-			builder.append ("(%s, %lf)".printf (this.latexify_date (r.dates[r.dates.size - 1]), avg));
+			var avg_str = "%lf".printf (avg).replace (",", ".");
+			builder.append ("(%s, %s)".printf (this.latexify_date (r.dates[0]), avg_str));
+			builder.append ("(%s, %s)".printf (this.latexify_date (r.dates[r.dates.size - 1]), avg_str));
 			builder.append ("};\n");
 			builder.append ("\\legend {").append (_("Amount")).append (",").append (_("Average Amount")).
 			append ("}\n");
@@ -158,21 +163,23 @@ namespace LFinance {
 															      .
 															      end_date));
 			builder.append (",ymin=0,ymax=").append ("%lf".printf (r.accumulated[r.accumulated.size - 1] *
-									       1.05)).append (",date ZERO=").append (this.latexify_date (
-															     r
-															     .
-															     start_date));
+									       1.05).replace (",", ".")).append (
+				",date ZERO=").append (this.latexify_date (
+							       r
+							       .
+							       start_date));
 			builder.append ("]\n");
 			builder.append ("\\addplot[smooth,red] coordinates {");
 			for(var i = 0; i < r.accumulated.size; i++) {
-				builder.append ("(%s, %lf)\n".printf (this.latexify_date (r.dates[i]),
-								      r.accumulated[i]));
+				builder.append ("(%s, %s)\n".printf (this.latexify_date (r.dates[i]),
+								     "%lf".printf (r.each_expense[i]).replace (",",
+													       ".")));
 			}
 			builder.append ("};\n");
 			builder.append ("\\addplot[smooth,blue] coordinates {");
-			builder.append ("(%s, %lf)".printf (this.latexify_date (r.dates[0]), 0));
-			builder.append ("(%s, %lf)".printf (this.latexify_date (r.dates[r.dates.size - 1]),
-							    date_diff * avg));
+			builder.append ("(%s, 0.0)".printf (this.latexify_date (r.dates[0])));
+			builder.append ("(%s, %s)".printf (this.latexify_date (r.dates[r.dates.size - 1]),
+							   "%lf".printf (date_diff * avg).replace (",", ".")));
 			builder.append ("};\n");
 			builder.append ("\\legend {").append (_("Accumulated Amount")).append (",").append (_(
 														    "Average amount per day"))
