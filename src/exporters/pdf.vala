@@ -74,6 +74,7 @@ namespace LFinance {
 			builder.append ("\\usepackage{eurosym}\n");
 			builder.append ("\\usepackage[none]{hyphenat}\n\n");
 			builder.append ("\\usepgfplotslibrary{dateplot}\n");
+			builder.append ("\\pgfplotsset{compat=1.18}\n");
 			builder.append ("\\title{%s}".printf (_("Accounting Report")));
 			builder.append ("\\author{%s}".printf (Environment.get_user_name ()));
 			builder.append ("\\begin{document}\n");
@@ -131,20 +132,23 @@ namespace LFinance {
 															      r
 															      .
 															      end_date));
-			builder.append (",ymin=0,ymax=").append ("%lf".printf (r.max_expense_value * 1.05)).append (
+			builder.append (",ymin=0,ymax=").append (this.format_double (r.max_expense_value *
+										     1.05)).append (
 				",date ZERO=").append (this.latexify_date (r.start_date));
 			builder.append ("]\n");
 			builder.append ("\\addplot[smooth,red] coordinates {");
 			for(var i = 0; i < r.each_expense.size; i++) {
-				builder.append ("(%s, %lf)\n".printf (this.latexify_date (
-									      r.dates[i]), r.each_expense[i]));
+				builder.append ("(%s, %s)\n".printf (this.latexify_date (
+									     r.dates[i]),
+								     this.format_double (r.each_expense[i])));
 			}
 			builder.append ("};\n");
 			builder.append ("\\addplot[smooth,blue] coordinates {");
 			var date_diff = r.dates[r.dates.size - 1].difference (r.dates[0]) / TimeSpan.DAY;
 			var avg = r.accumulated[r.accumulated.size - 1] / date_diff;
-			builder.append ("(%s, %lf)".printf (this.latexify_date (r.dates[0]), avg));
-			builder.append ("(%s, %lf)".printf (this.latexify_date (r.dates[r.dates.size - 1]), avg));
+			var avg_string = this.format_double (avg);
+			builder.append ("(%s, %s)".printf (this.latexify_date (r.dates[0]), avg_string));
+			builder.append ("(%s, %s)".printf (this.latexify_date (r.dates[r.dates.size - 1]), avg_string));
 			builder.append ("};\n");
 			builder.append ("\\legend {").append (_("Amount")).append (",").append (_("Average Amount")).
 			append ("}\n");
@@ -157,22 +161,23 @@ namespace LFinance {
 															      r
 															      .
 															      end_date));
-			builder.append (",ymin=0,ymax=").append ("%lf".printf (r.accumulated[r.accumulated.size - 1] *
-									       1.05)).append (",date ZERO=").append (this.latexify_date (
-															     r
-															     .
-															     start_date));
+			builder.append (",ymin=0,ymax=").append (this.format_double (r.accumulated[r.accumulated.size -
+												   1] *
+										     1.05)).append (",date ZERO=").
+			append (this.latexify_date (
+					r
+					.start_date));
 			builder.append ("]\n");
 			builder.append ("\\addplot[smooth,red] coordinates {");
 			for(var i = 0; i < r.accumulated.size; i++) {
-				builder.append ("(%s, %lf)\n".printf (this.latexify_date (r.dates[i]),
-								      r.accumulated[i]));
+				builder.append ("(%s, %s)\n".printf (this.latexify_date (r.dates[i]),
+								     this.format_double (r.accumulated[i])));
 			}
 			builder.append ("};\n");
 			builder.append ("\\addplot[smooth,blue] coordinates {");
-			builder.append ("(%s, %lf)".printf (this.latexify_date (r.dates[0]), 0));
-			builder.append ("(%s, %lf)".printf (this.latexify_date (r.dates[r.dates.size - 1]),
-							    date_diff * avg));
+			builder.append ("(%s, 0.0)".printf (this.latexify_date (r.dates[0])));
+			builder.append ("(%s, %s)".printf (this.latexify_date (r.dates[r.dates.size - 1]),
+							   this.format_double (date_diff * avg)));
 			builder.append ("};\n");
 			builder.append ("\\legend {").append (_("Accumulated Amount")).append (",").append (_(
 														    "Average amount per day"))
@@ -230,7 +235,7 @@ namespace LFinance {
 				var month = iter.get ();
 				// The ',' is replaced, as otherwise there could be some problems
 				// with LaTeX.
-				builder.append ("%.2lf".printf ((month.amount / sum) * 100).replace (",", ".")).append (
+				builder.append (this.format_double ((month.amount / sum) * 100)).append (
 					"/").append (month.name);
 				if(!iter.next ())
 					break;
@@ -376,13 +381,18 @@ namespace LFinance {
 				this.curr_frac++;
 			}
 		}
+		string format_double(double d) {
+			Intl.setlocale (LocaleCategory.NUMERIC, "C");
+			var ret = "%lf".printf (d);
+			Intl.setlocale ();
+			return ret;
+		}
 		string escape_latex(string input) {
 			// Based on https://github.com/dangmai/escape-latex/blob/master/src/index.js
-			var builder = new StringBuilder.sized (input.length + 20);
 			var map = new Gee.HashMap<string, string>();
+			map["\\"] = "\\textbackslash{}";
 			map["{"] = "\\{";
 			map["}"] = "\\}";
-			map["\\"] = "\\textbackslash{}";
 			map["#"] = "\\#";
 			map["$"] = "\\$";
 			map["%"] = "\\%";
@@ -392,28 +402,11 @@ namespace LFinance {
 			map["~"] = "\\textasciitilde{}";
 			map["\t"] = "\\qquad{}";
 			map["€"] = "\\officialeuro";
-			map["ä"] = "{\\\"a}";
-			map["ö"] = "{\\\"o}";
-			map["ü"] = "{\\\"u}";
-			map["Ä"] = "{\\\"A}";
-			map["Ö"] = "{\\\"O}";
-			map["Ü"] = "{\\\"U}";
-			map["ß"] = "{\\ss}";
-			// Fix for some weird unicode bugs
-			map["\xff\xbf\xbf\xbf\xbf\xbf"] = "";
-			// This shouldn't work, but it works without
-			// any complaints
-			for(var i = 0; i < input.char_count (); i++) {
-				var ic = input.get_char (i);
-				var as_string = ic.to_string ();
-				if(map.has_key (as_string)) {
-					info ("%s => %s", as_string, map[as_string]);
-					builder.append (map[as_string]);
-				} else {
-					builder.append_unichar (ic);
-				}
+			var s = input;
+			foreach (var item in map) {
+				s = s.replace (item.key, item.value);
 			}
-			return builder.str;
+			return s;
 		}
 		internal signal void progress_update (string to_add,
 						      double fraction);
