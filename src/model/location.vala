@@ -7,9 +7,7 @@ namespace LFinance {
 		bool sharp;
 		TriggerFunc func;
 
-		internal Location(string name,
-				  string? city,
-				  string? info) {
+		internal Location(string name, string? city, string? info) {
 			this._name = name;
 			this._city = city;
 			this._further_info = info == null ? "" : info;
@@ -29,8 +27,9 @@ namespace LFinance {
 			this.fire (TriggerType.EDIT_LOCATION);
 		}
 		internal void fire(TriggerType type) {
-			if(!this.sharp || this.func == null)
+			if(!this.sharp || this.func == null) {
 				return;
+			}
 			this.func (type);
 		}
 		internal void set_sharp(owned TriggerFunc func) {
@@ -38,8 +37,9 @@ namespace LFinance {
 			this.sharp = true;
 		}
 		internal string id_string() {
-			if(this._city == null || this._city == "" || this._city.length == 0)
+			if(this._city == null || this._city == "" || this._city.length == 0) {
 				return this._name;
+			}
 			return this._name + ",\u00a0" + this._city;
 		}
 		internal Json.Node serialize() {

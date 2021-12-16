@@ -5,8 +5,7 @@ namespace LFinance {
 
 	internal interface Exporter : Object {
 		internal abstract void export (Account account) throws Error;
-		internal signal void progress (string text,
-					       double frac);
+		internal signal void progress (string text, double frac);
 	}
 
 	internal class ExporterFactory {
@@ -19,15 +18,19 @@ namespace LFinance {
 				}
 			}
 			var extension = file.substring (dot + 1).down ();
-			if(extension == "pdf") // Search for LaTeX
+			if(extension == "pdf") { // Search for LaTeX
 				return new PDFExporter (file);
-			else if(extension == "md")
+			}
+			else if(extension == "md") {
 				return new MDExporter (file);
-			else if(extension == "html")
+			}
+			else if(extension == "html") {
 				throw new ExporterErrors.EXTENSION_NOT_SUPPORTED (_("Not implemented"));
-			else
+			}
+			else{
 				throw new ExporterErrors.EXTENSION_NOT_SUPPORTED (_(
 											  "Only .pdf, .md and .html are supported!"));
+			}
 		}
 	}
 }

@@ -23,8 +23,7 @@ namespace LFinance {
 		Gtk.Button add_btn;
 		Gtk.Button reset;
 
-		internal CreateExpense(Account account,
-				       Model model) {
+		internal CreateExpense(Account account, Model model) {
 			Object (orientation: Gtk.Orientation.VERTICAL, spacing: 2);
 			this.model = model;
 			this.account = account;
@@ -58,7 +57,8 @@ namespace LFinance {
 			foreach(var tag in model._tags) {
 				var c = tag._rgba;
 				var markup =
-					"<b><span foreground=\"#%02x%02x%02x%02x\" >%s</span></b>".printf (c[0], c[1],
+					"<b><span foreground=\"#%02x%02x%02x%02x\" >%s</span></b>".printf (c[0],
+													   c[1],
 													   c[2],
 													   c[3],
 													   tag._name);
@@ -137,8 +137,12 @@ namespace LFinance {
 			}
 			// TODO: Add combobox for currency
 			expense.set_currency ("€");
-			expense.set_date (new DateTime.local (this.calendar.year, this.calendar.month + 1,
-							      this.calendar.day, 0, 0, 0));
+			expense.set_date (new DateTime.local (this.calendar.year,
+							      this.calendar.month + 1,
+							      this.calendar.day,
+							      0,
+							      0,
+							      0));
 			var idx = 0;
 			foreach(var cb in this.tags) {
 				if(cb.get_active ()) {
@@ -174,8 +178,9 @@ namespace LFinance {
 										  prologue_len + content_len);
 						info ("Looking up %s", sub_string);
 						var tag = this.model.search_tag (sub_string);
-						if(tag != null)
+						if(tag != null) {
 							active.add (tag);
+						}
 					}
 				}
 				this.build_tags_window ();
@@ -186,8 +191,9 @@ namespace LFinance {
 						var content_len = btn.label.length - (prologue_len + epilogue_len);
 						var sub_string = btn.label.slice (prologue_len,
 										  prologue_len + content_len);
-						if(sub_string == tag._name)
+						if(sub_string == tag._name) {
 							btn.active = true;
+						}
 					}
 				}
 				this.reorder_child (this.tags_scw, 2);

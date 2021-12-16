@@ -26,8 +26,9 @@ namespace LFinance {
 			this.colored_radio_buttons.add (this.custom_color);
 			foreach(var c in Colors.get_colors ()) {
 				var c2 = c.strip ();
-				if(c2.length == 0)
+				if(c2.length == 0) {
 					continue;
+				}
 				var btn = new RecommendedColorButton (c2, this.colored_radio_buttons);
 				btn.join_group (this.custom_color);
 				btn.set_text (_("Sample text"));
@@ -61,8 +62,9 @@ namespace LFinance {
 			this.entry.changed.connect (() => {
 				var text = _("Sample text");
 				var et = this.entry.buffer.text;
-				if(et.length != 0)
+				if(et.length != 0) {
 					text = et;
+				}
 				foreach(var btn in this.colored_radio_buttons) {
 					btn.set_text (text);
 				}

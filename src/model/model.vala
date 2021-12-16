@@ -9,8 +9,7 @@ namespace LFinance {
 		internal bool encrypted {get; private set;}
 		internal string password {get; private set;}
 
-		internal Model(bool encrypted = false,
-			       string password = "") {
+		internal Model(bool encrypted = false, string password = "") {
 			this._tags = new Gee.ArrayList<Tag>();
 			this._locations = new Gee.ArrayList<Location>();
 			this._accounts = new Gee.ArrayList<Account>();
@@ -42,34 +41,37 @@ namespace LFinance {
 			foreach(var l in this._locations) {
 				var b1 = l._city == "" && city == null;
 				var b2 = l._city == null && city == "";
-				if(name == l._name && (city == l._city || b1 || b2))
+				if(name == l._name && (city == l._city || b1 || b2)) {
 					return l;
+				}
 			}
 			return null;
 		}
 		internal Location? search_location_by_id (string id) {
 			foreach(var l in this._locations) {
-				if(id == l.id_string ())
+				if(id == l.id_string ()) {
 					return l;
+				}
 			}
 			return null;
 		}
 		internal Tag? search_tag (string name) {
 			foreach(var t in this._tags) {
-				if(name == t._name)
+				if(name == t._name) {
 					return t;
+				}
 			}
 			return null;
 		}
 		internal Account? search_account (string name) {
 			foreach(var a in this._accounts) {
-				if(name == a._name)
+				if(name == a._name) {
 					return a;
+				}
 			}
 			return null;
 		}
-		internal void rename_tag(string old,
-					 string @new) {
+		internal void rename_tag(string old, string @new) {
 			foreach(var t in this._tags) {
 				if(old == t._name) {
 					t.set_name (@new);
@@ -79,8 +81,9 @@ namespace LFinance {
 			this.sort ();
 		}
 		internal void fire(TriggerType type) {
-			if(!this.sharp || this.func == null)
+			if(!this.sharp || this.func == null) {
 				return;
+			}
 			this.func (type);
 		}
 		internal void set_sharp(TriggerFunc func) {
@@ -117,15 +120,17 @@ namespace LFinance {
 		}
 		internal bool has_account(Account a) {
 			foreach(var account in this._accounts)
-				if(account._name == a._name)
+				if(account._name == a._name) {
 					return true;
+				}
 			return false;
 		}
 		internal void remove_account_by_name(string s) {
 			var index = 0;
 			foreach(var account in this._accounts) {
-				if(account._name == s)
+				if(account._name == s) {
 					break;
+				}
 				index++;
 			}
 			this._accounts.remove_at (index);
@@ -187,8 +192,9 @@ namespace LFinance {
 		}
 		internal bool account_exists(string name) {
 			foreach(var account in this._accounts)
-				if(account._name == name)
+				if(account._name == name) {
 					return true;
+				}
 			return false;
 		}
 		internal void secure(string pwd) {

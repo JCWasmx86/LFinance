@@ -18,9 +18,7 @@ namespace LFinance {
 		Gtk.Box fourth_line;
 		Gtk.Button edit;
 		Gtk.Button cancel;
-		internal EditWidget(Model model,
-				    Account account,
-				    Expense expense) {
+		internal EditWidget(Model model, Account account, Expense expense) {
 			Object (orientation: Gtk.Orientation.VERTICAL, spacing: 2);
 			this.model = model;
 			this.account = account;
@@ -109,8 +107,9 @@ namespace LFinance {
 				this.second_line.get_date (out year, out month, out day);
 				month++;
 				this.expense.set_date (new DateTime.local ((int)year, (int)month, (int)day, 0, 0, 0));
-				while(this.expense._tags.size != 0)
+				while(this.expense._tags.size != 0) {
 					this.expense._tags.remove_at (0);
+				}
 				foreach(var tag in this.tags) {
 					this.expense._tags.add (tag.get_tag ());
 				}
@@ -129,8 +128,9 @@ namespace LFinance {
 				foreach(var etb in this.tags) {
 					this.third_line.remove (etb);
 				}
-				while(this.tags.size != 0)
+				while(this.tags.size != 0) {
 					this.tags.remove_at (0);
+				}
 				foreach(var tag in this.expense._tags) {
 					var btn = new ExtendedTagButton (tag, this.account, this.expense, this.tags);
 					this.tags.add (btn);
@@ -153,10 +153,13 @@ namespace LFinance {
 				foreach(var radio in dialog.buttons) {
 					if(radio.get_active ()) {
 						var btn = new ExtendedTagButton (this.model.search_tag (
-											 radio.label), this.account, this.expense,
+											 radio.label),
+										 this.account,
+										 this.expense,
 										 this.tags);
 						this.tags.add (btn);
-						Gdk.threads_add_idle_full (Priority.HIGH_IDLE + 20, () => {
+						Gdk.threads_add_idle_full (Priority.HIGH_IDLE + 20,
+									   () => {
 							this.third_line.pack_start (btn, false, false, 2);
 							this.third_line.show_all ();
 							this.third_line.queue_draw ();

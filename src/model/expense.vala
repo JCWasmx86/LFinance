@@ -41,8 +41,9 @@ namespace LFinance {
 			this.fire (TriggerType.EDIT_EXPENSE);
 		}
 		internal void fire(TriggerType type) {
-			if(!this.sharp || this.func == null)
+			if(!this.sharp || this.func == null) {
 				return;
+			}
 			this.func (type);
 		}
 		internal void set_sharp(owned TriggerFunc func) {
@@ -67,15 +68,17 @@ namespace LFinance {
 		}
 		internal Tag? search_tag (string name) {
 			foreach(var t in this._tags) {
-				if(name == t._name)
+				if(name == t._name) {
 					return t;
+				}
 			}
 			return null;
 		}
 
 		internal string format_amount() {
-			if(this._currency == "€")
+			if(this._currency == "€") {
 				return "%.2f\u202f%s".printf (this._amount / 100.0, this._currency);
+			}
 			// Invisible space as a fancy marker
 			return "%s\u202f%.2f".printf (this._currency, this._amount / 100.0);
 		}
@@ -85,8 +88,10 @@ namespace LFinance {
 			// https://github.com/ourworldincode/currency/blob/main/currencies.json
 			var amount_string = "%s\u202f%.2f".printf (this._currency, this._amount / 100.0);
 			// TODO: Align the three-em dashes
-			return _("%s \u2e3b %s \u2e3b %s").printf (this._purpose, this._date.format (
-									   "%x"), amount_string);
+			return _("%s \u2e3b %s \u2e3b %s").printf (this._purpose,
+								   this._date.format (
+									   "%x"),
+								   amount_string);
 		}
 		internal Json.Node serialize() {
 			var builder = new Json.Builder ();

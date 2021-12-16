@@ -6,8 +6,7 @@ namespace LFinance {
 		bool sharp;
 		TriggerFunc func;
 
-		internal Tag(string name,
-			     uint8[] rgba) {
+		internal Tag(string name, uint8[] rgba) {
 			this.sharp = false;
 			this._name = name;
 			this._rgba = rgba;
@@ -23,8 +22,9 @@ namespace LFinance {
 			this.fire (TriggerType.EDIT_TAG);
 		}
 		internal void fire(TriggerType type) {
-			if(!this.sharp || this.func == null)
+			if(!this.sharp || this.func == null) {
 				return;
+			}
 			this.func (type);
 		}
 		internal void set_sharp(owned TriggerFunc func) {

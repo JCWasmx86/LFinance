@@ -4,8 +4,7 @@ namespace LFinance {
 		Gtk.Entry city;
 		Gtk.TextView textview;
 
-		internal LocationEditDialog(string selected,
-					    Model model) {
+		internal LocationEditDialog(string selected, Model model) {
 			this.title = _("Edit location");
 			var location = model.search_location_by_id (selected);
 			this.name_entry = new Gtk.Entry ();

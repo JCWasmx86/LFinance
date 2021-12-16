@@ -2,16 +2,20 @@ namespace LFinance {
 	namespace CryptoTest {
 		static void main(string[] args) {
 			Test.init (ref args);
-			Test.add_func ("/pwd_derivation_test", () => {
+			Test.add_func ("/pwd_derivation_test",
+				       () => {
 				CryptoTest.pwd_derivation_test ();
 			});
-			Test.add_func ("/encryption", () => {
+			Test.add_func ("/encryption",
+				       () => {
 				CryptoTest.encryption ();
 			});
-			Test.add_func ("/decryption", () => {
+			Test.add_func ("/decryption",
+				       () => {
 				CryptoTest.decryption ();
 			});
-			Test.add_func ("/decryption_fail", () => {
+			Test.add_func ("/decryption_fail",
+				       () => {
 				CryptoTest.decryption_fail ();
 			});
 			Test.run ();

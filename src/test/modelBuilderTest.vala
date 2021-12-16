@@ -2,22 +2,28 @@ namespace LFinance {
 	class ModelBuilderTest {
 		static void main(string[] args) {
 			Test.init (ref args);
-			Test.add_func ("/no_object", () => {
+			Test.add_func ("/no_object",
+				       () => {
 				ModelBuilderTest.no_object ();
 			});
-			Test.add_func ("/invalid_json", () => {
+			Test.add_func ("/invalid_json",
+				       () => {
 				ModelBuilderTest.invalid_json ();
 			});
-			Test.add_func ("/no_version", () => {
+			Test.add_func ("/no_version",
+				       () => {
 				ModelBuilderTest.no_version ();
 			});
-			Test.add_func ("/invalid_version", () => {
+			Test.add_func ("/invalid_version",
+				       () => {
 				ModelBuilderTest.invalid_version ();
 			});
-			Test.add_func ("/version_invalid_data_type", () => {
+			Test.add_func ("/version_invalid_data_type",
+				       () => {
 				ModelBuilderTest.version_invalid_data_type ();
 			});
-			Test.add_func ("/get_right_builder", () => {
+			Test.add_func ("/get_right_builder",
+				       () => {
 				ModelBuilderTest.get_right_builder ();
 			});
 			Test.run ();

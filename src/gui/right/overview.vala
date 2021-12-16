@@ -15,8 +15,7 @@ namespace LFinance {
 		Gtk.ListStore store;
 		Gtk.TreeView stats;
 
-		internal Overview(Model model,
-				  Account to_render) {
+		internal Overview(Model model, Account to_render) {
 			Object (orientation: Gtk.Orientation.VERTICAL, spacing: 2);
 			this.model = model;
 			this.account = to_render;
@@ -43,18 +42,26 @@ namespace LFinance {
 		void build_store() {
 			this.store = new Gtk.ListStore (4, Type.STRING, Type.STRING, Type.STRING, Type.STRING);
 			var time = new Gtk.TreeViewColumn.with_attributes (_("Timespan"),
-									   new Gtk.CellRendererText (), "text", 0,
+									   new Gtk.CellRendererText (),
+									   "text",
+									   0,
 									   null);
 			var nExpenses = new Gtk.TreeViewColumn.with_attributes (_(
 											"Number of Expenses"),
-										new Gtk.CellRendererText (), "text", 1,
+										new Gtk.CellRendererText (),
+										"text",
+										1,
 										null);
 			var average = new Gtk.TreeViewColumn.with_attributes (_(
 										      "Average Amount"),
-									      new Gtk.CellRendererText (), "text", 2,
+									      new Gtk.CellRendererText (),
+									      "text",
+									      2,
 									      null);
 			var total = new Gtk.TreeViewColumn.with_attributes (_("Total Amount"),
-									    new Gtk.CellRendererText (), "text", 3,
+									    new Gtk.CellRendererText (),
+									    "text",
+									    3,
 									    null);
 			this.stats = new Gtk.TreeView.with_model (this.store);
 			this.stats.append_column (time);
@@ -119,9 +126,7 @@ namespace LFinance {
 			this.insert (_("Last year"), out iter, last);
 			this.stats.model = this.store;
 		}
-		void insert(string time,
-			    out Gtk.TreeIter iter,
-			    Gee.List<Expense> expenses) {
+		void insert(string time, out Gtk.TreeIter iter, Gee.List<Expense> expenses) {
 			var n = expenses.size;
 			var sum = 0.0;
 			var hash_map = new Gee.HashMap<string, uint64?>();
@@ -152,8 +157,11 @@ namespace LFinance {
 			val2.set_string ("%u".printf (n));
 			val3.set_string ("%s%.2lf".printf (currency, average));
 			val4.set_string ("%s%.2lf".printf (currency, sum));
-			this.store.insert_with_valuesv (out iter, -1, new int[] {0, 1, 2, 3}, new Value[] {val1, val2,
-													   val3, val4});
+			this.store.insert_with_valuesv (out iter,
+							-1,
+							new int[] {0, 1, 2, 3},
+							new Value[] {val1, val2,
+								     val3, val4});
 		}
 		internal void rebuild(TriggerType? type) {
 			if(type == null) {

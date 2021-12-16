@@ -1,8 +1,7 @@
 namespace LFinance {
 	internal class RecommendedColorButton : ColoredRadioButton, Gtk.RadioButton {
 		string color;
-		internal RecommendedColorButton(string color,
-						Gee.List<ColoredRadioButton> list) {
+		internal RecommendedColorButton(string color, Gee.List<ColoredRadioButton> list) {
 			Object (group: null, label: "foo");
 			this.color = color;
 		}

@@ -31,7 +31,8 @@ namespace LFinance {
 				this.progress (_("Success!"), this.curr_frac / this.max_frac);
 				this.curr_frac++;
 				this.progress (_("Copying output to %s…").printf (
-						       this.file.get_path ()), this.curr_frac / this.max_frac);
+						       this.file.get_path ()),
+					       this.curr_frac / this.max_frac);
 				this.curr_frac++;
 				file.copy (this.file, FileCopyFlags.OVERWRITE | FileCopyFlags.ALL_METADATA);
 				this.progress (_("Finished!"), this.curr_frac / this.max_frac);
@@ -44,8 +45,10 @@ namespace LFinance {
 		string build() {
 			var sb = new StringBuilder ();
 			sb.append (_("# Expenses for account %s").printf (this.account._name)).append ("\n\n");
-			sb.append ("| %s    | %s     | %s    | %s    | %s    |\n".printf (_("Purpose"), _("Date"),
-											  _("Amount"), _("Location"),
+			sb.append ("| %s    | %s     | %s    | %s    | %s    |\n".printf (_("Purpose"),
+											  _("Date"),
+											  _("Amount"),
+											  _("Location"),
 											  _("Tags")));
 			sb.append ("| :---: | :----: | :---: | :---: | :---: |\n");
 			for(var i = 0; i < this.account._expenses.size; i++) {
@@ -57,8 +60,9 @@ namespace LFinance {
 													     " "))));
 				if(expense._location != null) {
 					sb.append (this.escape_md (expense._location._name));
-					if(expense._location._city != null)
+					if(expense._location._city != null) {
 						sb.append (", ").append (this.escape_md (expense._location._city));
+					}
 					sb.append (" |");
 				} else {
 					sb.append ("/ |");
@@ -68,8 +72,9 @@ namespace LFinance {
 					sb.append ("`");
 					sb.append (this.escape_md (tag._name));
 					sb.append ("`");
-					if(j != expense._tags.size - 1)
+					if(j != expense._tags.size - 1) {
 						sb.append (", ");
+					}
 				}
 				sb.append ("|\n");
 			}

@@ -45,8 +45,7 @@ namespace LFinance {
 		internal uint64 count;
 		internal int index;
 
-		internal MonthData(int index,
-				   string s) {
+		internal MonthData(int index, string s) {
 			this.index = index;
 			this.name = s;
 		}
@@ -74,8 +73,7 @@ namespace LFinance {
 			this.accumulated = new Gee.ArrayList<double?>();
 			this.dates = new Gee.ArrayList<DateTime?>();
 		}
-		internal void add_expense(double amount,
-					  DateTime date) {
+		internal void add_expense(double amount, DateTime date) {
 			var month = date.get_month ();
 			if(this.months.has_key (month)) {
 				this.months[month].add_expense (amount);
@@ -85,10 +83,12 @@ namespace LFinance {
 			}
 			if(this.dates.size == 0 || this.dates[this.dates.size - 1].compare (date) != 0) {
 				this.each_expense.add (amount);
-				if(accumulated.size != 0)
+				if(accumulated.size != 0) {
 					this.accumulated.add (this.accumulated[this.accumulated.size - 1] + amount);
-				else
+				}
+				else{
 					this.accumulated.add (amount);
+				}
 				this.max_expense_value = double.max (amount, this.max_expense_value);
 				this.dates.add (date);
 			} else {
@@ -99,8 +99,7 @@ namespace LFinance {
 			}
 			this.n++;
 		}
-		internal void end_it(DateTime start,
-				     DateTime end) {
+		internal void end_it(DateTime start, DateTime end) {
 			this.start_date = start;
 			this.end_date = end;
 			var len = this.accumulated.size - 1;

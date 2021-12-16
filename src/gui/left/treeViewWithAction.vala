@@ -8,9 +8,7 @@ namespace LFinance {
 		string type;
 		ActionHandler handler;
 
-		internal TreeViewWithAction(string s,
-					    ActionHandler handler,
-					    string type = "text",
+		internal TreeViewWithAction(string s, ActionHandler handler, string type = "text",
 					    bool editable = true) {
 			this.get_selection ().set_mode (Gtk.SelectionMode.BROWSE);
 			this.store = new Gtk.ListStore (3, Type.STRING, Type.STRING, Type.STRING);
@@ -57,8 +55,9 @@ namespace LFinance {
 				var val = Value (typeof(string));
 				this.store.get_value (iter, 0, out val);
 				string out_val = "";
-				if(handler.handle_edit ((string)val, new_text, out out_val))
+				if(handler.handle_edit ((string)val, new_text, out out_val)) {
 					this.store.set_value (iter, 0, out_val == null ? new_text : out_val);
+				}
 			});
 			this.key_release_event.connect_after ((event) => {
 				var selected = this.get_selection ();
@@ -72,8 +71,7 @@ namespace LFinance {
 			});
 		}
 
-		internal void append_string(string val,
-					    string shadow = "") {
+		internal void append_string(string val, string shadow = "") {
 			var val1 = Value (typeof(string));
 			var val2 = Value (typeof(string));
 			val1.set_string (val);

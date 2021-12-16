@@ -74,7 +74,8 @@ namespace LFinance {
 			lock (this.rebuild_lock) {
 				this.left.rebuild (type, this.func);
 				this.right.rebuild (type);
-				Gdk.threads_add_idle_full (Priority.HIGH_IDLE + 20, () => {
+				Gdk.threads_add_idle_full (Priority.HIGH_IDLE + 20,
+							   () => {
 					this.left.show_all ();
 					this.right.show_all ();
 					this.queue_draw ();
@@ -101,23 +102,30 @@ namespace LFinance {
 				var suffix = model.encrypted ? ".enc" : "";
 				var new_save_file = base_dir + "/data.json" + suffix;
 				var old_save_file = save_dir + "/%d_%d_%d.json%s".printf (
-					date.get_hour (), date.get_minute (), date.get_second (), suffix);
+					date.get_hour (),
+					date.get_minute (),
+					date.get_second (),
+					suffix);
 				try {
 					info ("Copying old save file to %s", old_save_file);
 					File.new_for_path (new_save_file).copy (File.new_for_path (
-											old_save_file), FileCopyFlags.OVERWRITE, null,
+											old_save_file),
+										FileCopyFlags.OVERWRITE,
+										null,
 										null);
 				} catch(Error e) {
 					warning ("Error copying file: %s", e.message);
 				}
-				if(!model.encrypted)
+				if(!model.encrypted) {
 					generator.to_file (new_save_file);
+				}
 				else {
 					try {
 						var efw = new EncryptedFileWriter ();
 						efw.write (File.new_for_path (new_save_file),
 							   generator.to_gstring (
-								   new StringBuilder ()).str, model.password);
+								   new StringBuilder ()).str,
+							   model.password);
 					} catch(Error e) {
 						critical (e.message);
 					}
@@ -129,7 +137,8 @@ namespace LFinance {
 			if((key.state & Gdk.ModifierType.CONTROL_MASK) != 0 &&
 			   (key.keyval == Gdk.Key.s || key.keyval == Gdk.Key.S)) {
 				this.spinner.start ();
-				new Thread<void>("save", () => {
+				new Thread<void>("save",
+						 () => {
 					try {
 						this.save ();
 					} catch(Error e) {
@@ -142,9 +151,15 @@ namespace LFinance {
 		}
 		internal void export_all() {
 			var dialog =
-				new Gtk.FileChooserDialog (_("Export"), null, Gtk.FileChooserAction.SAVE, _(
-								   "_Cancel"), Gtk.ResponseType.CANCEL, _(
-								   "Export"), Gtk.ResponseType.OK);
+				new Gtk.FileChooserDialog (_("Export"),
+							   null,
+							   Gtk.FileChooserAction.SAVE,
+							   _(
+								   "_Cancel"),
+							   Gtk.ResponseType.CANCEL,
+							   _(
+								   "Export"),
+							   Gtk.ResponseType.OK);
 			dialog.do_overwrite_confirmation = true;
 			var result = dialog.run ();
 			var file = dialog.get_filename ();

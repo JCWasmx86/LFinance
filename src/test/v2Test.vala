@@ -2,22 +2,28 @@ namespace LFinance {
 	internal class V2Test {
 		static void main(string[] args) {
 			Test.init (ref args);
-			Test.add_func ("/no_tags", () => {
+			Test.add_func ("/no_tags",
+				       () => {
 				V2Test.no_tags ();
 			});
-			Test.add_func ("/tags_invalid_type", () => {
+			Test.add_func ("/tags_invalid_type",
+				       () => {
 				V2Test.tags_invalid_type ();
 			});
-			Test.add_func ("/tag_no_name", () => {
+			Test.add_func ("/tag_no_name",
+				       () => {
 				V2Test.tag_no_name ();
 			});
-			Test.add_func ("/tag_name_invalid_type", () => {
+			Test.add_func ("/tag_name_invalid_type",
+				       () => {
 				V2Test.tag_name_invalid_type ();
 			});
-			Test.add_func ("/tag_no_color", () => {
+			Test.add_func ("/tag_no_color",
+				       () => {
 				V2Test.tag_no_color ();
 			});
-			Test.add_func ("/tag_color_invalid_type", () => {
+			Test.add_func ("/tag_color_invalid_type",
+				       () => {
 				V2Test.tag_color_invalid_type ();
 			});
 			Test.run ();

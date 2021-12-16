@@ -15,8 +15,11 @@ namespace LFinance {
 		}
 
 		void build_gui() {
-			this.add_buttons (_("_Cancel"), Gtk.ResponseType.CANCEL, _(
-						  "Create Location"), Gtk.ResponseType.OK);
+			this.add_buttons (_("_Cancel"),
+					  Gtk.ResponseType.CANCEL,
+					  _(
+						  "Create Location"),
+					  Gtk.ResponseType.OK);
 			var name_l = new Gtk.Label (_("Name:"));
 			this.name_entry = new Gtk.Entry ();
 			var city_l = new Gtk.Label (_("City:"));

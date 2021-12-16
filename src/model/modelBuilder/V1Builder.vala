@@ -5,9 +5,7 @@ namespace LFinance {
 		Json.Object root;
 		string password;
 		bool pwd;
-		internal ModelV1Builder(Json.Object root,
-					string password,
-					bool pwd) {
+		internal ModelV1Builder(Json.Object root, string password, bool pwd) {
 			this.root = root;
 			this.pwd = pwd;
 			this.password = password;
@@ -33,7 +31,10 @@ namespace LFinance {
 				expense_ret.set_date (new DateTime (new TimeZone.local (),
 								    (int)date.get_int_member ("year") + 1900,
 								    (int)date.get_int_member ("month") + 1,
-								    (int)date.get_int_member ("day"), 0, 0, 0));
+								    (int)date.get_int_member ("day"),
+								    0,
+								    0,
+								    0));
 				account.add_expense (expense_ret);
 			}
 			info ("Loaded %u expenses", data.get_length ());

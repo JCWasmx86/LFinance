@@ -13,7 +13,8 @@ namespace LFinance {
 			this.color = color;
 			if(this.get_child () is Gtk.Label) {
 				((Gtk.Label) this.get_child ()).set_markup ("<b><span color=\"%s\">%s</span></b>".printf (
-										    color, _(
+										    color,
+										    _(
 											    "Select your own color")));
 			}
 		}

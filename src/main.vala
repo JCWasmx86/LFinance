@@ -43,7 +43,9 @@ namespace LFinance {
 				var dialog = new Gtk.Dialog ();
 				dialog.title = _("Password required");
 				dialog.modal = false;
-				dialog.add_buttons (_("Exit"), Gtk.ResponseType.CANCEL, _("Unlock"),
+				dialog.add_buttons (_("Exit"),
+						    Gtk.ResponseType.CANCEL,
+						    _("Unlock"),
 						    Gtk.ResponseType.OK);
 				var entry = new Gtk.Entry ();
 				entry.set_placeholder_text (_("Password"));
@@ -73,8 +75,9 @@ namespace LFinance {
 					if(r == Gtk.ResponseType.OK) {
 						this.password = entry.text;
 						try {
-							if(ModelBuilderFactory.check_password (this.password))
+							if(ModelBuilderFactory.check_password (this.password)) {
 								break;
+							}
 						} catch (Error e) {
 
 						}
@@ -106,8 +109,9 @@ namespace LFinance {
 			this.lock_button.tooltip_text = _("Encrypt your data");
 			this.lock_button.clicked.connect (() => {
 				this.panel.setup_encryption ();
-				if(this.panel.already_encrypted ())
+				if(this.panel.already_encrypted ()) {
 					this.lock_button.destroy ();
+				}
 			});
 			var title_bar = new Gtk.HeaderBar ();
 			title_bar.title = "LFinance";
@@ -126,7 +130,9 @@ namespace LFinance {
 			try {
 				this.panel.save ();
 			} catch(Error e) {
-				var dialog = new Gtk.MessageDialog (null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR,
+				var dialog = new Gtk.MessageDialog (null,
+								    Gtk.DialogFlags.MODAL,
+								    Gtk.MessageType.ERROR,
 								    Gtk.ButtonsType.OK,
 								    _("An error occurred saving data: %s\n").printf (e.
 														     message));
@@ -144,7 +150,9 @@ namespace LFinance {
 					this.lock_button.destroy ();
 				}
 			} catch(Error e) {
-				var dialog = new Gtk.MessageDialog (null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR,
+				var dialog = new Gtk.MessageDialog (null,
+								    Gtk.DialogFlags.MODAL,
+								    Gtk.MessageType.ERROR,
 								    Gtk.ButtonsType.OK,
 								    _("An error occurred loading LFinance: %s\n").printf (
 									    e.message));

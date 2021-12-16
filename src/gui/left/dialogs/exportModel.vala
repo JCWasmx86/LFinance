@@ -7,8 +7,7 @@ namespace LFinance {
 		Gtk.TextView view;
 		Gtk.Widget exit_button;
 
-		internal ExportModelDialog(string file,
-					   Model model) {
+		internal ExportModelDialog(string file, Model model) {
 			this.model = model;
 			this.file = file;
 			this.build_gui ();
@@ -29,7 +28,8 @@ namespace LFinance {
 		}
 		internal void export() {
 			this.show_all ();
-			new Thread<void>("question", () => {
+			new Thread<void>("question",
+					 () => {
 				try {
 					var exporter = new PDFModelExporter (this.model, this.file);
 					exporter.progress_update.connect ((text, frac) => {
@@ -42,7 +42,8 @@ namespace LFinance {
 				} catch(Error e) {
 					this.destroy ();
 					var message =
-						new Gtk.MessageDialog (null, Gtk.DialogFlags.MODAL,
+						new Gtk.MessageDialog (null,
+								       Gtk.DialogFlags.MODAL,
 								       Gtk.MessageType.ERROR,
 								       Gtk.ButtonsType.OK,
 								       _("Export failed: %s").printf (e.message));
@@ -51,8 +52,7 @@ namespace LFinance {
 				}
 			});
 		}
-		void update_view(string text,
-				 double frac) {
+		void update_view(string text, double frac) {
 			this.view.buffer.text += (text + "\n");
 			this.progress_bar.set_fraction (frac);
 			// To avoid any floating point inaccuracies…

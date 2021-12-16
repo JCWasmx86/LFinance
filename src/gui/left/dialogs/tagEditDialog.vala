@@ -3,8 +3,7 @@ namespace LFinance {
 		Gtk.Entry name_entry;
 		Gtk.ColorButton button;
 
-		internal TagEditDialog(Tag tag,
-				       Model model) {
+		internal TagEditDialog(Tag tag, Model model) {
 			this.title = _("Edit tag");
 			this.name_entry = new Gtk.Entry ();
 			this.name_entry.buffer.set_text (tag._name.data);

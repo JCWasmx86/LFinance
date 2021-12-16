@@ -16,9 +16,7 @@ namespace LFinance {
 		Gtk.Expander expander;
 		EditWidget edit;
 
-		internal ExpenseWidget(Model model,
-				       Account account,
-				       Expense expense) {
+		internal ExpenseWidget(Model model, Account account, Expense expense) {
 			Object (orientation: Gtk.Orientation.VERTICAL, spacing: 2);
 			this.model = model;
 			this.account = account;
@@ -83,12 +81,16 @@ namespace LFinance {
 		void connect_signals() {
 			this.delete_button.clicked.connect (() => {
 				var dialog =
-					new Gtk.MessageDialog (null, Gtk.DialogFlags.MODAL, Gtk.MessageType.QUESTION,
+					new Gtk.MessageDialog (null,
+							       Gtk.DialogFlags.MODAL,
+							       Gtk.MessageType.QUESTION,
 							       Gtk.ButtonsType.NONE,
 							       _("Do you really want to delete expense \u201c%s\u201d?")
 							       .printf (
 								       this.expense._purpose));
-				dialog.add_buttons (_("_Cancel"), Gtk.ResponseType.CANCEL, _("Delete"),
+				dialog.add_buttons (_("_Cancel"),
+						    Gtk.ResponseType.CANCEL,
+						    _("Delete"),
 						    Gtk.ResponseType.OK);
 				dialog.get_widget_for_response (Gtk.ResponseType.OK).get_style_context ().add_class (
 					"destructive-action");
@@ -178,8 +180,9 @@ namespace LFinance {
 			for(var i = array.length - 1; i >= 0; i--) {
 				if(!array[i]) {
 					this.tags_box.foreach(a => this.tags_box.remove (a));
-					while(this.tags.size != 0)
+					while(this.tags.size != 0) {
 						this.tags.remove_at (0);
+					}
 					foreach(var t in this.expense._tags) {
 						var btn = new TagButton (t);
 						this.tags.add (btn);

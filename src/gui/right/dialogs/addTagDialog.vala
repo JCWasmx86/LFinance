@@ -5,8 +5,7 @@ namespace LFinance {
 		Gee.List<ExtendedTagButton> tags;
 		internal unowned SList<Gtk.RadioButton> buttons {internal get; private set;}
 
-		internal AddTagDialog(Model model,
-				      Gee.List<ExtendedTagButton> tags) {
+		internal AddTagDialog(Model model, Gee.List<ExtendedTagButton> tags) {
 			this.title = _("Add tag");
 			this.model = model;
 			this.tags = tags;
@@ -25,8 +24,9 @@ namespace LFinance {
 						break;
 					}
 				}
-				if(found)
+				if(found) {
 					continue;
+				}
 				var radio = new Gtk.RadioButton.with_label (buttons, tag._name);
 				this.buttons.append (radio);
 				b.add (radio);

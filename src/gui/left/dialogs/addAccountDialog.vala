@@ -10,8 +10,11 @@ namespace LFinance {
 			this.build_gui ();
 		}
 		void build_gui() {
-			this.add_buttons (_("_Cancel"), Gtk.ResponseType.CANCEL, _(
-						  "Create Account"), Gtk.ResponseType.OK);
+			this.add_buttons (_("_Cancel"),
+					  Gtk.ResponseType.CANCEL,
+					  _(
+						  "Create Account"),
+					  Gtk.ResponseType.OK);
 			var label = new Gtk.Label (_("Name:"));
 			this.entry = new Gtk.Entry ();
 			this.entry.changed.connect (() => {

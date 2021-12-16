@@ -6,9 +6,7 @@ namespace LFinance {
 		string password;
 		bool pwd;
 
-		internal ModelV2Builder(Json.Object root,
-					string password,
-					bool pwd) {
+		internal ModelV2Builder(Json.Object root, string password, bool pwd) {
 			this.root = root;
 			this.pwd = pwd;
 			this.password = password;
@@ -31,7 +29,7 @@ namespace LFinance {
 				color[3] = colors.get_length () == 3 ? 255 : (uint8)(colors.get_int_element (3) & 0xFF);
 				ret.add_tag (new Tag (name, color));
 			}
-			info ("Loaded %u tags",tags.get_length ());
+			info ("Loaded %u tags", tags.get_length ());
 			ParsingErrors.check_node (this.root, "locations", NodeType.ARRAY);
 			var locations = this.root.get_array_member ("locations");
 			for(var i = 0; i < locations.get_length (); i++) {
@@ -44,7 +42,7 @@ namespace LFinance {
 				var _info = location.has_member ("info") ? location.get_string_member ("info") : null;
 				ret.add_location (new Location (name, city, _info));
 			}
-			info ("Loaded %u locations",locations.get_length ());
+			info ("Loaded %u locations", locations.get_length ());
 			ParsingErrors.check_node (this.root, "accounts", NodeType.ARRAY);
 			var accounts = this.root.get_array_member ("accounts");
 			for(var i = 0; i < accounts.get_length (); i++) {
@@ -72,7 +70,10 @@ namespace LFinance {
 					expense_ret.set_date (new DateTime (new TimeZone.local (),
 									    (int)date.get_int_member ("year"),
 									    (int)date.get_int_member ("month"),
-									    (int)date.get_int_member ("day"), 0, 0, 0));
+									    (int)date.get_int_member ("day"),
+									    0,
+									    0,
+									    0));
 					if(expense.has_member ("location") &&
 					   expense.get_string_member ("location") != null) {
 						var city =

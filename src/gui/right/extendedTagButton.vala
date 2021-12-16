@@ -4,10 +4,7 @@ namespace LFinance {
 		Gee.List<ExtendedTagButton> btns;
 		string old_markup;
 		Gtk.Label label;
-		internal ExtendedTagButton(Tag t,
-					   Account account,
-					   Expense expense,
-					   Gee.List<ExtendedTagButton> btns) {
+		internal ExtendedTagButton(Tag t, Account account, Expense expense, Gee.List<ExtendedTagButton> btns) {
 			Object (orientation: Gtk.Orientation.HORIZONTAL, spacing: 2);
 			this.tag = t;
 			this.btns = btns;

@@ -2,8 +2,7 @@ namespace LFinance {
 	internal class CreateExpenseWidget : Gtk.Expander {
 		CreateExpense ce;
 
-		internal CreateExpenseWidget(Account account,
-					     Model model) {
+		internal CreateExpenseWidget(Account account, Model model) {
 			this.label = _("Add Expense");
 			this.ce = new CreateExpense (account, model);
 			this.add (ce);

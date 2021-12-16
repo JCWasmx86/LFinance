@@ -4,10 +4,7 @@ namespace LFinance {
 		public int spacing {get; set construct;}
 		protected Gtk.Box box;
 
-		internal void pack_start(Gtk.Widget child,
-					 bool expand = true,
-					 bool fill = true,
-					 uint padding = 0) {
+		internal void pack_start(Gtk.Widget child, bool expand = true, bool fill = true, uint padding = 0) {
 			if(this.box == null) {
 				this.box = new Gtk.Box (this.orientation, this.spacing);
 				this.add (this.box);

@@ -15,13 +15,15 @@ namespace LFinance {
 			this.model = model;
 			this.overview = null;
 			this.expenses = null;
-			if(this.model._accounts.size == 0)
+			if(this.model._accounts.size == 0) {
 				return;
+			}
 			this.to_render = this.model._accounts[0];
 		}
 		internal void select(string? account_name) {
-			if(account_name != null)
+			if(account_name != null) {
 				this.to_render = this.model.search_account (account_name);
+			}
 			if(account_name == null || this.to_render == null) {
 				this.rebuild (null);
 				return;
@@ -38,7 +40,8 @@ namespace LFinance {
 			}
 			this.overview.select (this.to_render);
 			this.expenses.select (this.to_render);
-			Gdk.threads_add_idle_full (Priority.HIGH_IDLE + 20, () => {
+			Gdk.threads_add_idle_full (Priority.HIGH_IDLE + 20,
+						   () => {
 				this.show_all ();
 				return false;
 			});
@@ -77,8 +80,9 @@ namespace LFinance {
 			} else if(type == TriggerType.DELETE_ACCOUNT) {
 				// Account was deleted
 				if(!this.model.has_account (this.to_render)) {
-					if(this.model._accounts.size > 0)
+					if(this.model._accounts.size > 0) {
 						this.select (this.model._accounts[0]._name);
+					}
 					else {
 						this.remove (this.notebook);
 						this.to_render = null;

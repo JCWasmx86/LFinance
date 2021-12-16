@@ -10,7 +10,9 @@ namespace LFinance {
 			this.connect_signals ();
 		}
 		void build_gui() {
-			this.add_buttons (_("_Cancel"), Gtk.ResponseType.CANCEL, _("Encrypt Data"),
+			this.add_buttons (_("_Cancel"),
+					  Gtk.ResponseType.CANCEL,
+					  _("Encrypt Data"),
 					  Gtk.ResponseType.OK);
 			this.get_widget_for_response (Gtk.ResponseType.OK).get_style_context ().add_class (
 				"destructive-action");

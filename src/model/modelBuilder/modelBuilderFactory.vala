@@ -3,16 +3,15 @@ using Json;
 namespace LFinance {
 	internal errordomain ParsingErrors {
 		INVALID_DATA, KEY_MISSING, WRONG_TYPE;
-		internal static void check_node(Json.Object root,
-						string key,
-						NodeType type) throws Error {
+		internal static void check_node(Json.Object root, string key, NodeType type) throws Error {
 			if(!root.has_member (key)) {
 				throw new ParsingErrors.KEY_MISSING ("Key \"%s\" not found!", key);
 			}
 			var obj = root.get_member (key);
 			if(obj.get_node_type () != type) {
 				throw new ParsingErrors.WRONG_TYPE ("Expected key \"%s\" to be an %s, but got an %s",
-								    key, type.to_string (),
+								    key,
+								    type.to_string (),
 								    obj.get_node_type ().to_string ());
 			}
 		}
@@ -21,8 +20,7 @@ namespace LFinance {
 		internal abstract Model build () throws Error;
 	}
 	internal class ModelBuilderFactory {
-		internal static ModelBuilder from_file(string file,
-						       string? password = "",
+		internal static ModelBuilder from_file(string file, string? password = "",
 						       bool pwd = false) throws Error {
 			Json.Node node;
 			if(!pwd) {
@@ -75,11 +73,13 @@ namespace LFinance {
 		}
 		internal static bool encrypted_data() {
 			var base_dir = Environment.get_user_data_dir () + "/LFinance/";
-			if(!File.new_for_path (base_dir).query_exists ())
+			if(!File.new_for_path (base_dir).query_exists ()) {
 				return false;
+			}
 			var encrypted = base_dir + "data.json.enc";
-			if(File.new_for_path (encrypted).query_exists ())
+			if(File.new_for_path (encrypted).query_exists ()) {
 				return true;
+			}
 			return false;
 		}
 		internal static bool check_password(string password) throws GLib.Error {

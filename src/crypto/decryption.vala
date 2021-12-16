@@ -1,8 +1,7 @@
 using GCrypt;
 
 namespace LFinance {
-	internal static uint8[] decrypt(uint8[] data,
-					string password) {
+	internal static uint8[] decrypt(uint8[] data, string password) {
 		Cipher.Cipher cipher;
 		var error =
 			Cipher.Cipher.open (out cipher, Cipher.Algorithm.AES256, Cipher.Mode.CBC, Cipher.Flag.SECURE);

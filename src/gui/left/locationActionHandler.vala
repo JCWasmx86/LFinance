@@ -4,14 +4,11 @@ namespace LFinance {
 		internal LocationActionHandler(Model model) {
 			this.model = model;
 		}
-		bool handle_edit(string old,
-				 string @new,
-				 out string replacement) {
+		bool handle_edit(string old, string @new, out string replacement) {
 			replacement = null;
 			return false;
 		}
-		void handle_mouse_press(string selected,
-					Gdk.EventButton event) {
+		void handle_mouse_press(string selected, Gdk.EventButton event) {
 			if(event.type == Gdk.EventType.BUTTON_PRESS && event.button == 3) {
 				var menu = new Gtk.Menu ();
 				var edit = new Gtk.MenuItem.with_label (_("Edit"));
@@ -39,12 +36,15 @@ namespace LFinance {
 				var @delete = new Gtk.MenuItem.with_label (_("Delete"));
 				@delete.activate.connect (() => {
 					var md =
-						new Gtk.MessageDialog (null, Gtk.DialogFlags.MODAL,
+						new Gtk.MessageDialog (null,
+								       Gtk.DialogFlags.MODAL,
 								       Gtk.MessageType.QUESTION,
 								       Gtk.ButtonsType.NONE,
 								       _(
 									       "Do you really want to delete this location?"));
-					md.add_buttons (_("_Cancel"), Gtk.ResponseType.CANCEL, _("Delete"),
+					md.add_buttons (_("_Cancel"),
+							Gtk.ResponseType.CANCEL,
+							_("Delete"),
 							Gtk.ResponseType.OK);
 					md.get_widget_for_response (Gtk.ResponseType.OK).get_style_context ().add_class (
 						"destructive-action");
@@ -59,13 +59,16 @@ namespace LFinance {
 				return;
 			}
 		}
-		void handle_key_press(string selected,
-				      Gdk.EventKey key) {
+		void handle_key_press(string selected, Gdk.EventKey key) {
 			if(key.keyval == Gdk.Key.Delete) {
-				var md = new Gtk.MessageDialog (null, Gtk.DialogFlags.MODAL, Gtk.MessageType.QUESTION,
+				var md = new Gtk.MessageDialog (null,
+								Gtk.DialogFlags.MODAL,
+								Gtk.MessageType.QUESTION,
 								Gtk.ButtonsType.NONE,
 								_("Do you really want to delete this location?"));
-				md.add_buttons (_("_Cancel"), Gtk.ResponseType.CANCEL, _("Delete"),
+				md.add_buttons (_("_Cancel"),
+						Gtk.ResponseType.CANCEL,
+						_("Delete"),
 						Gtk.ResponseType.OK);
 				md.get_widget_for_response (Gtk.ResponseType.OK).get_style_context ().add_class (
 					"destructive-action");

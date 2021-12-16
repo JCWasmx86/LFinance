@@ -7,8 +7,7 @@ namespace LFinance {
 		Gtk.TextView view;
 		Gtk.Widget exit_button;
 
-		internal ExportDialog(string file,
-				      Account account) {
+		internal ExportDialog(string file, Account account) {
 			this.account = account.sorted_copy ();
 			this.file = file;
 			this.build_gui ();
@@ -29,7 +28,8 @@ namespace LFinance {
 		}
 		internal void export() {
 			this.show_all ();
-			new Thread<void>("question", () => {
+			new Thread<void>("question",
+					 () => {
 				try {
 					var exporter = ExporterFactory.for_file (this.file);
 					exporter.progress.connect ((text, frac) => {
@@ -45,7 +45,8 @@ namespace LFinance {
 				} catch(Error e) {
 					this.destroy ();
 					var message =
-						new Gtk.MessageDialog (null, Gtk.DialogFlags.MODAL,
+						new Gtk.MessageDialog (null,
+								       Gtk.DialogFlags.MODAL,
 								       Gtk.MessageType.ERROR,
 								       Gtk.ButtonsType.OK,
 								       _("Export failed: %s").printf (e.message));

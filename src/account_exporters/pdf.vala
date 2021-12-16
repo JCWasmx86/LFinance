@@ -26,12 +26,18 @@ namespace LFinance {
 			foreach(var latex in latexes) {
 				var status = 0;
 				try {
-					Process.spawn_sync ("/", new string[] {latex, "--version"},
-							    Environ.get (), SpawnFlags.SEARCH_PATH, null, null, null,
+					Process.spawn_sync ("/",
+							    new string[] {latex, "--version"},
+							    Environ.get (),
+							    SpawnFlags.SEARCH_PATH,
+							    null,
+							    null,
+							    null,
 							    out status);
 					if(status == 0) {
 						this.progress (_("Found command: %s").printf (
-								       latex), this.curr_frac / this.max_frac);
+								       latex),
+							       this.curr_frac / this.max_frac);
 						this.curr_frac++;
 						info ("Found command: %s", latex);
 						this.working = latex;
@@ -62,7 +68,8 @@ namespace LFinance {
 				var len = path.length;
 				var replaced = path.splice (len - 4, len, ".pdf");
 				this.progress (_("Copying output to %s…").printf (
-						       this.file.get_path ()), this.curr_frac / this.max_frac);
+						       this.file.get_path ()),
+					       this.curr_frac / this.max_frac);
 				this.curr_frac++;
 				File.new_for_path (replaced).copy (this.file,
 								   FileCopyFlags.OVERWRITE |
@@ -86,7 +93,8 @@ namespace LFinance {
 		void check_for_package(string name) throws Error {
 			try {
 				this.progress (_("Checking for package %s…").printf (
-						       name), this.curr_frac / this.max_frac);
+						       name),
+					       this.curr_frac / this.max_frac);
 				this.curr_frac++;
 				FileIOStream iostream;
 				var file = File.new_tmp ("tpl_XXXXXX.tex", out iostream);
@@ -114,19 +122,18 @@ namespace LFinance {
 				throw new PdfExporterErrors.PACKAGE_NOT_FOUND (e.message);
 			}
 		}
-		void cleanup(File file,
-			     bool cleanup_pdf = true) {
+		void cleanup(File file, bool cleanup_pdf = true) {
 			info ("Cleaning temp files created after compiling %s", file.get_path ());
 			this.clean (file, ".aux");
 			this.clean (file, ".fdb_latexmk");
 			this.clean (file, ".fls");
 			this.clean (file, ".log");
 			this.clean (file, ".tex");
-			if(cleanup_pdf)
+			if(cleanup_pdf) {
 				this.clean (file, ".pdf");
+			}
 		}
-		void clean(File file,
-			   string extension) {
+		void clean(File file, string extension) {
 			var path = file.get_path ();
 			var len = path.length;
 			var replaced = path.splice (len - 4, len, extension);
@@ -136,8 +143,7 @@ namespace LFinance {
 				info ("Error deleting %s: %s", replaced, e.message);
 			}
 		}
-		int compile_document(File file,
-				     bool cleanup_pdf = true) throws Error {
+		int compile_document(File file, bool cleanup_pdf = true) throws Error {
 			var parent_dir = file.get_parent ();
 			var args = this.working ==
 				   "latexmk" ? new string[] {this.working, "-pdf", file.get_path (),
@@ -147,8 +153,13 @@ namespace LFinance {
 			var status = 0;
 			string stderr;
 			string stdout;
-			Process.spawn_sync (parent_dir.get_path (), args,
-					    Environ.get (), SpawnFlags.SEARCH_PATH, null, out stdout, out stderr,
+			Process.spawn_sync (parent_dir.get_path (),
+					    args,
+					    Environ.get (),
+					    SpawnFlags.SEARCH_PATH,
+					    null,
+					    out stdout,
+					    out stderr,
 					    out status);
 			return status;
 		}
@@ -165,7 +176,10 @@ namespace LFinance {
 			builder.append ("\\begin{longtable}{|l|l|l|p{5cm}|}\n");
 			builder.append ("\\hline \\multicolumn{1}{|c|}{\\textbf{%s}} & \\multicolumn{1}{c|}{\\textbf{%s}} & \\multicolumn{1}{c|}{\\textbf{%s}} & \\multicolumn{1}{c|}{\\textbf{%s}} \\\\ \\hline \\endfirsthead\n".printf (
 						_(
-							"Purpose"), _("Date"), _("Amount"), _("Further Information")));
+							"Purpose"),
+						_("Date"),
+						_("Amount"),
+						_("Further Information")));
 			builder.append ("\\hline \\multicolumn{4}{|r|}{{%s}} \\\\ \\hline \\endfoot\n".printf (_(
 														       "Continued on the next page")));
 			builder.append ("\\hline \\hline \\endlastfoot\n");
@@ -178,10 +192,12 @@ namespace LFinance {
 				builder.append (this.escape_latex (expense.format_amount ().replace ("\u202f", " ")));
 				builder.append (" & ");
 				builder.append (this.build_extra_info (expense));
-				if(i == this.account._expenses.size)
+				if(i == this.account._expenses.size) {
 					builder.append ("\\");
-				else
+				}
+				else{
 					builder.append (" \\\\\n");
+				}
 			}
 			builder.append ("\\end{longtable}\n");
 			builder.append ("\\end{document}\n");
@@ -192,11 +208,13 @@ namespace LFinance {
 			if(expense._location != null) {
 				ret.append ("\\textbf{");
 				ret.append (this.escape_latex (expense._location._name));
-				if(expense._location._city != null)
+				if(expense._location._city != null) {
 					ret.append (", ").append (this.escape_latex (expense._location._city));
+				}
 				ret.append ("}");
-				if(expense._tags.size > 0)
+				if(expense._tags.size > 0) {
 					ret.append (", ");
+				}
 			}
 			for(var i = 0; i < expense._tags.size; i++) {
 				var tag = expense._tags[i];

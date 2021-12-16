@@ -18,8 +18,7 @@ namespace LFinance {
 		uint curr_frac = 0;
 		string? working;
 
-		internal PDFModelExporter(Model model,
-					  string file_name) {
+		internal PDFModelExporter(Model model, string file_name) {
 			this.model = model;
 			this.file = File.new_for_path (file_name);
 		}
@@ -49,7 +48,8 @@ namespace LFinance {
 				var len = path.length;
 				var replaced = path.splice (len - 4, len, ".pdf");
 				this.progress_update (_("Copying output to %s…").printf (
-							      this.file.get_path ()), this.curr_frac / this.max_frac);
+							      this.file.get_path ()),
+						      this.curr_frac / this.max_frac);
 				this.curr_frac++;
 				File.new_for_path (replaced).copy (this.file,
 								   FileCopyFlags.OVERWRITE |
@@ -94,7 +94,10 @@ namespace LFinance {
 			builder.append ("\\begin{longtable}{|l|l|l|p{5cm}|}\n");
 			builder.append ("\\hline \\multicolumn{1}{|c|}{\\textbf{%s}} & \\multicolumn{1}{c|}{\\textbf{%s}} & \\multicolumn{1}{c|}{\\textbf{%s}} & \\multicolumn{1}{c|}{\\textbf{%s}} \\\\ \\hline \\endfirsthead\n".printf (
 						_(
-							"Purpose"), _("Date"), _("Amount"), _("Further Information")));
+							"Purpose"),
+						_("Date"),
+						_("Amount"),
+						_("Further Information")));
 			builder.append ("\\hline \\multicolumn{4}{|r|}{{%s}} \\\\ \\hline \\endfoot\n".printf (_(
 														       "Continued on the next page")));
 			builder.append ("\\hline \\hline \\endlastfoot\n");
@@ -107,10 +110,12 @@ namespace LFinance {
 				builder.append (this.escape_latex (expense.format_amount ().replace ("\u202f", " ")));
 				builder.append (" & ");
 				builder.append (this.build_extra_info (expense));
-				if(i == account._expenses.size)
+				if(i == account._expenses.size) {
 					builder.append ("\\");
-				else
+				}
+				else{
 					builder.append (" \\\\\n");
+				}
 			}
 			builder.append ("\\end{longtable}\n");
 			builder.append ("\\subsection{%s}\n".printf (_("Diagrams")));
@@ -121,9 +126,7 @@ namespace LFinance {
 			this.build_total (builder, stats);
 			return builder.str;
 		}
-		void generate_expense_diagram(StringBuilder builder,
-					      Range r,
-					      string time) {
+		void generate_expense_diagram(StringBuilder builder, Range r, string time) {
 			builder.append ("\\subsubsection{%s}\n".printf (time));
 			builder.append ("\\begin{tikzpicture}[baseline]\n");
 			builder.append (
@@ -185,39 +188,36 @@ namespace LFinance {
 			builder.append ("\\end{axis}");
 			builder.append ("\\end{tikzpicture}\n\\newline");
 		}
-		void build_last_week(StringBuilder builder,
-				     Stats stats) {
+		void build_last_week(StringBuilder builder, Stats stats) {
 			var r = stats.last_week;
 			this.generate_expense_diagram (builder, r, _("Last week"));
 		}
-		void build_last_month(StringBuilder builder,
-				      Stats stats) {
+		void build_last_month(StringBuilder builder, Stats stats) {
 			var r = stats.last_month;
-			if(r.dates.size == stats.last_week.dates.size)
+			if(r.dates.size == stats.last_week.dates.size) {
 				return;
+			}
 			this.generate_expense_diagram (builder, r, _("Last month"));
 		}
-		void build_last_year(StringBuilder builder,
-				     Stats stats) {
+		void build_last_year(StringBuilder builder, Stats stats) {
 			var r = stats.last_year;
-			if(r.dates.size == stats.last_month.dates.size)
+			if(r.dates.size == stats.last_month.dates.size) {
 				return;
+			}
 			this.generate_expense_diagram (builder, r, _("Last year"));
 			builder.append ("\n");
 			this.generate_pie_chart_for_months (builder, r.months, _("Expenses by month"));
 		}
-		void build_total(StringBuilder builder,
-				 Stats stats) {
+		void build_total(StringBuilder builder, Stats stats) {
 			var r = stats.total;
-			if(r.dates.size == stats.last_year.dates.size)
+			if(r.dates.size == stats.last_year.dates.size) {
 				return;
+			}
 			this.generate_expense_diagram (builder, r, _("All time"));
 			builder.append ("\n");
 			this.generate_pie_chart_for_months (builder, r.months, _("Expenses by month"));
 		}
-		void generate_pie_chart_for_months(StringBuilder builder,
-						   Gee.Map<int, MonthData> data,
-						   string s) {
+		void generate_pie_chart_for_months(StringBuilder builder, Gee.Map<int, MonthData> data, string s) {
 			builder.append ("\\newpage");
 			builder.append ("\\paragraph{").append (s).append ("}\n");
 			builder.append ("\\begin{tikzpicture}\n").append ("\\pie[text=legend] {");
@@ -235,10 +235,11 @@ namespace LFinance {
 				var month = iter.get ();
 				// The ',' is replaced, as otherwise there could be some problems
 				// with LaTeX.
-				builder.append (this.format_double ((month.amount / sum) * 100)).append (
+				builder.append (this.format_double ((month.amount / sum) * 100, 2)).append (
 					"/").append (month.name);
-				if(!iter.next ())
+				if(!iter.next ()) {
 					break;
+				}
 				builder.append (",");
 			}
 			builder.append ("}\n\\end{tikzpicture}\n");
@@ -251,11 +252,13 @@ namespace LFinance {
 			if(expense._location != null) {
 				ret.append ("\\textbf{");
 				ret.append (this.escape_latex (expense._location._name));
-				if(expense._location._city != null)
+				if(expense._location._city != null) {
 					ret.append (", ").append (this.escape_latex (expense._location._city));
+				}
 				ret.append ("}");
-				if(expense._tags.size > 0)
+				if(expense._tags.size > 0) {
 					ret.append (", ");
+				}
 			}
 			for(var i = 0; i < expense._tags.size; i++) {
 				var tag = expense._tags[i];
@@ -272,15 +275,22 @@ namespace LFinance {
 			foreach(var latex in latexes) {
 				var status = 0;
 				try {
-					Process.spawn_sync ("/", new string[] {latex, "--version"},
-							    Environ.get (), SpawnFlags.SEARCH_PATH, null, null, null,
+					Process.spawn_sync ("/",
+							    new string[] {latex, "--version"},
+							    Environ.get (),
+							    SpawnFlags.SEARCH_PATH,
+							    null,
+							    null,
+							    null,
 							    out status);
 					if(status == 0) {
 						this.progress_update (_("Found command: %s").printf (
-									      latex), this.curr_frac / this.max_frac);
+									      latex),
+								      this.curr_frac / this.max_frac);
 						this.curr_frac++;
-						if(latex != "latexmk")
+						if(latex != "latexmk") {
 							this.max_frac += 8; // Latexmk needs only one round
+						}
 						info ("Found command: %s", latex);
 						this.working = latex;
 						return;
@@ -304,7 +314,8 @@ namespace LFinance {
 		void check_for_package(string name) throws Error {
 			try {
 				this.progress_update (_("Checking for package %s…").printf (
-							      name), this.curr_frac / this.max_frac);
+							      name),
+						      this.curr_frac / this.max_frac);
 				this.curr_frac++;
 				FileIOStream iostream;
 				var file = File.new_tmp ("tpl_XXXXXX.tex", out iostream);
@@ -325,7 +336,8 @@ namespace LFinance {
 											       name));
 				}
 				this.progress_update (_("Found package %s!").printf (
-							      name), this.curr_frac / this.max_frac);
+							      name),
+						      this.curr_frac / this.max_frac);
 				this.curr_frac++;
 				this.cleanup (file);
 			} catch(Error e) {
@@ -333,19 +345,18 @@ namespace LFinance {
 				throw new PdfExporterErrors.PACKAGE_NOT_FOUND (e.message);
 			}
 		}
-		void cleanup(File file,
-			     bool cleanup_pdf = true) {
+		void cleanup(File file, bool cleanup_pdf = true) {
 			info ("Cleaning temp files created after compiling %s", file.get_path ());
 			this.clean (file, ".aux");
 			this.clean (file, ".fdb_latexmk");
 			this.clean (file, ".fls");
 			this.clean (file, ".log");
 			this.clean (file, ".tex");
-			if(cleanup_pdf)
+			if(cleanup_pdf) {
 				this.clean (file, ".pdf");
+			}
 		}
-		void clean(File file,
-			   string extension) {
+		void clean(File file, string extension) {
 			var path = file.get_path ();
 			var len = path.length;
 			var replaced = path.splice (len - 4, len, extension);
@@ -365,8 +376,13 @@ namespace LFinance {
 			var status = 0;
 			string stderr;
 			string stdout;
-			Process.spawn_sync (parent_dir.get_path (), args,
-					    Environ.get (), SpawnFlags.SEARCH_PATH, null, out stdout, out stderr,
+			Process.spawn_sync (parent_dir.get_path (),
+					    args,
+					    Environ.get (),
+					    SpawnFlags.SEARCH_PATH,
+					    null,
+					    out stdout,
+					    out stderr,
 					    out status);
 			return status;
 		}
@@ -381,9 +397,9 @@ namespace LFinance {
 				this.curr_frac++;
 			}
 		}
-		string format_double(double d) {
+		string format_double(double d, int precision = 7) {
 			Intl.setlocale (LocaleCategory.NUMERIC, "C");
-			var ret = "%lf".printf (d);
+			var ret = "%%.%df".printf (precision).printf (d);
 			Intl.setlocale ();
 			return ret;
 		}
@@ -408,7 +424,6 @@ namespace LFinance {
 			}
 			return s;
 		}
-		internal signal void progress_update (string to_add,
-						      double fraction);
+		internal signal void progress_update (string to_add, double fraction);
 	}
 }

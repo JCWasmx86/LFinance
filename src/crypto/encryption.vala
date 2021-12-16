@@ -1,8 +1,7 @@
 using GCrypt;
 
 namespace LFinance {
-	internal static uint8[] encrypt(uint8[] data,
-					string password) {
+	internal static uint8[] encrypt(uint8[] data, string password) {
 		var padded = new uint8[(data.length + 32 - 1) & -32];
 		Posix.memcpy (padded, data, data.length);
 		for(var i = data.length; i < padded.length; i++) {

@@ -44,8 +44,9 @@ namespace LFinance {
 					rgba[0] = (uint8)uint.parse (color.substring (1, 2), 16);
 					rgba[1] = (uint8)uint.parse (color.substring (3, 2), 16);
 					rgba[2] = (uint8)uint.parse (color.substring (5, 2), 16);
-					if(color.length == 9)
+					if(color.length == 9) {
 						rgba[3] = (uint8)uint.parse (color.substring (7, 2), 16);
+					}
 					this.model.add_tag (new Tag (name, rgba));
 				}
 				dialog.destroy ();

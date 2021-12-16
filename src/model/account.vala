@@ -39,8 +39,9 @@ namespace LFinance {
 			this.fire (TriggerType.EDIT_ACCOUNT);
 		}
 		internal void fire(TriggerType type) {
-			if((!this.sharp) || this.func == null)
+			if((!this.sharp) || this.func == null) {
 				return;
+			}
 			this.func (type);
 		}
 		internal void delete_expense(Expense expense) {
@@ -58,7 +59,7 @@ namespace LFinance {
 			});
 		}
 		internal void sort(bool sort_expenses = true) {
-			this._expenses.sort ((a,b) => {
+			this._expenses.sort ((a, b) => {
 				switch(this._sorting) {
 				case 1:
 					return a._amount > b._amount ? 1 : (a._amount == b._amount ? 0 : -1);
