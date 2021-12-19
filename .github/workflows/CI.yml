@@ -43,7 +43,7 @@ jobs:
        - uses: actions/checkout@v2
        - name: Just build it
          run: |
-           sudo dnf install uncrustify git glib2-devel pkgconf-pkg-config meson ninja-build vala libgee-devel json-glib-devel gtk3-devel libgcrypt-devel texlive-scheme-medium -y
+           sudo dnf install uncrustify git glib2-devel pkgconf-pkg-config meson ninja-build vala libgee-devel json-glib-devel gtk3-devel libgcrypt-devel texlive-scheme-full -y
            mkdir build && cd build
            meson ..
            ninja -j$(nproc)
