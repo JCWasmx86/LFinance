@@ -14,8 +14,6 @@ namespace LFinance {
 		}
 		static void small_data() {
 			try {
-				// Testing 25 at the time seems to work
-				// really good (Total RAM: 2.3GB)
 				var pool = new ThreadPool<uint?>.with_owned_data(i => {
 					var model = new Model();
 					model.fill_sample_data(true);
@@ -29,8 +27,8 @@ namespace LFinance {
 						critical(e.message);
 						assert(false);
 					}
-				}, 25, false);
-				for(var i = 0; i < 50; i++) {
+				}, 2, false);
+				for(var i = 0; i < 2; i++) {
 					pool.add(i);
 				}
 				while(pool.unprocessed() > 0);
@@ -41,8 +39,6 @@ namespace LFinance {
 		}
 		static void big_data() {
 			try {
-				// Testing 25 at the time seems to work
-				// really good (Total RAM: 3GB)
 				var pool = new ThreadPool<uint?>.with_owned_data(i => {
 					var model = new Model();
 					model.fill_sample_data(false);
@@ -56,8 +52,8 @@ namespace LFinance {
 						critical(e.message);
 						assert(false);
 					}
-				}, 25, false);
-				for(var i = 0; i < 50; i++) {
+				}, 2, false);
+				for(var i = 0; i < 2; i++) {
 					pool.add(i);
 				}
 				while(pool.unprocessed() > 0);
