@@ -201,5 +201,44 @@ namespace LFinance {
 			this.encrypted = true;
 			this.password = pwd;
 		}
+
+		internal void fill_sample_data(bool small = true) {
+			this.sharp = false;
+			this._tags = new Gee.ArrayList<Tag>();
+			this._locations = new Gee.ArrayList<Location>();
+			this._accounts = new Gee.ArrayList<Account>();
+			this.add_tag(new Tag(_("Shopping"), new uint8[4]{0xFF, 0x11, 0x00}));
+			this.add_tag(new Tag(_("Restaurant"), new uint8[]{0x11, 0xFF, 0x00}));
+			this.add_tag(new Tag(_("Gifts"), new uint8[]{0xFF, 0x00, 0xFF}));
+			this.add_tag(new Tag(_("Donations"), new uint8[]{0x60, 0xF0, 0x0F}));
+			this.add_tag(new Tag(_("IT/Software"), new uint8[]{0x00, 0xFF, 0xFF}));
+			this.add_tag(new Tag(_("Groceries"), new uint8[4]{0x0F, 0xA0, 0xFF}));
+			this.add_tag(new Tag(_("Hobbies"), new uint8[4]{0xAF, 0x0A, 0x0F}));
+			this.add_tag(new Tag(_("Culture"), new uint8[4]{0xA0, 0x00, 0x00}));
+			this.add_tag(new Tag(_("Other"), new uint8[4]{0x33, 0x33, 0xFF}));
+			var acc = new Account(_("My account"));
+			this.add_account(acc);
+			acc.fill_sample_data(this._tags, this._locations, small);
+			acc = new Account(_("Gifts"));
+			this.add_account(acc);
+			acc.fill_sample_data(this._tags, this._locations, small);
+			if (small) {
+				for(var i = 2017; i <= 2019; i++) {
+					acc = new Account(_("Holidays %d").printf(i));
+					this.add_account(acc);
+					acc.fill_holiday_data(i, this._tags, this._locations, small);
+				}
+			} else {
+				for(var i = 1980; i <= 2021; i++) {
+					acc = new Account(_("Holidays %d").printf(i));
+					this.add_account(acc);
+					acc.fill_holiday_data(i, this._tags, this._locations, small);
+				}
+			}
+			this.sharp = true;
+			// TODO: Fire
+			this.fire(TriggerType.ADD_TAG);
+			this.fire(TriggerType.ADD_ACCOUNT);
+		}
 	}
 }

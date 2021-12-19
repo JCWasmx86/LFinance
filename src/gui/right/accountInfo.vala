@@ -52,9 +52,15 @@ namespace LFinance {
 				this.notebook = new Gtk.Notebook ();
 				this.pack_start (this.notebook, true, true, 2);
 				if(this.model._accounts.size == 0) {
-					// TODO: Flesh out
-					var lbl = new Gtk.Label (_("Create an account!"));
-					this.notebook.append_page (lbl, new Gtk.Label (""));
+					var box = new Gtk.Box (Gtk.Orientation.VERTICAL, 2);
+					var lbl = new Gtk.Label (_("Create an account…"));
+					var btn = new Gtk.Button.with_label(_("…or create sample data to explore LFinance!"));
+					btn.clicked.connect(() => {
+						model.fill_sample_data();
+					});
+					box.pack_start(lbl, false, false, 2);
+					box.pack_start(btn, false, false, 2);
+					this.notebook.append_page (box, new Gtk.Label (""));
 					return;
 				}
 				// Account was deleted
@@ -69,14 +75,18 @@ namespace LFinance {
 			} else if(type == TriggerType.ADD_TAG || type == TriggerType.DELETE_TAG ||
 				  type == TriggerType.EDIT_TAG) {
 				// Only the expenses deal with tags
-				this.expenses.rebuild (type);
+				if(this.expenses != null)
+					this.expenses.rebuild (type);
 			} else if(type == TriggerType.ADD_LOCATION || type == TriggerType.DELETE_LOCATION ||
 				  type == TriggerType.EDIT_LOCATION) {
-				this.expenses.rebuild (type);
+				if(this.expenses != null)
+					this.expenses.rebuild (type);
 			} else if(type == TriggerType.ADD_EXPENSE || type == TriggerType.DELETE_EXPENSE ||
 				  type == TriggerType.EDIT_EXPENSE) {
+				  if(this.overview != null)
 				this.overview.rebuild (type);
-				this.expenses.rebuild (type);
+				if(this.expenses != null)
+					this.expenses.rebuild (type);
 			} else if(type == TriggerType.DELETE_ACCOUNT) {
 				// Account was deleted
 				if(!this.model.has_account (this.to_render)) {
@@ -95,8 +105,10 @@ namespace LFinance {
 					this.to_render = this.model._accounts[0];
 					this.remove (this.notebook);
 					this.rebuild (null);
-					this.overview.select (this.to_render);
-					this.expenses.select (this.to_render);
+					if(this.overview != null)
+						this.overview.select (this.to_render);
+					if(this.expenses != null)
+						this.expenses.select (this.to_render);
 				}
 			} else {
 				info ("Unknown type, ignoring in AccountInfo: %s", type.to_string ());

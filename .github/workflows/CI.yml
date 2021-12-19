@@ -13,7 +13,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Just build it
         run: |
-          sudo apt update && sudo apt install git libglib2.0-dev meson ninja-build valac libgee-0.8-dev libjson-glib-dev libgtk-3-dev libgcrypt-dev
+          sudo apt update && sudo apt install git libglib2.0-dev meson ninja-build valac libgee-0.8-dev libjson-glib-dev libgtk-3-dev libgcrypt-dev texlive-full
           mkdir build && cd build
           meson ..
           ninja -j$(nproc)
@@ -43,7 +43,7 @@ jobs:
        - uses: actions/checkout@v2
        - name: Just build it
          run: |
-           sudo dnf install uncrustify git glib2-devel pkgconf-pkg-config meson ninja-build vala libgee-devel json-glib-devel gtk3-devel libgcrypt-devel -y
+           sudo dnf install uncrustify git glib2-devel pkgconf-pkg-config meson ninja-build vala libgee-devel json-glib-devel gtk3-devel libgcrypt-devel texlive-scheme-medium -y
            mkdir build && cd build
            meson ..
            ninja -j$(nproc)

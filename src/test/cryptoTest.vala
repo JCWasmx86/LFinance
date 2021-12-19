@@ -1,5 +1,5 @@
 namespace LFinance {
-	namespace CryptoTest {
+	class CryptoTest {
 		static void main(string[] args) {
 			Test.init (ref args);
 			Test.add_func ("/pwd_derivation_test",
@@ -77,7 +77,7 @@ namespace LFinance {
 			assert (reconstructed != clear_text);
 		}
 
-		string format(uint8[] data) {
+		static string format(uint8[] data) {
 			var sb = new StringBuilder.sized (data.length * 2);
 			for(var i = 0; i < data.length; i++)
 				sb.append ("%02x".printf (data[i]));

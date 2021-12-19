@@ -57,7 +57,6 @@ namespace LFinance {
 				}
 			} else {
 				this.model = new Model ();
-				this.model.add_account (new Account (_("default")));
 				try {
 					File.new_for_path (data_dir + "/LFinance").make_directory_with_parents ();
 				} catch(Error e) {

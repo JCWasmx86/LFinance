@@ -109,5 +109,94 @@ namespace LFinance {
 			builder.end_object ();
 			return builder.get_root ();
 		}
+		internal void fill_sample_data(Gee.List<Tag> tags, Gee.List<Location> locations, bool small) {
+			this.sharp = false;
+			var now = new DateTime.now();
+			var start_month = Random.next_int() % 4 + 5;
+			var start_day = (int) (Random.next_int() % 28) + 1;
+			var start_year = now.get_year() - (Random.next_int() % (small ? 10 : 100));
+			var date = new DateTime.utc((int)start_year, (int)start_month, start_day, 0, 0, 0);
+			if(date == null) {
+				Posix.perror("date.utc");
+			}
+			info("%u %u %d", start_year, start_month, start_day);
+			assert(date != null);
+			while(true) {
+				date = date.add_days((int)(Random.next_int() % 4));
+				if(date.compare(now) > 0)
+					break;
+				this.add_expense(this.random_expense(date));
+			}
+			this.set_sorting(3);
+			this.sharp = true;
+		}
+		internal void fill_holiday_data(int year, Gee.List<Tag> tags, Gee.List<Location> locations, bool small) {
+			this.sharp = false;
+			var start_month = 5;
+			var start_day = (int) (Random.next_int() % 27) + 1;
+			var date = new DateTime.utc(year, start_month, start_day, 0, 0, 0);
+			if(date == null) {
+				Posix.perror("DateTime.utc");
+			}
+			assert(date != null);
+			this.add_expense(this.new_expense(_("Vacation apartment"), date, Random.next_double() * 1500));
+			var n = Random.next_int() % (small ? 40 : 500) + 8;
+			for (var i = 0; i < n; i++) {
+				date = date.add_days((int)(Random.next_int() % 4));
+				this.add_expense(this.random_expense(date));
+			}
+			this.set_sorting(3);
+			this.sharp = true;
+		}
+		Expense new_expense(string purpose, DateTime date, double amount) {
+			var irounded = (int32)(amount * 100);
+			var ret = new Expense(purpose);
+			ret.set_currency("€");
+			ret.set_date(date);
+			ret.set_amount(irounded);
+			return ret;
+		}
+		Expense random_expense(DateTime date, uint remainder = 5) {
+			var ret = new Expense("");
+			ret.set_date(date);
+			ret.set_currency("€");
+			switch(Random.next_int() % remainder) {
+				case 0: // Culture
+					ret.set_amount(Random.next_int() % 3000);
+					ret.set_purpose(this.random_string(_("Cinema"), _("Opera"), _("Theatre"), _("Museum")));
+					break;
+				case 1: // Restaurant
+					ret.set_amount(Random.next_int() % 9000 + 3000);
+					ret.set_purpose(this.random_string(_("Dürüm"), _("Pizza"), _("Greek food"), _("Burger"), _("Chinese food"), _("Indian food")));
+					break;
+				case 2: // Groceries
+					ret.set_amount(Random.next_int() % 6000 + 200);
+					ret.set_purpose(this.random_string(_("Lunch"), _("Groceries"), _("Bakery ingredients"), _("Regular grocery shopping")));
+					break;
+				case 3: // Fuel
+					ret.set_amount(Random.next_int() % 9000);
+					ret.set_purpose(_("%.2lf litres gasoline").printf(Random.next_double() * 80 + 20));
+					break;
+				case 4: // Hobbies
+					ret.set_amount(Random.next_int() % 29000);
+					ret.set_purpose(this.random_string(_("Soccer match tickets"), _("Paraglider course"), _("Diving with dolphins"), _("Zoo")));
+					break;
+			}
+			return ret;
+		}
+		string random_string(...) {
+			var l = va_list();
+			string? hot_str = l.arg();
+			while(true) {
+				var rand = Random.next_double();
+				if(rand < 0.5)
+					return hot_str;
+				string? tmp = l.arg();
+				if(tmp == null)
+					return hot_str;
+				hot_str = tmp;
+
+			}
+		}
 	}
 }

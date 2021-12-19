@@ -59,6 +59,7 @@ deps = [
 	dependency('gee-0.8'),
 	dependency('json-glib-1.0'),
 	dependency('gtk+-3.0'),
+	meson.get_compiler('c').find_library('m', required : false),
 	meson.get_compiler('vala').find_library('posix'),
 	project_config_dep,
 	dependency('libgcrypt')
@@ -70,6 +71,7 @@ test_deps = [
 	dependency('gee-0.8'),
 	dependency('json-glib-1.0'),
 	dependency('libgcrypt'),
+	meson.get_compiler('c').find_library('m', required : false),
 	meson.get_compiler('vala').find_library('posix'),
 ]
 test_sources = [
@@ -95,3 +97,5 @@ v2_test = executable('v2_test', sources: test_sources + ['test/v2Test.vala'], de
 test('v2_test', v2_test)
 crypto_test = executable('crypto_test', sources: test_sources + ['test/cryptoTest.vala'], dependencies : test_deps)
 test('crypto_test', crypto_test)
+random_data_test = executable('random_data_test', sources: test_sources + ['exporters/pdf.vala', 'exporters/stats.vala','test/randomDataTest.vala'], dependencies : test_deps)
+test('random_data_test', random_data_test)

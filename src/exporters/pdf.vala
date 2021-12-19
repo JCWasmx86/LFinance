@@ -58,7 +58,7 @@ namespace LFinance {
 				this.curr_frac++;
 			} catch(Error e) {
 				info ("%s", e.message);
-				throw new PdfExporterErrors.COMPILATION_FAILED (e.message);
+				throw new PDFModelExporterErrors.COMPILATION_FAILED (e.message);
 			}
 		}
 		string build() {
@@ -72,6 +72,7 @@ namespace LFinance {
 			builder.append ("\\usepackage{tikz}\n");
 			builder.append ("\\usepackage{pgf-pie}\n");
 			builder.append ("\\usepackage{eurosym}\n");
+			builder.append ("\\usepackage[hidelinks]{hyperref}\n");
 			builder.append ("\\usepackage[none]{hyphenat}\n\n");
 			builder.append ("\\usepgfplotslibrary{dateplot}\n");
 			builder.append ("\\pgfplotsset{compat=1.18}\n");
@@ -332,7 +333,7 @@ namespace LFinance {
 				} else {
 					info ("Failed to use package %s with status: %d", name, status);
 					this.cleanup (file);
-					throw new PdfExporterErrors.PACKAGE_NOT_FOUND (_("Package not found: %s").printf (
+					throw new PDFModelExporterErrors.PACKAGE_NOT_FOUND (_("Package not found: %s").printf (
 											       name));
 				}
 				this.progress_update (_("Found package %s!").printf (
@@ -342,7 +343,7 @@ namespace LFinance {
 				this.cleanup (file);
 			} catch(Error e) {
 				warning ("%s", e.message);
-				throw new PdfExporterErrors.PACKAGE_NOT_FOUND (e.message);
+				throw new PDFModelExporterErrors.PACKAGE_NOT_FOUND (e.message);
 			}
 		}
 		void cleanup(File file, bool cleanup_pdf = true) {
